@@ -24,6 +24,10 @@ public class UserService {
         }
     }
 
+    public HashSet<User> getListOfUsers() {
+        return users;
+    }
+
     public User getUserByUsername(String username) {
         for (User user: users) {
             if (user.getUsername().equals(username)) {
