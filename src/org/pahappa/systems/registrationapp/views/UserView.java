@@ -1,7 +1,5 @@
 package org.pahappa.systems.registrationapp.views;
 
-import org.pahappa.systems.registrationapp.models.User;
-
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Scanner;
@@ -64,7 +62,6 @@ public class UserView {
     }
 
     private void registerUser() {
-        User newUser = new User();
         System.out.println("Provide the following details:");
         try {
             System.out.println("First Name:");
@@ -86,11 +83,6 @@ public class UserView {
             int month = Integer.parseInt(dateData[1]) - 1;
             int date = Integer.parseInt(dateData[0]);
             Date dateOfBirth = new Date(year,month,date);
-            newUser.setFirstname(firstname);
-            newUser.setLastname(lastname);
-            newUser.setUsername(username);
-            newUser.setDateOfBirth(dateOfBirth);
-            //service.addUser(newUser);
         } catch (Exception e) {
             System.err.println("An error has been encountered with your inputs. Please try again.");
             registerUser();
