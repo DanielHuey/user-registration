@@ -17,13 +17,6 @@ public class UserService {
         users.add(user);
     }
 
-    public void listUsers() {
-        System.out.println("Full Name\t\t\t@ username");
-        for (User user: users){
-            System.out.println(user.getFirstname() + " " + user.getLastname() + " \t@ " + user.getUsername());
-        }
-    }
-
     public HashSet<User> getListOfUsers() {
         return users;
     }
