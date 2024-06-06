@@ -9,6 +9,7 @@ public class UserService {
     private final HashSet<User> users = new HashSet<>();
 
     public void registerUser(String firstname, String lastname, String username, Date dateOfBirth){
+        if (checkIfUsernameExists(username)) return;
         User user = new User();
         user.setFirstname(firstname);
         user.setLastname(lastname);
