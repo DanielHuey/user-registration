@@ -1,5 +1,9 @@
 package org.pahappa.systems.registrationapp.views;
 
+import org.pahappa.systems.registrationapp.models.User;
+
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Scanner;
 
 public class UserView {
@@ -60,6 +64,37 @@ public class UserView {
     }
 
     private void registerUser() {
+        User newUser = new User();
+        System.out.println("Provide the following details:");
+        try {
+            System.out.println("First Name:");
+            String firstname = scanner.nextLine();
+            System.out.println("Last Name:");
+            String lastname = scanner.nextLine();
+            System.out.println("Username:");
+            String username = "";
+            boolean usernameIsUnique = false;
+            while (!usernameIsUnique){
+                username = scanner.nextLine();
+                //check for unique username
+                usernameIsUnique = true;
+            }
+            System.out.println("Date Of Birth (dd/mm/yyyy):");
+            String dateOfBirthString = scanner.nextLine();
+            String[] dateData = dateOfBirthString.split("/");
+            int year = Integer.parseInt(dateData[2]) - 1900;
+            int month = Integer.parseInt(dateData[1]) - 1;
+            int date = Integer.parseInt(dateData[0]);
+            Date dateOfBirth = new Date(year,month,date);
+            newUser.setFirstname(firstname);
+            newUser.setLastname(lastname);
+            newUser.setUsername(username);
+            newUser.setDateOfBirth(dateOfBirth);
+            //service.addUser(newUser);
+        } catch (Exception e) {
+            System.err.println("An error has been encountered with your inputs. Please try again.");
+            registerUser();
+        }
     }
 
     private void displayAllUsers() {
