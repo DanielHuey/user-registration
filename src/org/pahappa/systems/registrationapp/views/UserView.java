@@ -11,6 +11,8 @@ public class UserView {
 
     private final Scanner scanner;
     private final UserService userService;
+    private final int MIN_USERNAME_LENGTH = 4;
+    private final int MAX_USERNAME_LENGTH = 16;
 
     public UserView(){
         this.scanner = new Scanner(System.in);
@@ -79,8 +81,15 @@ public class UserView {
             while (!usernameIsUnique){
                 System.out.println("Username:");
                 username = scanner.nextLine().trim();
-                if (!userService.checkIfUsernameExists(username)) usernameIsUnique = true;
-                else System.out.print("This username is already in use. New "); //
+                if (username.length() >= MIN_USERNAME_LENGTH && username.length() <= MAX_USERNAME_LENGTH && !userService.checkIfUsernameExists(username)) {
+                    usernameIsUnique = true;
+                    continue;
+                }
+                if (username.length() < MIN_USERNAME_LENGTH) {
+                    System.out.print("Username is too short. Minimum is "+MIN_USERNAME_LENGTH+" characters. Try another ");
+                } else if (username.length() > MAX_USERNAME_LENGTH) {
+                    System.out.print("Username is too long. Maximum is "+MAX_USERNAME_LENGTH+" characters. Try another ");
+                } else System.out.print("This username is already in use. New "); 
             }
 
             System.out.println("Date Of Birth (dd/mm/yyyy):");
@@ -155,9 +164,15 @@ public class UserView {
             while (!usernameIsUnique){
                 System.out.println("Username("+user.getUsername()+"):");
                 newUsername = scanOrNull();
-                if (newUsername == null || !userService.checkIfUsernameExists(newUsername)) 
+                if (newUsername == null || (newUsername.length() >= MIN_USERNAME_LENGTH && newUsername.length() <= MAX_USERNAME_LENGTH && !userService.checkIfUsernameExists(newUsername))) {
                     usernameIsUnique = true;
-                else System.out.print("This username is already in use. New "); // Word loop
+                    continue;
+                }
+                if (newUsername.length() < MIN_USERNAME_LENGTH) {
+                    System.out.print("New username is too short. Minimum is "+MIN_USERNAME_LENGTH+" characters. Try another ");
+                } else if (newUsername.length() > MAX_USERNAME_LENGTH) {
+                    System.out.print("New username is too long. Maximum is "+MAX_USERNAME_LENGTH+" characters. Try another ");
+                } else System.out.print("This username is already in use. New "); // Word loop
             }
             Date oldDate = user.getDateOfBirth();
             System.out.println("Date Of Birth ("+ oldDate.getDate() +"/"+ (oldDate.getMonth()+1) +"/"+ (oldDate.getYear()+1900) +"):");
