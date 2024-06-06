@@ -101,8 +101,11 @@ public class UserView {
             Date dateOfBirth = new Date(year,month,date);
             userService.registerUser(firstname, lastname, username, dateOfBirth);
         } catch (Exception e) {
-            System.err.println("An error has been encountered with your inputs. Please try again.\n");
-            registerUser();
+            System.err.println("An error has been encountered with your inputs. Please hit r to try again.");
+            String retry = scanner.nextLine().strip();
+            if (retry.toLowerCase().equals("r")) {
+                registerUser();
+            }
         }
     }
 
@@ -133,8 +136,11 @@ public class UserView {
             System.out.println("Date Of Birth: " + user.getDateOfBirth());
 
         } catch (Exception e) {
-            System.err.println("An error has been encountered with your inputs. Please try again.\n");
-            getUserOfUsername();
+            System.err.println("An error has been encountered with your inputs. Please hit r to try again.");
+            String retry = scanner.nextLine().strip();
+            if (retry.toLowerCase().equals("r")) {
+                getUserOfUsername();
+            }
         }
     }
 
@@ -191,8 +197,11 @@ public class UserView {
                 System.out.println("Did not find the user with username \""+username+"\". Maybe the details were edited by another administrator while you were also editing.");                
             }
         } catch (Exception e) {
-            System.err.println("An error has been encountered with your inputs. Please try again.\n");
-            updateUserOfUsername();
+            System.err.println("An error has been encountered with your inputs. Please hit r to try again.");
+            String retry = scanner.nextLine().strip();
+            if (retry.toLowerCase().equals("r")) {
+                updateUserOfUsername();
+            }
         }
     }
 
@@ -208,8 +217,11 @@ public class UserView {
             userService.deleteUser(username);
             System.out.println("Successfully deleted the user @" + username);
         } catch (Exception e) {
-            System.err.println("An error has been encountered with your inputs. Please try again.\n");
-            deleteUserOfUsername();
+            System.err.println("An error has been encountered with your inputs. Please hit r to try again.");
+            String retry = scanner.nextLine().strip();
+            if (retry.toLowerCase().equals("r")) {
+                deleteUserOfUsername();
+            }
         }
     }
 
