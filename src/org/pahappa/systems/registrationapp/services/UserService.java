@@ -44,14 +44,15 @@ public class UserService {
         if (user != null) users.remove(user);
     }
 
-    public void updateDetailsOfUser(String username, String firstname, String lastname, String newUserName, Date dateOfBirth) {
+    public boolean updateDetailsOfUser(String username, String firstname, String lastname, String newUserName, Date dateOfBirth) {
         User user = getUserByUsername(username);
-        if (user == null) return;
+        if (user == null) return false;
         users.remove(user);
         user.setFirstname(firstname != null ? firstname : user.getFirstname());
         user.setLastname(lastname != null ? lastname : user.getLastname());
         user.setDateOfBirth(dateOfBirth != null ? dateOfBirth : user.getDateOfBirth());
         user.setUsername(newUserName != null ? newUserName : user.getUsername());
         users.add(user);
+        return true;
     }
 }
