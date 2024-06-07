@@ -1,5 +1,6 @@
 package org.pahappa.systems.registrationapp.views;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Scanner;
@@ -103,14 +104,26 @@ public class UserView {
 
             System.out.println("Date Of Birth (dd/mm/yyyy):");
             String dateOfBirthString = scanner.nextLine().trim();
-            while (!dateOfBirthString.matches("\\$\\d{1,2}/\\d{1,2}/\\d{4}")) {
+            while (!dateOfBirthString.matches("\\d{1,2}/\\d{1,2}/\\d{4}")) {
                 System.out.println("The date of birth must match the format dd/mm/yyyy. Please try again: ");
                 dateOfBirthString = scanner.nextLine().trim();
             }
             String[] dateData = dateOfBirthString.split("/");
             int year = Integer.parseInt(dateData[2]) - 1900;
+            while (year > (Calendar.getInstance().get(Calendar.YEAR) - 1900)) {
+                System.out.println("You cannot be born in the future! Plese provide a different year:");
+                year = scanner.nextInt();
+            }
             int month = Integer.parseInt(dateData[1]) - 1;
+            while (month > 11 || month < 0) {
+                System.out.println("A month cannot be less than 1 or more than 12. Please provide a different month:");
+                month = scanner.nextInt() - 1;
+            }
             int date = Integer.parseInt(dateData[0]);
+            while (date > (month == 1 ? (year%4 == 0 ? 28 : 29) : 31) || date < 1) {
+                System.out.println("A day cannot be less than 1 or more than "+(month == 1 ? (year%4 == 0 ? 28 : 29) : 31)+". Please provide a different day:");
+                date = scanner.nextInt();
+            }
             Date dateOfBirth = new Date(year,month,date);
             userService.registerUser(firstname, lastname, username, dateOfBirth);
         } catch (Exception e) {
@@ -206,7 +219,7 @@ public class UserView {
             String dateOfBirthString = scanOrNull();
             Date dateOfBirth = null;
             while (dateOfBirthString != null) {
-                if (!dateOfBirthString.matches("\\$\\d{1,2}/\\d{1,2}/\\d{4}")) {
+                if (!dateOfBirthString.matches("\\d{1,2}/\\d{1,2}/\\d{4}")) {
                     System.out.println("The date of birth must match the format dd/mm/yyyy. Please try again: ");
                     dateOfBirthString = scanOrNull();
                     if (dateOfBirthString == null) break;
@@ -214,8 +227,20 @@ public class UserView {
                 }
                 String[] dateData = dateOfBirthString.split("/");
                 int year = Integer.parseInt(dateData[2]) - 1900;
+                while (year > Calendar.getInstance().get(Calendar.YEAR)) {
+                    System.out.println("You cannot be born in the future! Please provide a different year:");
+                    year = scanner.nextInt();
+                }
                 int month = Integer.parseInt(dateData[1]) - 1;
+                while (month > 11 || month < 0) {
+                    System.out.println("A month cannot be less than 1 or more than 12. Please provide a different month:");
+                    month = scanner.nextInt() - 1;
+                }
                 int date = Integer.parseInt(dateData[0]);
+                while (date > (month == 1 ? (year%4 == 0 ? 28 : 29) : 31) || date < 1) {
+                    System.out.println("A day cannot be less than 1 or more than "+(month == 1 ? (year%4 == 0 ? 28 : 29) : 31)+". Please provide a different day:");
+                    date = scanner.nextInt();
+                }
                 dateOfBirth = new Date(year,month,date);
             }
             if (userService.updateDetailsOfUser(username, firstname, lastname, newUsername, dateOfBirth)) {
