@@ -13,6 +13,7 @@ public class UserView {
     private final UserService userService;
     private final int MIN_USERNAME_LENGTH = 4;
     private final int MAX_USERNAME_LENGTH = 16;
+    private final int MIN_NAME_LENGTH = 2;
 
     public UserView(){
         this.scanner = new Scanner(System.in);
@@ -73,8 +74,16 @@ public class UserView {
         try {
             System.out.println("First Name:");
             String firstname = scanner.nextLine().trim();
+            while (firstname.length() < MIN_NAME_LENGTH) {
+                System.out.println("Name entered must have at least "+MIN_NAME_LENGTH+" letters. Please try again: ");
+                firstname = scanner.nextLine().trim();
+            }
             System.out.println("Last Name:");
             String lastname = scanner.nextLine().trim();
+            while (lastname.length() < MIN_NAME_LENGTH) {
+                System.out.println("Name entered must have at least "+MIN_NAME_LENGTH+" letters. Please try again: ");
+                lastname = scanner.nextLine().trim();
+            }
 
             String username = "";
             boolean usernameIsUnique = false;
@@ -94,6 +103,10 @@ public class UserView {
 
             System.out.println("Date Of Birth (dd/mm/yyyy):");
             String dateOfBirthString = scanner.nextLine().trim();
+            while (!dateOfBirthString.matches("\\$\\d{1,2}/\\d{1,2}/\\d{4}")) {
+                System.out.println("The date of birth must match the format dd/mm/yyyy. Please try again: ");
+                dateOfBirthString = scanner.nextLine().trim();
+            }
             String[] dateData = dateOfBirthString.split("/");
             int year = Integer.parseInt(dateData[2]) - 1900;
             int month = Integer.parseInt(dateData[1]) - 1;
@@ -125,6 +138,10 @@ public class UserView {
         try {
             System.out.println("Provide the username below:");
             String username = scanner.nextLine().trim();
+            while (username.length() < MIN_USERNAME_LENGTH) {
+                System.out.println("Username entered must have at least "+MIN_USERNAME_LENGTH+" letters. Please try again: ");
+                username = scanner.nextLine().trim();
+            }
             User user = userService.getUserByUsername(username);
             if (user == null) {
                 System.out.println("There is no user with the username \"" + username + "\"");
@@ -154,6 +171,10 @@ public class UserView {
         try {
             System.out.println("Provide the username below:");
             String username = scanner.nextLine().trim();
+            while (username.length() < MIN_USERNAME_LENGTH) {
+                System.out.println("Username entered must have at least "+MIN_USERNAME_LENGTH+" letters. Please try again: ");
+                username = scanner.nextLine().trim();
+            }
             User user = userService.getUserByUsername(username);
             if (user == null) {
                 System.out.println("There is no user with the username \"" + username + "\"");
@@ -184,7 +205,13 @@ public class UserView {
             System.out.println("Date Of Birth ("+ oldDate.getDate() +"/"+ (oldDate.getMonth()+1) +"/"+ (oldDate.getYear()+1900) +"):");
             String dateOfBirthString = scanOrNull();
             Date dateOfBirth = null;
-            if (dateOfBirthString != null) {
+            while (dateOfBirthString != null) {
+                if (!dateOfBirthString.matches("\\$\\d{1,2}/\\d{1,2}/\\d{4}")) {
+                    System.out.println("The date of birth must match the format dd/mm/yyyy. Please try again: ");
+                    dateOfBirthString = scanOrNull();
+                    if (dateOfBirthString == null) break;
+                    else continue;
+                }
                 String[] dateData = dateOfBirthString.split("/");
                 int year = Integer.parseInt(dateData[2]) - 1900;
                 int month = Integer.parseInt(dateData[1]) - 1;
@@ -209,6 +236,10 @@ public class UserView {
         try {
             System.out.println("Provide the username below:");
             String username = scanner.nextLine().trim();
+            while (username.length() < MIN_USERNAME_LENGTH) {
+                System.out.println("Username entered must have at least "+MIN_USERNAME_LENGTH+" letters. Please try again: ");
+                username = scanner.nextLine().trim();
+            }
             User user = userService.getUserByUsername(username);
             if (user == null) {
                 System.out.println("There is no user with the username \"" + username + "\"");
