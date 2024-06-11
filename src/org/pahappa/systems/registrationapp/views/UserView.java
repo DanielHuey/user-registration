@@ -132,9 +132,19 @@ public class UserView {
                     dateOfBirthString = scanner.nextLine().strip();
                 }
                 String[] dateData = dateOfBirthString.split("/");
-                int year = Integer.parseInt(dateData[2]) - 1900;
+                int year = Integer.parseInt(dateData[2]);
                 int month = Integer.parseInt(dateData[1]) - 1;
+                while (month < 0 || month > 11) {
+                    System.out.println("Invalid month. Please try again: ");
+                    month = Integer.parseInt(dateData[1]) - 1;
+                }
                 int date = Integer.parseInt(dateData[0]);
+                boolean leapYear = (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
+                while (date < 1 || (month==1 && date>(leapYear?29:28)) || date > 31) {
+                    System.out.println("Invalid date. Please try again: ");
+                    date = Integer.parseInt(dateData[0]);
+                }
+                year -= 1900; //because of the documentation's date format
                 dateOfBirth = new Date(year,month,date);
                 if (Calendar.getInstance().getTime().before(dateOfBirth)) {
                     System.err.println("You cannot be born in the future. Please choose another date.");                    
@@ -255,9 +265,19 @@ public class UserView {
                     System.out.println("The date of birth must match the format dd/mm/yyyy. Please try again: ");
                 }
                 String[] dateData = dateOfBirthString.split("/");
-                int year = Integer.parseInt(dateData[2]) - 1900;
+                int year = Integer.parseInt(dateData[2]);
                 int month = Integer.parseInt(dateData[1]) - 1;
+                while (month < 0 || month > 11) {
+                    System.out.println("Invalid month. Please try again: ");
+                    month = Integer.parseInt(dateData[1]) - 1;
+                }
                 int date = Integer.parseInt(dateData[0]);
+                boolean leapYear = (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
+                while (date < 1 || (month==1 && date>(leapYear?29:28)) || date > 31) {
+                    System.out.println("Invalid date. Please try again: ");
+                    date = Integer.parseInt(dateData[0]);
+                }
+                year -= 1900;
                 dateOfBirth = new Date(year,month,date);
                 if (Calendar.getInstance().getTime().before(dateOfBirth)) {
                     System.err.println("You cannot be born in the future. Please choose another date.");                    
