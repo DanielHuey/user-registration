@@ -25,6 +25,8 @@ public class UserView {
     public void displayMenu() {
         System.out.println("********* User Registration System *********");
         boolean running = true;
+        //seed a user (quick testing purposes)
+        userService.registerUser("The", "Admin", "admin", new Date(100,1,1));
 
         while (running) {
             System.out.println("\nChoose an operation:");
@@ -70,27 +72,45 @@ public class UserView {
         }
     }
 
+    /** helper function for handling user retries */
+    private boolean retry() {
+        System.out.println("An error has been encountered with your inputs. Please hit r to try again.");
+        String retry = scanner.nextLine().strip();
+        return retry.toLowerCase().equals("r");
+    }
+
+    /** Removes all spaces from the input string */
+    private String spacesCleaner(String input) {
+        return input
+        .replaceAll(" ","") //space
+        .replaceAll(" ",""); // Alt+0160 chracter, looks like space
+    }
+
     private void registerUser() {
         System.out.println("Provide the following details:");
         try {
+            String firstname = "";
             System.out.println("First Name:");
-            String firstname = scanner.nextLine().trim();
-            while (firstname.length() < MIN_NAME_LENGTH) {
-                System.out.println("Name entered must have at least "+MIN_NAME_LENGTH+" letters. Please try again: ");
-                firstname = scanner.nextLine().trim();
+            while (true) {
+                firstname = spacesCleaner(scanner.nextLine().strip());
+                if (firstname.length() < MIN_NAME_LENGTH) {
+                    System.out.println("Name entered must have at least "+MIN_NAME_LENGTH+" letters. Please try again: ");
+                } else if (!firstname.matches("^[a-zA-Z]*")) {
+                    System.out.println("A name should have letters only");
+                } else break;
             }
             System.out.println("Last Name:");
-            String lastname = scanner.nextLine().trim();
-            while (lastname.length() < MIN_NAME_LENGTH) {
-                System.out.println("Name entered must have at least "+MIN_NAME_LENGTH+" letters. Please try again: ");
-                lastname = scanner.nextLine().trim();
-            }
+            String lastname = spacesCleaner(scanner.nextLine().strip()).replaceAll("[0-9]*","");
 
             String username = "";
             boolean usernameIsUnique = false;
             while (!usernameIsUnique){
                 System.out.println("Username:");
-                username = scanner.nextLine().trim();
+                username = spacesCleaner(scanner.nextLine().strip());
+                if (!username.matches("^[a-zA-Z0-9][a-zA-Z0-9_]*")) {
+                    System.out.println("Invalid characters in username. Usernames start with a letter, and can only allow letters, numbers and underscores.");
+                    continue;
+                }
                 if (username.length() >= MIN_USERNAME_LENGTH && username.length() <= MAX_USERNAME_LENGTH && !userService.checkIfUsernameExists(username)) {
                     usernameIsUnique = true;
                     continue;
@@ -102,36 +122,31 @@ public class UserView {
                 } else System.out.print("This username is already in use. New "); 
             }
 
-            System.out.println("Date Of Birth (dd/mm/yyyy):");
-            String dateOfBirthString = scanner.nextLine().trim();
-            while (!dateOfBirthString.matches("\\d{1,2}/\\d{1,2}/\\d{4}")) {
-                System.out.println("The date of birth must match the format dd/mm/yyyy. Please try again: ");
-                dateOfBirthString = scanner.nextLine().trim();
+            boolean validDate = false;
+            Date dateOfBirth = null;
+            while (!validDate) {
+                System.out.println("Date Of Birth (dd/mm/yyyy):");
+                String dateOfBirthString = scanner.nextLine().strip();
+                while (!dateOfBirthString.matches("\\d{1,2}/\\d{1,2}/\\d{4}")) {
+                    System.out.println("The date of birth must match the format dd/mm/yyyy. Please try again: ");
+                    dateOfBirthString = scanner.nextLine().strip();
+                }
+                String[] dateData = dateOfBirthString.split("/");
+                int year = Integer.parseInt(dateData[2]) - 1900;
+                int month = Integer.parseInt(dateData[1]) - 1;
+                int date = Integer.parseInt(dateData[0]);
+                dateOfBirth = new Date(year,month,date);
+                if (Calendar.getInstance().getTime().before(dateOfBirth)) {
+                    System.err.println("You cannot be born in the future. Please choose another date.");                    
+                } else if (dateOfBirth.before(new Date(0,1,1))) {
+                    System.err.println("You cannot be born before 1900. Please choose another date.");                    
+                } else {
+                    validDate = true;
+                }
             }
-            String[] dateData = dateOfBirthString.split("/");
-            int year = Integer.parseInt(dateData[2]) - 1900;
-            while (year > (Calendar.getInstance().get(Calendar.YEAR) - 1900)) {
-                System.out.println("You cannot be born in the future! Plese provide a different year:");
-                year = scanner.nextInt();
-            }
-            int month = Integer.parseInt(dateData[1]) - 1;
-            while (month > 11 || month < 0) {
-                System.out.println("A month cannot be less than 1 or more than 12. Please provide a different month:");
-                month = scanner.nextInt() - 1;
-            }
-            int date = Integer.parseInt(dateData[0]);
-            while (date > (month == 1 ? (year%4 == 0 ? 28 : 29) : 31) || date < 1) {
-                System.out.println("A day cannot be less than 1 or more than "+(month == 1 ? (year%4 == 0 ? 28 : 29) : 31)+". Please provide a different day:");
-                date = scanner.nextInt();
-            }
-            Date dateOfBirth = new Date(year,month,date);
             userService.registerUser(firstname, lastname, username, dateOfBirth);
         } catch (Exception e) {
-            System.err.println("An error has been encountered with your inputs. Please hit r to try again.");
-            String retry = scanner.nextLine().strip();
-            if (retry.toLowerCase().equals("r")) {
-                registerUser();
-            }
+            if (retry()) registerUser();
         }
     }
 
@@ -141,19 +156,19 @@ public class UserView {
             System.out.println("The system doesn't have any users.");
             return;
         }
-        System.out.println("FULL NAME\t\t@ USERNAME");
+        System.out.println("FULL NAME\t\t\"USERNAME\"");
         for (User user: listOfUsers){
-            System.out.println(user.getFirstname() + " " + user.getLastname() + " \t@ " + user.getUsername());
+            System.out.println(user.getFirstname() + " " + user.getLastname() + " \t\t\"" + user.getUsername() + "\"");
         }
     }
 
     private void getUserOfUsername() {
         try {
             System.out.println("Provide the username below:");
-            String username = scanner.nextLine().trim();
+            String username = spacesCleaner(scanner.nextLine().strip());
             while (username.length() < MIN_USERNAME_LENGTH) {
                 System.out.println("Username entered must have at least "+MIN_USERNAME_LENGTH+" letters. Please try again: ");
-                username = scanner.nextLine().trim();
+                username = spacesCleaner(scanner.nextLine().strip());
             }
             User user = userService.getUserByUsername(username);
             if (user == null) {
@@ -163,19 +178,16 @@ public class UserView {
             System.out.println("First Name: " + user.getFirstname());
             System.out.println("Last Name: " + user.getLastname());
             System.out.println("Username: " + user.getUsername());
-            System.out.println("Date Of Birth: " + user.getDateOfBirth());
+            System.out.println("Date Of Birth: " + user.getDateOfBirth().toString().replaceFirst("00:00:00 UTC ", ""));
 
         } catch (Exception e) {
-            System.err.println("An error has been encountered with your inputs. Please hit r to try again.");
-            String retry = scanner.nextLine().strip();
-            if (retry.toLowerCase().equals("r")) {
-                getUserOfUsername();
-            }
+            if (retry()) getUserOfUsername();
         }
     }
 
+    /** returns a string or null */
     private String scanOrNull() {
-        String input = scanner.nextLine().trim();
+        String input = scanner.nextLine().strip();
         if (input == "") return null;
         return input;
     }
@@ -183,19 +195,29 @@ public class UserView {
     private void updateUserOfUsername() {
         try {
             System.out.println("Provide the username below:");
-            String username = scanner.nextLine().trim();
-            while (username.length() < MIN_USERNAME_LENGTH) {
+            String username = spacesCleaner(scanner.nextLine().strip());
+            while (username.length() < MIN_USERNAME_LENGTH || username.length() > MAX_USERNAME_LENGTH) {
+                if (!username.matches("^[a-zA-Z][a-zA-Z0-9_]*")) System.out.println("Invalid characters in username. Usernames start with a letter, and can only allow letters, numbers and underscores.");
                 System.out.println("Username entered must have at least "+MIN_USERNAME_LENGTH+" letters. Please try again: ");
-                username = scanner.nextLine().trim();
+                username = spacesCleaner(scanner.nextLine().strip());
             }
             User user = userService.getUserByUsername(username);
             if (user == null) {
                 System.out.println("There is no user with the username \"" + username + "\"");
                 return;
             }
-            System.out.println("Press Enter to keep the prevoius values.\n");
+            System.out.println("Press Enter to keep the (prevoius) values.\n");
             System.out.println("First Name ("+user.getFirstname()+"):");
-            String firstname = scanOrNull();
+            String firstname = "";
+            while (firstname != null) {
+                firstname = scanOrNull();
+                if (firstname == null) break;
+                if (firstname.length() < MIN_NAME_LENGTH) {
+                    System.out.println("Name entered must have at least "+MIN_NAME_LENGTH+" letters. Please try again: ");
+                } else if (!firstname.matches("^[a-zA-Z]*")) {
+                    System.out.println("A name should have letters only");
+                } else break;
+            }
             System.out.println("Last Name("+user.getLastname()+"):");
             String lastname = scanOrNull();
 
@@ -204,7 +226,12 @@ public class UserView {
             while (!usernameIsUnique){
                 System.out.println("Username("+user.getUsername()+"):");
                 newUsername = scanOrNull();
-                if (newUsername == null || (newUsername.length() >= MIN_USERNAME_LENGTH && newUsername.length() <= MAX_USERNAME_LENGTH && !userService.checkIfUsernameExists(newUsername))) {
+                if (newUsername == null) break;
+                if (!newUsername.matches("^[a-zA-Z0-9][a-zA-Z0-9_]*")) {
+                    System.out.println("Invalid characters in username. Usernames start with a letter, and can only allow letters, numbers and underscores.");
+                    continue;
+                }
+                if (newUsername.length() >= MIN_USERNAME_LENGTH && newUsername.length() <= MAX_USERNAME_LENGTH && !userService.checkIfUsernameExists(newUsername)) {
                     usernameIsUnique = true;
                     continue;
                 }
@@ -215,33 +242,30 @@ public class UserView {
                 } else System.out.print("This username is already in use. New "); // Word loop
             }
             Date oldDate = user.getDateOfBirth();
-            System.out.println("Date Of Birth ("+ oldDate.getDate() +"/"+ (oldDate.getMonth()+1) +"/"+ (oldDate.getYear()+1900) +"):");
-            String dateOfBirthString = scanOrNull();
+            String dateOfBirthString = "";
+            boolean validDate = false;
             Date dateOfBirth = null;
-            while (dateOfBirthString != null) {
-                if (!dateOfBirthString.matches("\\d{1,2}/\\d{1,2}/\\d{4}")) {
-                    System.out.println("The date of birth must match the format dd/mm/yyyy. Please try again: ");
+            outer: while (!validDate) {
+                while (!dateOfBirthString.matches("\\d{1,2}/\\d{1,2}/\\d{4}")) {
+                    System.out.println("Date Of Birth ("+ oldDate.getDate() +"/"+ (oldDate.getMonth()+1) +"/"+ (oldDate.getYear()+1900) +"):");
                     dateOfBirthString = scanOrNull();
-                    if (dateOfBirthString == null) break;
-                    else continue;
+                    if (dateOfBirthString == null) {
+                        break outer;
+                    }
+                    System.out.println("The date of birth must match the format dd/mm/yyyy. Please try again: ");
                 }
                 String[] dateData = dateOfBirthString.split("/");
                 int year = Integer.parseInt(dateData[2]) - 1900;
-                while (year > Calendar.getInstance().get(Calendar.YEAR)) {
-                    System.out.println("You cannot be born in the future! Please provide a different year:");
-                    year = scanner.nextInt();
-                }
                 int month = Integer.parseInt(dateData[1]) - 1;
-                while (month > 11 || month < 0) {
-                    System.out.println("A month cannot be less than 1 or more than 12. Please provide a different month:");
-                    month = scanner.nextInt() - 1;
-                }
                 int date = Integer.parseInt(dateData[0]);
-                while (date > (month == 1 ? (year%4 == 0 ? 28 : 29) : 31) || date < 1) {
-                    System.out.println("A day cannot be less than 1 or more than "+(month == 1 ? (year%4 == 0 ? 28 : 29) : 31)+". Please provide a different day:");
-                    date = scanner.nextInt();
-                }
                 dateOfBirth = new Date(year,month,date);
+                if (Calendar.getInstance().getTime().before(dateOfBirth)) {
+                    System.err.println("You cannot be born in the future. Please choose another date.");                    
+                } else if (dateOfBirth.before(new Date(0,1,1))) {
+                    System.err.println("You cannot be born before 1900. Please choose another date.");                    
+                } else {
+                    validDate = true;
+                }
             }
             if (userService.updateDetailsOfUser(username, firstname, lastname, newUsername, dateOfBirth)) {
                 System.out.println("Details successfully recorded");
@@ -249,21 +273,17 @@ public class UserView {
                 System.out.println("Did not find the user with username \""+username+"\". Maybe the details were edited by another administrator while you were also editing.");                
             }
         } catch (Exception e) {
-            System.err.println("An error has been encountered with your inputs. Please hit r to try again.");
-            String retry = scanner.nextLine().strip();
-            if (retry.toLowerCase().equals("r")) {
-                updateUserOfUsername();
-            }
+            if (retry()) updateUserOfUsername();
         }
     }
 
     private void deleteUserOfUsername() {
         try {
             System.out.println("Provide the username below:");
-            String username = scanner.nextLine().trim();
+            String username = scanner.nextLine().strip();
             while (username.length() < MIN_USERNAME_LENGTH) {
                 System.out.println("Username entered must have at least "+MIN_USERNAME_LENGTH+" letters. Please try again: ");
-                username = scanner.nextLine().trim();
+                username = scanner.nextLine().strip();
             }
             User user = userService.getUserByUsername(username);
             if (user == null) {
@@ -271,19 +291,15 @@ public class UserView {
                 return;
             }
             userService.deleteUser(username);
-            System.out.println("Successfully deleted the user @" + username);
+            System.out.println("Successfully deleted the user \"" + username + "\"");
         } catch (Exception e) {
-            System.err.println("An error has been encountered with your inputs. Please hit r to try again.");
-            String retry = scanner.nextLine().strip();
-            if (retry.toLowerCase().equals("r")) {
-                deleteUserOfUsername();
-            }
+            if (retry()) deleteUserOfUsername();
         }
     }
 
     private void deleteAllUsers() {
         System.out.println("Are you sure? This action is irreversible!  (y/n)");
-        switch (scanner.nextLine().trim().toLowerCase()) {
+        switch (scanner.nextLine().strip().toLowerCase()) {
             case "y":
                 userService.deleteAllUsers();
                 System.out.println("All users successfully deleted!");
