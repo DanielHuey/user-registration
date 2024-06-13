@@ -8,9 +8,9 @@
   <artifactId>registration-app</artifactId>
   <version>apple</version>
 
-  <name>.</name>
+  <name>registration-app</name>
   
-  <url>https://www.registrationapp.systems.pahappa.org</url>
+  <url>https://registrationapp.systems.pahappa.org</url>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -19,6 +19,13 @@
   </properties>
 
   <dependencies>
+<!-- 
+    <dependency>
+      <groupId>org.hsqldb</groupId>
+      <artifactId>hsqldb</artifactId>
+      <version>2.7.3</version>
+    </dependency> -->
+
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>

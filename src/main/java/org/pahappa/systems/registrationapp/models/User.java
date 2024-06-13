@@ -3,8 +3,18 @@ package org.pahappa.systems.registrationapp.models;
 import java.util.Date;
 import java.util.Objects;
 
-public class User {
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
+@Entity
+public class User {
+    @Id
+    @Column(name = "user_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
     private String username;
     private String firstname;
     private String lastname;
@@ -14,11 +24,21 @@ public class User {
 
     }
 
-    private User(String username, String firstname, String lastname, Date dateOfBirth){
+    @SuppressWarnings("unused")
+    private User(long id, String username, String firstname, String lastname, Date dateOfBirth){
+        this.id = id;
         this.username = username;
         this.firstname = firstname;
         this.lastname = lastname;
         this.dateOfBirth = dateOfBirth;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getUsername() {
