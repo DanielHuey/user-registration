@@ -23,14 +23,15 @@ public class UserDAO {
     //delete (1, all)
 
     public void addUser(User user) {
+        Transaction tx = null;
         try {
             Session session = sessionFactory.openSession();
-            Transaction tx = session.beginTransaction();
+            tx = session.beginTransaction();
             session.save(user);
             tx.commit();
             session.close();
         } catch (Exception e) {
-            System.out.println(e);
+            rollback(tx,e);
         }
     }
 
@@ -49,7 +50,7 @@ public class UserDAO {
     }
 
     public List<User> getAllUsers() {
-        List<User> users = null;
+        List users = null;
         try {
             Session session = sessionFactory.openSession();
             users = session.createQuery("FROM User").list();
@@ -61,14 +62,15 @@ public class UserDAO {
     }
     
     public void updateUser(User user) {
+        Transaction tx = null;
         try {
             Session session = sessionFactory.openSession();
-            Transaction tx = session.beginTransaction();
+            tx = session.beginTransaction();
             session.saveOrUpdate(user);
             tx.commit();
             session.close();
         } catch (Exception e) {
-            System.out.println(e);
+            rollback(tx,e);
         }
     }
 
@@ -81,8 +83,7 @@ public class UserDAO {
             tx.commit();
             session.close();
         } catch (Exception e) {
-            tx.rollback();
-            System.out.println(e);
+            rollback(tx,e);
         }
     }
 
@@ -91,13 +92,18 @@ public class UserDAO {
         try {
             Session session = sessionFactory.openSession();
             tx = session.beginTransaction();
-            session.clear();
+            session.createQuery("DELETE * FROM User");
             tx.commit();
             session.close();
         } catch (Exception e) {
-            tx.rollback();
-            System.out.println(e);
+            rollback(tx,e);
         }
+    }
+
+    private void rollback(Transaction tx, Exception e) {
+        assert tx != null;
+        tx.rollback();
+        System.out.println(e.getMessage());
     }
 
 }

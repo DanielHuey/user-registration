@@ -22,7 +22,7 @@ public class UserView {
     public void displayMenu() {
         System.out.println("********* User Registration System *********");
         boolean running = true;
-        //seed a user (quick testing purposes)
+        /* seed a user (quick testing purposes)
         User seededUser = new User();
         seededUser.setFirstname("The");
         seededUser.setLastname("Admin");
@@ -32,7 +32,7 @@ public class UserView {
             userService.registerUser(seededUser);
         } catch (Exception e) {
             e.printStackTrace();
-        }
+        } */
 
         while (running) {
             System.out.println("\nChoose an operation:");
@@ -81,39 +81,37 @@ public class UserView {
     private boolean retry() {
         System.out.println("An error has been encountered with your inputs. Please hit r to try again.");
         String retry = scanner.nextLine().strip();
-        return retry.toLowerCase().equals("r");
+        return retry.equalsIgnoreCase("r");
     }
 
     /** Removes all spaces from the input string */
     private String spacesCleaner(String input) {
-        return input.replaceAll("[ \u00a0]",""); //space & nbsp
+        return input.strip().replaceAll("[ \u00a0]",""); //space & nbsp
     }
 
     private void registerUser() {
-        System.out.println("Provide the following details:");
         try {
+            userService.isQuitting(spacesCleaner(scanner.nextLine()));
+            System.out.println("Provide the following details:");
             User newUser = new User();
-            String firstname = "";
+            String firstname;
             System.out.println("First Name (required):");
             while (true) {
                 try {
-                    firstname = userService.validateName(spacesCleaner(scanner.nextLine().strip()));
+                    firstname = userService.validateName(spacesCleaner(scanner.nextLine()));
                     break;
                 } catch (Exception e) {
                     System.out.println(e.getMessage());
                 }
             }
             System.out.println("Last Name:");
-            String lastname = spacesCleaner(scanner.nextLine().strip());
-            if (lastname.contains("[0-9]*")) {
-                lastname = lastname.replaceAll("[0-9]*","");
-            }
+            String lastname = spacesCleaner(scanner.nextLine()).replaceAll("[0-9]*","");
 
             System.out.println("Username (required):");
-            String username = null;
+            String username;
             while (true) {
                 try {
-                    username = userService.validateUsername(spacesCleaner(scanner.nextLine().strip()));
+                    username = userService.validateUsername(spacesCleaner(scanner.nextLine()));
                     if (!userService.usernameExists(username)) break;
                     throw new UsernameException("The username you have provided already exists");
                 } catch (Exception e) {
@@ -122,7 +120,7 @@ public class UserView {
             }
 
             System.out.println("Date Of Birth (required) (dd/mm/yyyy):");
-            Date dateOfBirth = null;
+            Date dateOfBirth;
             while (true) {
                 try {
                     dateOfBirth = userService.validateDateOfBirth(scanner.nextLine().strip());
@@ -156,12 +154,13 @@ public class UserView {
 
     private void getUserOfUsername() {
         try {
+            userService.isQuitting(spacesCleaner(scanner.nextLine()));
             System.out.println("Provide the username below:");
-            String username = null;
+            String username;
             User user;
             while (true) {
                 try {
-                    username = spacesCleaner(scanner.nextLine().strip());
+                    username = spacesCleaner(scanner.nextLine());
                     user = userService.getUserByUsername(username);
                     break;
                 } catch (Exception e) {
@@ -175,7 +174,7 @@ public class UserView {
             System.out.println("First Name:    " + user.getFirstname());
             System.out.println("Last Name:     " + user.getLastname());
             System.out.println("Username:      " + user.getUsername());
-            System.out.println("Date Of Birth: " + user.getDateOfBirth().toString().replaceFirst("00:00:00 UTC ", ""));
+            System.out.println("Date Of Birth: " + user.getDateOfBirth().toString().replaceFirst("00:00:00 UTC ", "").replaceFirst(" 00:00:00.0",""));
 
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -186,18 +185,19 @@ public class UserView {
     /** returns a string or null */
     private String scanOrNull() {
         String input = scanner.nextLine().strip();
-        if (input == "") return null;
+        if (input.isEmpty()) return null;
         return input;
     }
 
     private void updateUserOfUsername() {
         try {
+            userService.isQuitting(spacesCleaner(scanner.nextLine()));
             System.out.println("Provide the username below:");
-            String username = null;
-            User user = null;
+            String username;
+            User user;
             while (true) {
                 try {
-                    username = spacesCleaner(scanner.nextLine().strip());
+                    username = spacesCleaner(scanner.nextLine());
                     user = userService.getUserByUsername(username);
                     break;
                 } catch (Exception e) {
@@ -210,7 +210,7 @@ public class UserView {
             }
             System.out.println("Press Enter to keep the (previous) values.\n");
             System.out.println("First Name ("+user.getFirstname()+"):");
-            String firstname = "";
+            String firstname;
             while (true) {
                 firstname = scanOrNull();
                 if (firstname == null) break;
@@ -223,9 +223,10 @@ public class UserView {
             }
             System.out.println("Last Name("+user.getLastname()+"):");
             String lastname = scanOrNull();
+            lastname = lastname != null ? lastname.replaceAll("[0-9]*","") : null;
 
             System.out.println("Username("+user.getUsername()+"):");
-            String newUsername = null;
+            String newUsername;
             while (true){
                 newUsername = scanOrNull();
                 if (newUsername == null) break;
@@ -238,7 +239,7 @@ public class UserView {
                 }
             }
             Date oldDate = user.getDateOfBirth();
-            String dateOfBirthString = "";
+            String dateOfBirthString;
             Date dateOfBirth = null;
             System.out.println("Date Of Birth ("+ oldDate.getDate() +"/"+ (oldDate.getMonth()+1) +"/"+ (oldDate.getYear()+1900) +"):");
             while (true) {
@@ -264,12 +265,13 @@ public class UserView {
 
     private void deleteUserOfUsername() {
         try {
+            userService.isQuitting(spacesCleaner(scanner.nextLine()));
             System.out.println("Provide the username below:");
-            String username = null;
-            User user = null;
+            String username;
+            User user;
             while (true) {
                 try {
-                    username = spacesCleaner(scanner.nextLine().strip());
+                    username = spacesCleaner(scanner.nextLine());
                     user = userService.getUserByUsername(username);
                     break;
                 } catch (Exception e) {
@@ -290,13 +292,9 @@ public class UserView {
 
     private void deleteAllUsers() {
         System.out.println("Are you sure? This action is irreversible!  (y/n)");
-        switch (scanner.nextLine().strip().toLowerCase()) {
-            case "y":
-                userService.deleteAllUsers();
-                System.out.println("All users successfully deleted!");
-                break;
-            default:
-                break;
+        if (scanner.nextLine().strip().equalsIgnoreCase("y")) {
+            userService.deleteAllUsers();
+            System.out.println("All users successfully deleted!");
         }
     }
 }

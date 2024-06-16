@@ -3,24 +3,22 @@ package org.pahappa.systems.registrationapp.services;
 import org.pahappa.systems.registrationapp.dao.UserDAO;
 import org.pahappa.systems.registrationapp.exception.DateException;
 import org.pahappa.systems.registrationapp.exception.NameException;
+import org.pahappa.systems.registrationapp.exception.ExitException;
 import org.pahappa.systems.registrationapp.exception.UsernameException;
 import org.pahappa.systems.registrationapp.models.User;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
 
 public class UserService {
-    private final HashSet<User> users;
     private final UserDAO userDAO;
     private final int MIN_USERNAME_LENGTH = 4;
     private final int MAX_USERNAME_LENGTH = 16;
     private final int MIN_NAME_LENGTH = 2;
 
     public UserService () {
-        users = new HashSet<>();
         userDAO = new UserDAO();
     }
 
@@ -33,8 +31,7 @@ public class UserService {
     }
 
     public List<User> getListOfUsers() {
-        List<User> userList = userDAO.getAllUsers();
-        return userList;
+        return userDAO.getAllUsers();
     }
 
     public User getUserByUsername(String username) throws UsernameException {
@@ -58,7 +55,7 @@ public class UserService {
     public boolean updateDetailsOfUser(String username, String firstname, String lastname, String newUserName, Date dateOfBirth) throws Exception {
         User user = getUserByUsername(username);
         if (user == null) return false;
-        users.remove(user);
+        userDAO.deleteUser(user);
         user.setFirstname(firstname != null ? validateName(firstname) : user.getFirstname());
         user.setLastname(lastname != null ? lastname : user.getLastname());
         user.setDateOfBirth(dateOfBirth != null ? validateDateOfBirth(dateOfBirth) : user.getDateOfBirth());
@@ -68,7 +65,7 @@ public class UserService {
     }
 
     /* Validators */
-    /** Returns the validted Name */
+    /** Returns the validated Name */
     public String validateName(String name) throws NameException {
         if (name.length() < MIN_NAME_LENGTH) {
             throw new NameException("A name must have at least "+MIN_NAME_LENGTH+" letters.");
@@ -94,7 +91,7 @@ public class UserService {
     public Date validateDateOfBirth(Date dateOfBirth) throws DateException {
         if (Calendar.getInstance().getTime().before(dateOfBirth)) {
             throw new DateException("You cannot be born in the future. Please choose another date.");                    
-        } else if (dateOfBirth.before(new Date(0,1,1))) {
+        } else if (dateOfBirth.before(new Date(0, Calendar.JANUARY,1))) {
             throw new DateException("You cannot be born before 1900. Please choose another date.");                    
         }
         return dateOfBirth;
@@ -107,5 +104,10 @@ public class UserService {
         SimpleDateFormat dFormat = new SimpleDateFormat("dd/MM/yyyy");
         Date dateOfBirth = dFormat.parse(dateOfBirthString);
         return validateDateOfBirth(dateOfBirth);
+    }
+
+    public void isQuitting(String input) throws ExitException {
+        System.out.println("Proceed with selected action? (y/n): ");
+        if (input.equalsIgnoreCase("n")) throw new ExitException();
     }
 }
