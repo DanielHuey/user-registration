@@ -6,104 +6,69 @@ import java.util.List;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.pahappa.systems.registrationapp.config.SessionConfiguration;
+import org.pahappa.systems.registrationapp.models.Dependant;
 import org.pahappa.systems.registrationapp.models.User;
 
-public class UserDAO {
-    private final SessionFactory sessionFactory;
+public class UserDAO extends DaoSkeleton {
+
 
     public UserDAO() {
-        this.sessionFactory = SessionConfiguration.getSessionFactory();
+        this.setTable("User");
     }
 
-    //add
-    //get (1, all)
-    //update
-    //delete (1, all)
-
     public void addUser(User user) {
-        Transaction tx = null;
-        try {
-            Session session = sessionFactory.openSession();
-            tx = session.beginTransaction();
-            session.save(user);
-            tx.commit();
-            session.close();
-        } catch (Exception e) {
-            rollback(tx,e);
-        }
+        super.add(user);
     }
 
     public User getUserByUsername(String username) {
-        User user = null;
-        try {
-            Session session = sessionFactory.openSession();
-            Query q = session.createQuery("FROM User WHERE username = :username");
-            q.setParameter("username", username);
-            user = (User) q.uniqueResult();
-            session.close();
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-        return user;
+        return (User) this.getByUsername(username);
     }
 
     public List<User> getAllUsers() {
-        List users = null;
-        try {
-            Session session = sessionFactory.openSession();
-            users = session.createQuery("FROM User").list();
-            session.close();
-        } catch (Exception e) {
-            System.out.println(e);
+        List<User> users = null;
+        for (Object o: this.getAll()) {
+            users.add((User) o);
         }
         return users;
     }
     
     public void updateUser(User user) {
-        Transaction tx = null;
-        try {
-            Session session = sessionFactory.openSession();
-            tx = session.beginTransaction();
-            session.saveOrUpdate(user);
-            tx.commit();
-            session.close();
-        } catch (Exception e) {
-            rollback(tx,e);
-        }
+        this.update(user);
     }
 
     public void deleteUser(User user) {
-        Transaction tx = null;
-        try {
-            Session session = sessionFactory.openSession();
-            tx = session.beginTransaction();
-            session.delete(user);
-            tx.commit();
-            session.close();
-        } catch (Exception e) {
-            rollback(tx,e);
-        }
+        this.delete(user);
     }
 
     public void deleteAllUsers() {
+        this.deleteAll();
+    }
+
+    public void addDependant(User user, Dependant dependant) {
         Transaction tx = null;
-        try {
-            Session session = sessionFactory.openSession();
-            tx = session.beginTransaction();
-            session.createQuery("DELETE * FROM User");
-            tx.commit();
-            session.close();
-        } catch (Exception e) {
-            rollback(tx,e);
-        }
+//        try {
+//            Session session = sessionFactory.openSession();
+//            tx = session.beginTransaction();
+//            user.addDependant(dependant);
+//            session.saveOrUpdate(user);
+//            tx.commit();
+//            session.close();
+//        } catch (Exception e) {
+//            rollback(tx,e);
+//        }
     }
 
-    private void rollback(Transaction tx, Exception e) {
-        assert tx != null;
-        tx.rollback();
-        System.out.println(e.getMessage());
+    public void addDependants(User user, List<Dependant> dependants) {
+//        Transaction tx = null;
+//        try {
+//            Session session = sessionFactory.openSession();
+//            tx = session.beginTransaction();
+//            user.addDependants(dependants);
+//            session.saveOrUpdate(user);
+//            tx.commit();
+//            session.close();
+//        } catch (Exception e) {
+//            rollback(tx,e);
+//        }
     }
-
 }

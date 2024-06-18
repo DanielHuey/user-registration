@@ -107,7 +107,6 @@ public class UserService {
     }
 
     public void isQuitting(String input) throws ExitException {
-        System.out.println("Proceed with selected action? (y/n): ");
         if (input.equalsIgnoreCase("n")) throw new ExitException();
     }
 }

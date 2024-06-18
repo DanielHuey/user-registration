@@ -1,16 +1,14 @@
 package org.pahappa.systems.registrationapp.models;
 
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
-public class User {
+public class User extends UserSkeleton {
     @Id
     @Column(name = "user_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,6 +17,8 @@ public class User {
     private String firstname;
     private String lastname;
     private Date dateOfBirth;
+    @OneToMany(mappedBy = "owner")
+    private List<Dependant> dependants;
 
     public User(){
 
@@ -73,6 +73,26 @@ public class User {
         this.dateOfBirth = dateOfBirth;
     }
 
+    public List<Dependant> getDependants() {
+        return dependants;
+    }
+
+    public void setDependants(List<Dependant> dependants) {
+        this.dependants = dependants;
+    }
+
+    public void addDependant(Dependant dependant) {
+        this.dependants.add(dependant);
+    }
+
+    public void addDependants(List<Dependant> dependants) {
+        for (Dependant dependant: dependants) addDependant(dependant);
+    }
+
+    public void removeDependant(Dependant dependant) {
+        this.dependants.remove(dependant);
+    }
+
     @Override
     public String toString() {
         return username;
@@ -86,7 +106,8 @@ public class User {
         return Objects.equals(username, user.username) &&
                 Objects.equals(firstname, user.firstname) &&
                 Objects.equals(lastname, user.lastname) &&
-                Objects.equals(dateOfBirth, user.dateOfBirth);
+                Objects.equals(dateOfBirth, user.dateOfBirth) &&
+                Objects.equals(dependants, user.dependants);
     }
 
     @Override

@@ -1,38 +1,35 @@
 package org.pahappa.systems.registrationapp.views;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
+import org.pahappa.systems.registrationapp.exception.ExitException;
 import org.pahappa.systems.registrationapp.exception.UsernameException;
 import org.pahappa.systems.registrationapp.models.User;
+import org.pahappa.systems.registrationapp.services.DependantService;
 import org.pahappa.systems.registrationapp.services.UserService;
+
+import javax.swing.text.DateFormatter;
 
 public class UserView {
 
     private final Scanner scanner;
     private final UserService userService;
+    private final DependantView dependantView;
 
     public UserView(){
         this.scanner = new Scanner(System.in);
         this.userService = new UserService();
+        this.dependantView = new DependantView();
     }
 
 
     public void displayMenu() {
         System.out.println("********* User Registration System *********");
         boolean running = true;
-        /* seed a user (quick testing purposes)
-        User seededUser = new User();
-        seededUser.setFirstname("The");
-        seededUser.setLastname("Admin");
-        seededUser.setUsername("admin");
-        seededUser.setDateOfBirth(new Date(100,1,1));
-        try {
-            userService.registerUser(seededUser);
-        } catch (Exception e) {
-            e.printStackTrace();
-        } */
 
         while (running) {
             System.out.println("\nChoose an operation:");
@@ -42,7 +39,8 @@ public class UserView {
             System.out.println("4. Update user details of username");
             System.out.println("5. Delete User of username");
             System.out.println("6. Delete all users");
-            System.out.println("7. Exit");
+            System.out.println("7. Add a dependant");
+            System.out.println("8. Exit");
             try{
                 int choice = scanner.nextInt();
                 scanner.nextLine(); // Consume the newline character
@@ -66,6 +64,9 @@ public class UserView {
                         deleteAllUsers();
                         break;
                     case 7:
+                        addDependant();
+                        break;
+                    case 8:
                         running = false;
                         break;
                     default:
@@ -74,6 +75,21 @@ public class UserView {
             }catch (Exception e){
                 System.out.println("Invalid choice. Please try again.\n");
             }
+        }
+    }
+
+    private void addDependant() {
+        try {
+            quitMessage();
+            userService.isQuitting(spacesCleaner(scanner.nextLine()));
+            User user = getUserOfUsername();
+            assert user != null;
+            dependantView.registerDependant(user);
+        } catch (ExitException e) {
+            System.out.println(e.getMessage());
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            if (retry()) addDependant();
         }
     }
 
@@ -91,6 +107,7 @@ public class UserView {
 
     private void registerUser() {
         try {
+            quitMessage();
             userService.isQuitting(spacesCleaner(scanner.nextLine()));
             System.out.println("Provide the following details:");
             User newUser = new User();
@@ -134,11 +151,15 @@ public class UserView {
             newUser.setUsername(username);
             newUser.setDateOfBirth(dateOfBirth);
             userService.registerUser(newUser);
+        } catch (ExitException e) {
+            System.out.println(e.getMessage());
         } catch (Exception e) {
             System.out.println(e.getMessage());
             if (retry()) registerUser();
         }
     }
+
+    private void quitMessage() {System.out.println("Proceed with selected action? (y/n): ");}
 
     private void displayAllUsers() {
         List<User> listOfUsers = userService.getListOfUsers();
@@ -147,13 +168,16 @@ public class UserView {
             return;
         }
         System.out.println("FULL NAME\t\t\"USERNAME\"");
+
         for (User user: listOfUsers){
+
             System.out.println(user.getFirstname() + " " + user.getLastname() + " \t\t\"" + user.getUsername() + "\"");
         }
     }
 
-    private void getUserOfUsername() {
+    private User getUserOfUsername() {
         try {
+            quitMessage();
             userService.isQuitting(spacesCleaner(scanner.nextLine()));
             System.out.println("Provide the username below:");
             String username;
@@ -169,17 +193,21 @@ public class UserView {
             }
             if (user == null) {
                 System.out.println("There is no user with the username \"" + username + "\"");
-                return;
+            } else {
+                DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+                System.out.println("First Name:    " + user.getFirstname());
+                System.out.println("Last Name:     " + user.getLastname());
+                System.out.println("Username:      " + user.getUsername());
+                System.out.println("Date Of Birth: " + df.format(user.getDateOfBirth()));
             }
-            System.out.println("First Name:    " + user.getFirstname());
-            System.out.println("Last Name:     " + user.getLastname());
-            System.out.println("Username:      " + user.getUsername());
-            System.out.println("Date Of Birth: " + user.getDateOfBirth().toString().replaceFirst("00:00:00 UTC ", "").replaceFirst(" 00:00:00.0",""));
-
+            return user;
+        } catch (ExitException e) {
+            System.out.println(e.getMessage());
         } catch (Exception e) {
             System.out.println(e.getMessage());
             if (retry()) getUserOfUsername();
         }
+        return null;
     }
 
     /** returns a string or null */
@@ -191,6 +219,7 @@ public class UserView {
 
     private void updateUserOfUsername() {
         try {
+            quitMessage();
             userService.isQuitting(spacesCleaner(scanner.nextLine()));
             System.out.println("Provide the username below:");
             String username;
@@ -257,6 +286,8 @@ public class UserView {
             } else {
                 System.out.println("Did not find the user with username \""+username+"\". Maybe the details were edited by another administrator while you were also editing.");                
             }
+        } catch (ExitException e) {
+            System.out.println(e.getMessage());
         } catch (Exception e) {
             System.out.println(e.getMessage());
             if (retry()) updateUserOfUsername();
@@ -265,6 +296,7 @@ public class UserView {
 
     private void deleteUserOfUsername() {
         try {
+            quitMessage();
             userService.isQuitting(spacesCleaner(scanner.nextLine()));
             System.out.println("Provide the username below:");
             String username;
@@ -284,6 +316,8 @@ public class UserView {
             }
             userService.deleteUser(username);
             System.out.println("Successfully deleted the user \"" + username + "\"");
+        } catch (ExitException e) {
+            System.out.println(e.getMessage());
         } catch (Exception e) {
             System.out.println(e.getMessage());
             if (retry()) deleteUserOfUsername();

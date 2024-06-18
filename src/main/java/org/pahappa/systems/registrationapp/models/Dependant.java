@@ -2,10 +2,26 @@ package org.pahappa.systems.registrationapp.models;
 
 import org.pahappa.systems.registrationapp.models.enums.Gender;
 
+import javax.persistence.*;
 import java.util.Objects;
 
-public class Dependant extends User {
-    Gender gender;
+@Entity
+public class Dependant extends UserSkeleton {
+    @Id
+    @Column(name = "dependant_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+    private Gender gender;
+    @ManyToOne
+    private User owner;
+
+    public User getOwner() {
+        return owner;
+    }
+
+    public void setOwner(User owner) {
+        this.owner = owner;
+    }
 
     public Dependant() {}
 
@@ -23,7 +39,7 @@ public class Dependant extends User {
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         Dependant dependant = (Dependant) o;
-        return gender == dependant.gender;
+        return gender == dependant.gender && getId() == dependant.getId() && Objects.equals(getUsername(), dependant.getUsername());
     }
 
     @Override
