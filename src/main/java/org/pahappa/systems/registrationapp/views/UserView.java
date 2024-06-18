@@ -39,8 +39,9 @@ public class UserView {
             System.out.println("4. Update user details of username");
             System.out.println("5. Delete User of username");
             System.out.println("6. Delete all users");
-            System.out.println("7. Add a dependant");
-            System.out.println("8. Exit");
+            System.out.println("7. Add a dependant to a user");
+            System.out.println("8. List dependants of a user");
+            System.out.println("9. Exit");
             try{
                 int choice = scanner.nextInt();
                 scanner.nextLine(); // Consume the newline character
@@ -67,6 +68,9 @@ public class UserView {
                         addDependant();
                         break;
                     case 8:
+                        listUserDependants();
+                        break;
+                    case 9:
                         running = false;
                         break;
                     default:
@@ -78,15 +82,22 @@ public class UserView {
         }
     }
 
+    private void listUserDependants() {
+        try {
+            User user = getUserOfUsername();
+            assert user != null;
+            dependantView.displayDependantsOfUser(user);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            if (retry()) listUserDependants();
+        }
+    }
+
     private void addDependant() {
         try {
-            quitMessage();
-            userService.isQuitting(spacesCleaner(scanner.nextLine()));
             User user = getUserOfUsername();
             assert user != null;
             dependantView.registerDependant(user);
-        } catch (ExitException e) {
-            System.out.println(e.getMessage());
         } catch (Exception e) {
             System.out.println(e.getMessage());
             if (retry()) addDependant();

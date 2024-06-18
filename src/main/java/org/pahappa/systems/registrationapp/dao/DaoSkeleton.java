@@ -28,7 +28,7 @@ public abstract class DaoSkeleton {
         return sessionFactory;
     }
     
-    private void rollback(Transaction tx, Exception e) {
+    protected void rollback(Transaction tx, Exception e) {
         assert tx != null;
         tx.rollback();
         System.out.println(e.getMessage());
@@ -56,19 +56,19 @@ public abstract class DaoSkeleton {
             object = q.uniqueResult();
             session.close();
         } catch (Exception e) {
-            System.out.println(e);
+            System.out.println(e.getMessage());
         }
         return object;
     }
 
-    public List<Object> getAll() {
-        List<Object> objects = null;
+    public <T> List<T> getAll() {
+        List<T> objects = null;
         try {
             Session session = sessionFactory.openSession();
             objects = session.createQuery("FROM "+getTable()).list();
             session.close();
         } catch (Exception e) {
-            System.out.println(e);
+            System.out.println(e.getMessage());
         }
         return objects;
     }

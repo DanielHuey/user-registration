@@ -10,6 +10,7 @@ import org.pahappa.systems.registrationapp.services.DependantService;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Scanner;
 
 public class DependantView {
@@ -22,7 +23,7 @@ public class DependantView {
     }
     
     protected void registerDependant(User user) {
-        System.out.println("Provide the following details:");
+        System.out.println("\nProvide the following details for the dependant:");
         Dependant newDependant = new Dependant();
         String firstname;
         System.out.println("First Name (required):");
@@ -37,16 +38,16 @@ public class DependantView {
         System.out.println("Last Name:");
         String lastname = scanner.nextLine().replaceAll("[ \u00a00-9]*","");
 
-        System.out.println("Gender (default=m)");
+        System.out.println("Gender (default=m) (m/f)");
         newDependant.setGender(Gender.Male);
-        if (scanner.nextLine().replaceAll("[ \u00a0]*","").equalsIgnoreCase("f"))
+        if (spacesCleaner(scanner.nextLine()).equalsIgnoreCase("f"))
             newDependant.setGender(Gender.Female);
 
         System.out.println("Username (required):");
         String username;
         while (true) {
             try {
-                username = dependantService.validateUsername(scanner.nextLine().replaceAll("[ \u00a0]",""));
+                username = dependantService.validateUsername(spacesCleaner(scanner.nextLine()));
                 if (!dependantService.usernameExists(username)) break;
                 throw new UsernameException("The username you have provided already exists");
             } catch (Exception e) {
@@ -72,7 +73,7 @@ public class DependantView {
         dependantService.registerDependant(newDependant);
     }
 
-    private Dependant getDependantOfUsername() {
+    protected Dependant getDependantOfUsername() {
         try {
             quitMessage();
             dependantService.isQuitting(spacesCleaner(scanner.nextLine()));
@@ -103,6 +104,14 @@ public class DependantView {
             System.out.println(e.getMessage());
         }
         return null;
+    }
+
+    protected void displayDependantsOfUser(User user) {
+        System.out.println();
+        List<Dependant> dependantList = dependantService.getDependantsOfUser(user);
+        for (Dependant dependant: dependantList) {
+            System.out.printf("%s %s%n", dependant.getFirstname(), dependant);
+        }
     }
 
     private void quitMessage() {System.out.println("Proceed with selected action? (y/n): ");}

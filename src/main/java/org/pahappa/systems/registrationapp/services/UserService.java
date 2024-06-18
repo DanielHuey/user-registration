@@ -55,7 +55,7 @@ public class UserService {
     public boolean updateDetailsOfUser(String username, String firstname, String lastname, String newUserName, Date dateOfBirth) throws Exception {
         User user = getUserByUsername(username);
         if (user == null) return false;
-        userDAO.deleteUser(user);
+//        userDAO.deleteUser(user);
         user.setFirstname(firstname != null ? validateName(firstname) : user.getFirstname());
         user.setLastname(lastname != null ? lastname : user.getLastname());
         user.setDateOfBirth(dateOfBirth != null ? validateDateOfBirth(dateOfBirth) : user.getDateOfBirth());

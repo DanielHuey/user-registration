@@ -25,11 +25,7 @@ public class UserDAO extends DaoSkeleton {
     }
 
     public List<User> getAllUsers() {
-        List<User> users = null;
-        for (Object o: this.getAll()) {
-            users.add((User) o);
-        }
-        return users;
+        return this.getAll();
     }
     
     public void updateUser(User user) {
@@ -44,31 +40,19 @@ public class UserDAO extends DaoSkeleton {
         this.deleteAll();
     }
 
-    public void addDependant(User user, Dependant dependant) {
-        Transaction tx = null;
-//        try {
-//            Session session = sessionFactory.openSession();
-//            tx = session.beginTransaction();
-//            user.addDependant(dependant);
-//            session.saveOrUpdate(user);
-//            tx.commit();
-//            session.close();
-//        } catch (Exception e) {
-//            rollback(tx,e);
-//        }
-    }
 
     public void addDependants(User user, List<Dependant> dependants) {
-//        Transaction tx = null;
-//        try {
-//            Session session = sessionFactory.openSession();
-//            tx = session.beginTransaction();
-//            user.addDependants(dependants);
-//            session.saveOrUpdate(user);
-//            tx.commit();
-//            session.close();
-//        } catch (Exception e) {
-//            rollback(tx,e);
-//        }
+        org.hibernate.Transaction tx = null;
+        try {
+            org.hibernate.Session session = getSessionFactory().openSession();
+            tx = session.beginTransaction();
+            user.addDependants(dependants);
+            session.saveOrUpdate(user);
+            tx.commit();
+            session.close();
+        } catch (Exception e) {
+            assert tx != null;
+            this.rollback(tx,e);
+        }
     }
 }

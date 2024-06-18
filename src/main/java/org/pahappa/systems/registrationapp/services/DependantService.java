@@ -3,6 +3,9 @@ package org.pahappa.systems.registrationapp.services;
 import org.pahappa.systems.registrationapp.dao.DependantDAO;
 import org.pahappa.systems.registrationapp.exception.UsernameException;
 import org.pahappa.systems.registrationapp.models.Dependant;
+import org.pahappa.systems.registrationapp.models.User;
+
+import java.util.List;
 
 public class DependantService extends UserService{
     private final DependantDAO dependantDAO;
@@ -18,6 +21,8 @@ public class DependantService extends UserService{
         validateUsername(username);
         return dependantDAO.getDependantByUsername(username);
     }
+
+    public List<Dependant> getDependantsOfUser(User user) { return dependantDAO.getAllUserDependants(user); }
 
     @Override
     public boolean usernameExists(String username) throws UsernameException {

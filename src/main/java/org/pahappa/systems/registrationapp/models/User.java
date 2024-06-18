@@ -82,6 +82,7 @@ public class User extends UserSkeleton {
     }
 
     public void addDependant(Dependant dependant) {
+        dependant.setOwner(this);
         this.dependants.add(dependant);
     }
 
