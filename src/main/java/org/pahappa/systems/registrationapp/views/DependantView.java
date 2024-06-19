@@ -16,13 +16,72 @@ import java.util.Scanner;
 public class DependantView {
     DependantService dependantService;
     Scanner scanner;
+    UserView userView;
     
     public DependantView() {
         dependantService = new DependantService();
         scanner = new Scanner(System.in);
+        userView = new UserView();
     }
-    
-    protected void registerDependant(User user) {
+
+    public void displayMenu() {
+        System.out.println("\nDependant Menu:");
+        System.out.println("1. Add a dependant to a user");
+        System.out.println("2. List dependants of a user");
+        System.out.println("3. Delete a dependant");
+//        System.out.println("4. Update user details of username");
+//        System.out.println("5. Delete User of username");
+//        System.out.println("6. Delete all users");
+//        System.out.println("7. ");
+//        System.out.println("8. ");
+        System.out.println("Anything Else: Exit");
+        try{
+            int choice = scanner.nextInt();
+            scanner.nextLine(); // Consume the newline character
+            switch (choice) {
+                case 1:
+                    addDependant();
+                    break;
+                case 2:
+                    listUserDependants();
+                    break;
+                case 3:
+                    deleteDependant();
+                    break;
+                default:
+                    System.out.println("Returning to User Menu");
+                    break;
+            }
+        }catch (Exception e){
+            System.out.println("Returning to User Menu");
+        }
+    }
+
+    private void deleteDependant() {
+        try {
+            Dependant dependant = getDependantOfUsername();
+            if (dependant != null) {
+                dependantService.deleteDependant(dependant);
+            } else throw new Exception("");
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            if (userView.retry()) deleteDependant();
+        }
+    }
+
+    private void addDependant() {
+        try {
+            User user = userView.getUserOfUsername();
+            if (user != null) {
+                registerDependant(user);
+            } else throw new Exception("");
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            if (userView.retry()) addDependant();
+        }
+    }
+
+    private void registerDependant(User user) {
         System.out.println("\nProvide the following details for the dependant:");
         Dependant newDependant = new Dependant();
         String firstname;
@@ -73,9 +132,26 @@ public class DependantView {
         dependantService.registerDependant(newDependant);
     }
 
+    private void listUserDependants() {
+        try {
+            User user = userView.getUserOfUsername();
+            if (user != null) {
+                List<Dependant> dependantList = dependantService.getDependantsOfUser(user);
+                System.out.printf("Dependants for [%s]:%n",user.getUsername());
+                for (Dependant dependant: dependantList) {
+                    System.out.printf("%s%n", dependant);
+                }
+            }
+            else throw new Exception("");
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            if (userView.retry()) listUserDependants();
+        }
+    }
+
     protected Dependant getDependantOfUsername() {
         try {
-            quitMessage();
+            userView.quitMessage();
             dependantService.isQuitting(spacesCleaner(scanner.nextLine()));
             System.out.println("Provide the username below:");
             String username;
@@ -105,16 +181,6 @@ public class DependantView {
         }
         return null;
     }
-
-    protected void displayDependantsOfUser(User user) {
-        System.out.println();
-        List<Dependant> dependantList = dependantService.getDependantsOfUser(user);
-        for (Dependant dependant: dependantList) {
-            System.out.printf("%s %s%n", dependant.getFirstname(), dependant);
-        }
-    }
-
-    private void quitMessage() {System.out.println("Proceed with selected action? (y/n): ");}
 
     private String spacesCleaner(String s) {return s.strip().replaceAll("[ \u00a0]*","");}
 }

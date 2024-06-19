@@ -28,4 +28,8 @@ public class DependantService extends UserService{
     public boolean usernameExists(String username) throws UsernameException {
         return getDependantByUsername(username) != null;
     }
+
+    public void deleteDependant(Dependant dependant) {
+        dependantDAO.deleteDependant(dependant);
+    }
 }

@@ -3,6 +3,10 @@ package org.pahappa.systems.registrationapp.models;
 import org.pahappa.systems.registrationapp.models.enums.Gender;
 
 import javax.persistence.*;
+import java.text.DateFormat;
+import java.text.FieldPosition;
+import java.text.ParsePosition;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Objects;
 
@@ -104,9 +108,12 @@ public class Dependant extends UserSkeleton {
 
     @Override
     public String toString() {
-        return "Dependant{" +
-                "gender=" + gender +
-                ",username=" + getUsername() +
-                '}';
+        StringBuilder sb = new StringBuilder();
+        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+        sb.append("Dependant{name:").append(getFirstname()).append(" ").append(getLastname())
+                .append(",username:").append(username)
+                .append(",date_of_birth:").append(df.format(getDateOfBirth()))
+                .append(",gender:").append(getGender()).append("}");
+        return sb.toString();
     }
 }
