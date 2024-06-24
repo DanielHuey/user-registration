@@ -7,6 +7,7 @@
   <groupId>org.pahappa.systems.registrationapp</groupId>
   <artifactId>registration-app</artifactId>
   <version>apple</version>
+  <packaging>war</packaging>
 
   <name>registration-app</name>
   
@@ -70,6 +71,18 @@
       <artifactId>slf4j-log4j12</artifactId>
       <version>1.6.1</version>
     </dependency>
+
+<!--    FACES -->
+    <dependency>
+      <groupId>org.glassfish</groupId>
+      <artifactId>javax.faces</artifactId>
+      <version>2.3.9</version>
+    </dependency>
+    <dependency>
+      <groupId>org.primefaces</groupId>
+      <artifactId>primefaces</artifactId>
+      <version>7.0</version>
+    </dependency>
   </dependencies>
 
   <build>
@@ -93,9 +106,20 @@
           <artifactId>maven-surefire-plugin</artifactId>
           <version>2.22.1</version>
         </plugin>
+<!--        <plugin>-->
+<!--          <artifactId>maven-jar-plugin</artifactId>-->
+<!--          <version>3.0.2</version>-->
+<!--        </plugin>-->
         <plugin>
-          <artifactId>maven-jar-plugin</artifactId>
-          <version>3.0.2</version>
+          <artifactId>maven-war-plugin</artifactId>
+          <version>3.4.0</version>
+          <configuration>
+            <archive>
+              <manifest>
+                <mainClass>org.pahappa.systems.registrationapp.RegistrationApp</mainClass>
+              </manifest>
+            </archive>
+          </configuration>
         </plugin>
         <plugin>
           <artifactId>maven-install-plugin</artifactId>

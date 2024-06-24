@@ -1,6 +1,6 @@
 package org.pahappa.systems.registrationapp.models;
 
-import java.util.Arrays;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -65,8 +65,8 @@ public class User extends UserSkeleton {
         this.lastname = lastname;
     }
 
-    public Date getDateOfBirth() {
-        return dateOfBirth;
+    public String getDateOfBirth() {
+        return new SimpleDateFormat("dd/MM/yyyy").format(dateOfBirth);
     }
 
     public void setDateOfBirth(Date dateOfBirth) {

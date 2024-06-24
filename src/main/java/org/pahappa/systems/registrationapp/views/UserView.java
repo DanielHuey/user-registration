@@ -18,12 +18,11 @@ public class UserView {
 
     private final Scanner scanner;
     private final UserService userService;
-    private final DependantView dependantView;
+//    private final DependantView dependantView = new DependantView();
 
     public UserView(){
         this.scanner = new Scanner(System.in);
         this.userService = new UserService();
-        this.dependantView = new DependantView();
     }
 
 
@@ -64,7 +63,7 @@ public class UserView {
                         deleteAllUsers();
                         break;
                     case 7:
-                        dependantView.displayMenu();
+                        DependantView.displayMenu();
                         break;
                     case 8:
                         running = false;
@@ -252,7 +251,7 @@ public class UserView {
                     System.out.println(e.getMessage());
                 }
             }
-            Date oldDate = user.getDateOfBirth();
+            Date oldDate = userService.validateDateOfBirth(user.getDateOfBirth());
             String dateOfBirthString;
             Date dateOfBirth = null;
             System.out.println("Date Of Birth ("+ oldDate.getDate() +"/"+ (oldDate.getMonth()+1) +"/"+ (oldDate.getYear()+1900) +"):");

@@ -1,5 +1,6 @@
 package org.pahappa.systems.registrationapp.models;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public abstract class UserSkeleton {
@@ -33,8 +34,8 @@ public abstract class UserSkeleton {
         this.lastname = lastname;
     }
 
-    public Date getDateOfBirth() {
-        return dateOfBirth;
+    public String getDateOfBirth() {
+        return new SimpleDateFormat("dd/MM/yyyy").format(dateOfBirth);
     }
 
     public void setDateOfBirth(Date dateOfBirth) {

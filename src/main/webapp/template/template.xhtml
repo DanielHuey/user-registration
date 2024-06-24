@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+
+    <h:head>
+        <meta charset="UTF-8"/>
+        <title>User Registration</title>
+        <style type="text/css">
+            .flexDisplay {display:flex}
+            .flexRow {flex-direction:row}
+            .flexColumn {flex-direction:column}
+            .bg {background:#444}
+            .textStyle {color:#ccc;font-weight:bold;}
+            .autoMargin {margin: auto;}
+            .sidebar {
+                position: absolute;
+                left: 10px;
+                top: 10px;
+                margin: 10px;
+                border: solid;
+                border-width: 2px;
+                border-color: #223
+                width: 100px;
+                height:100px;
+            }
+            .content {width:80%;margin-top:5%;/*background:#eef;*/}
+            .borderRadius {border-radius:12px;}
+            .border {
+                border:solid;
+                border-width:1px;
+                border-color:#ccc;
+            }
+            .padding {padding:12px;}
+            .buttonS {background:#333;border: solid 1px #0000;padding:6px;cursor:pointer;}
+            .buttonS:hover {background:#111}
+            .usernameLabel {
+                color:white;
+                font-family:monospace;
+                padding:3px;
+                font-size:10px; font-weight:900;
+                background:#6af6;
+                border-radius:6px;
+                cursor:pointer;
+            }
+            .userActions {
+                color:lightBlue;
+                cursor:pointer;
+                margin-left:8px;
+                background:#2228;
+            }
+            .userActions:hover {background:#7778}
+            .redText {color:#faa}
+            .greenText {color:#afa}
+            .userRow {justify-content:space-between;background:#0000}
+            .userRow:hover {background:#0002}
+            .spacer {width:20px}
+            input.textIn {padding:8px;background:#0002;color:#aaa}
+            .textIn::placeholder {color:#cccc}
+        </style>
+
+    </h:head>
+    <h:body class="bg textStyle">
+<!--        <div class="sidebar">-->
+<!--            Side-->
+<!--        </div>-->
+        <div class="flexDisplay flexColumn autoMargin content padding">
+            <ui:insert name="content"/>
+        </div>
+    </h:body>
+</html>

@@ -14,17 +14,14 @@ import java.util.List;
 import java.util.Scanner;
 
 public class DependantView {
-    DependantService dependantService;
-    Scanner scanner;
-    UserView userView;
+    static DependantService dependantService = new DependantService();
+    static Scanner scanner = new Scanner(System.in);
+    static UserView userView = new UserView();
     
     public DependantView() {
-        dependantService = new DependantService();
-        scanner = new Scanner(System.in);
-        userView = new UserView();
     }
 
-    public void displayMenu() {
+    public static void displayMenu() {
         System.out.println("\nDependant Menu:");
         System.out.println("1. Add a dependant to a user");
         System.out.println("2. List dependants of a user");
@@ -48,16 +45,17 @@ public class DependantView {
                 case 3:
                     deleteDependant();
                     break;
-                default:
-                    System.out.println("Returning to User Menu");
-                    break;
+//                default:
+//                    System.out.println("Returning to User Menu");
+//                    break;
             }
         }catch (Exception e){
+            System.out.println(e.getMessage());
             System.out.println("Returning to User Menu");
         }
     }
 
-    private void deleteDependant() {
+    private static void deleteDependant() {
         try {
             Dependant dependant = getDependantOfUsername();
             if (dependant != null) {
@@ -69,7 +67,7 @@ public class DependantView {
         }
     }
 
-    private void addDependant() {
+    private static void addDependant() {
         try {
             User user = userView.getUserOfUsername();
             if (user != null) {
@@ -81,7 +79,7 @@ public class DependantView {
         }
     }
 
-    private void registerDependant(User user) {
+    private static void registerDependant(User user) {
         System.out.println("\nProvide the following details for the dependant:");
         Dependant newDependant = new Dependant();
         String firstname;
@@ -132,7 +130,7 @@ public class DependantView {
         dependantService.registerDependant(newDependant);
     }
 
-    private void listUserDependants() {
+    private static void listUserDependants() {
         try {
             User user = userView.getUserOfUsername();
             if (user != null) {
@@ -149,7 +147,7 @@ public class DependantView {
         }
     }
 
-    protected Dependant getDependantOfUsername() {
+    protected static Dependant getDependantOfUsername() {
         try {
             userView.quitMessage();
             dependantService.isQuitting(spacesCleaner(scanner.nextLine()));
@@ -182,5 +180,5 @@ public class DependantView {
         return null;
     }
 
-    private String spacesCleaner(String s) {return s.strip().replaceAll("[ \u00a0]*","");}
+    private static String spacesCleaner(String s) {return s.strip().replaceAll("[ \u00a0]*","");}
 }

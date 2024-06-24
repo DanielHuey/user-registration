@@ -3,9 +3,6 @@ package org.pahappa.systems.registrationapp.models;
 import org.pahappa.systems.registrationapp.models.enums.Gender;
 
 import javax.persistence.*;
-import java.text.DateFormat;
-import java.text.FieldPosition;
-import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Objects;
@@ -13,7 +10,7 @@ import java.util.Objects;
 @Entity
 public class Dependant extends UserSkeleton {
     @Id
-    @Column(name = "user_id")
+    @Column(name = "dependant_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String username;
@@ -25,8 +22,8 @@ public class Dependant extends UserSkeleton {
     private User owner;
 
     @Override
-    public Date getDateOfBirth() {
-        return dateOfBirth;
+    public String getDateOfBirth() {
+        return super.getDateOfBirth();
     }
 
     @Override

@@ -58,7 +58,7 @@ public class UserService {
 //        userDAO.deleteUser(user);
         user.setFirstname(firstname != null ? validateName(firstname) : user.getFirstname());
         user.setLastname(lastname != null ? lastname : user.getLastname());
-        user.setDateOfBirth(dateOfBirth != null ? validateDateOfBirth(dateOfBirth) : user.getDateOfBirth());
+        user.setDateOfBirth(dateOfBirth != null ? validateDateOfBirth(dateOfBirth) : validateDateOfBirth(user.getDateOfBirth()));
         user.setUsername(newUserName != null ? validateUsername(newUserName) : user.getUsername());
         userDAO.updateUser(user);
         return true;
