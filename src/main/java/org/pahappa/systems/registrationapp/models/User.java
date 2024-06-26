@@ -138,8 +138,8 @@ public class User extends UserSkeleton {
     }
 
     @Override
-    public void setDeletedAt(Date deletedAt) {
-        this.deletedAt = deletedAt;
+    public void setDeletedAt() {
+        super.setDeletedAt();
     }
 
     @Override

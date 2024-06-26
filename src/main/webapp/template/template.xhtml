@@ -18,8 +18,12 @@
         <div class="splitBody">
             <div class="sidebar">
                 <div class="autoMargin">
-                    <h:form>
-                        <h:commandButton value="Back Home" action="#{authBean.goHomeIfAuthenticated()}"/>
+                    <h:form class="flexDisplay flexColumn">
+                        <h:commandButton styleClass="bold bi bi-home" value="Dashboard" rendered="#{authBean.isCurrentUserAdmin()}" action="#{authBean.goHomeIfAuthenticated()}"/>
+                        <h:commandButton styleClass="bold" value="Users" rendered="#{authBean.isCurrentUserAdmin()}" action="/pages/user/list.xhtml?faces-redirect=true"/>
+                        <h:commandButton styleClass="bold" value="Dependants" rendered="#{authBean.isCurrentUserAdmin()}" action="#{authBean.goHomeIfAuthenticated()}"/>
+                        <h:commandButton styleClass="bold" value="Settings" action="/pages/user/settings.xhtml?faces-redirect=true"/>
+                        <h:commandButton styleClass="bold" value="Logout" action="#{authBean.logout()}"/>
                     </h:form>
                 </div>
             </div>

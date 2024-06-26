@@ -18,16 +18,19 @@ public class MainBean implements Serializable {
     private List<User> users;
 
     public MainBean() {
-        firstLaunch();
+//        firstLaunch();
         refreshUsers();
     }
 
-    private void firstLaunch() {
-        // is it the first launch?
-        if (userService.getListOfUsers(false).isEmpty())
-            container(() -> redirect("/pages/admin/admin_setup"));
-        // else go to log in
-        else container(() -> redirect("/pages/login"));
+    public void firstLaunch() {
+        log("Launch Bootstrap");
+        container(() -> {
+            // is it the first launch?
+            if (userService.getListOfUsers(false).isEmpty())
+                redirect("/pages/admin/admin_setup");
+                // else go to log in
+            else redirect("/pages/login");
+        });
     }
 
     public List<User> getUsers() {

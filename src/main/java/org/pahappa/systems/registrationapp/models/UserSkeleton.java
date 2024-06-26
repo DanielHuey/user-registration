@@ -1,6 +1,7 @@
 package org.pahappa.systems.registrationapp.models;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 public abstract class UserSkeleton {
@@ -25,8 +26,8 @@ public abstract class UserSkeleton {
         return deletedAt;
     }
 
-    public void setDeletedAt(Date deletedAt) {
-        this.deletedAt = deletedAt;
+    public void setDeletedAt() {
+        this.deletedAt = Calendar.getInstance().getTime();
     }
 
     public String getEmail() {

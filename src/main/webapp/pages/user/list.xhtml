@@ -4,13 +4,13 @@
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui">
-<!--    <ui:define name="nav"></ui:define>-->
+    <!--    <ui:define name="nav"></ui:define>-->
     <ui:define name="content">
         #{adminBean.restrictDashboard()}
         #{indexBean.refreshUsers()}
         <div><h:button style="margin-left:10px;" class="actionButton b2 borderRadius" value="Register A New User" outcome="/pages/user/register"/></div>
         <br/>
-        <div style="margin-bottom:4px;display:flex;flex-direction:row-reverse">
+        <div class="hpad" style="margin-bottom:4px;display:flex;flex-direction:row-reverse">
             ::filters::
         </div>
         <div class="flexColumn firstChildBorder">

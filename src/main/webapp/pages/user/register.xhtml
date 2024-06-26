@@ -4,7 +4,7 @@
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
-    <ui:define name="nav"><h:commandButton styleClass="borderRadius noBorder hpad inputSubmit" value="Logout" action="#{authBean.logout}"/></ui:define>
+<!--    <ui:define name="nav"></ui:define>-->
     <ui:define name="content">
         <h:form class="autoMargin flexDisplay flexColumn formStyle">
             <h1>Register</h1>
@@ -17,11 +17,18 @@
                 <f:validateLength minimum="2"/>
                 <f:validateRegex pattern="^[a-zA-Z]*"/>
             </h:inputText>
-            <h:inputText styleClass="noTop" id="lastname" value="#{userBean.firstname}" pt:placeholder="Lastname [a-Z]" required="true"/>
+            <h:inputText styleClass="noTop" id="lastname" value="#{userBean.lastname}" pt:placeholder="Lastname [a-Z]" required="false"/>
             <h:inputText styleClass="noTop" id="dateOfBirth" value="#{userBean.dateOfBirth}" pt:placeholder="Birth Date [dd/mm/yyyy]" required="true">
                 <f:convertDateTime pattern="dd/MM/yyyy"/>
                 <f:validateRequired/>
             </h:inputText>
+            <h:inputText styleClass="noTop" id="email" value="#{userBean.email}" pt:placeholder="Email Address [mail@site.com]" required="true">
+                <f:validateLength minimum="8"/>
+                <f:validateRegex pattern="^[a-zA-Z0-9_]*@[a-z]*\.[a-z]*$"/>
+            </h:inputText>
+            <h:inputSecret styleClass="noTop" id="password" value="#{userBean.password}" pt:placeholder="Password [a@#1G%!*]" required="true" validatorMessage="Password should have at lest 8 characters">
+                <f:validateLength minimum="4"/>
+            </h:inputSecret>
             <div style="margin-top:10px">
                 <h:commandButton styleClass="borderRadius noBorder hpad inputSubmit" value="Register" action="#{userBean.register}"/>
             </div>

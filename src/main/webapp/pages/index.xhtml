@@ -1,34 +1,7 @@
-<ui:composition template="/template/template.xhtml"
-                xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:h="http://java.sun.com/jsf/html"
-                xmlns:f="http://java.sun.com/jsf/core"
-                xmlns:ui="http://java.sun.com/jsf/facelets"
-                xmlns:p="http://primefaces.org/ui">
-    <ui:define name="content">
-        #{indexBean.refreshUsers()}
-        <div><h:button class="buttonS textStyle borderRadius" value="Register A New User" outcome="user/register"/></div>
-        <br/>
-        <div style="margin-bottom:4px;display:flex;flex-direction:row-reverse">
-            ::filters::
-        </div>
-        <div class="flexColumn">
-            <ui:repeat var="user" value="#{indexBean.users}" rows="5">
-                <div class="border borderRadius padding flexDisplay flexRow userRow" style="margin-bottom:4px">
-                    <div class="flexDisplay flexRow">
-                        <div>
-                            <div class="">#{user.firstname} #{user.lastname} </div>
-                            <div class="usernameLabel border borderRadius"> @#{user.username} </div>
-                        </div>
-                        <div class="spacer"> </div>
-                        #{user.dateOfBirth}
-                    </div>
-                    <div class="flexDisplay flexRow"><h:form>
-                        <h:commandButton styleClass="userActions padding border borderRadius" action="#{userBean.edit(user.username)}" value="EDIT"/>
-                        <h:commandButton styleClass="userActions padding greenText border borderRadius" value="DEPENDANTS"/>
-                        <h:commandButton styleClass="userActions padding redText border borderRadius" action="#{userBean.delete(user.username)}" value="DELETE"/>
-                    </h:form></div>
-                </div>
-            </ui:repeat>
-        </div>
-    </ui:define>
-</ui:composition>
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html>
+<html xmlns:h="http://www.w3.org/1999/xhtml">
+<h:body>
+    #{indexBean.firstLaunch()}
+</h:body>
+</html>

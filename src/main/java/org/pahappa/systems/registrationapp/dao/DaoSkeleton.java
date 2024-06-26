@@ -99,6 +99,7 @@ public abstract class DaoSkeleton {
             tx = session.beginTransaction();
             if (softDelete) {
                 object.setDeleted(true);
+                object.setDeletedAt();
                 session.saveOrUpdate(object);
             }
             else session.delete(object);

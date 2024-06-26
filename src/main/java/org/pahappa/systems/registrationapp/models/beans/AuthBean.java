@@ -66,9 +66,9 @@ public class AuthBean implements Serializable {
     public void login() {
         container(() -> {
             boolean isEmail;
-            if (identity.matches("^[a-zA-Z0-9_]*@[a-z]*\\.[a-z]*"))
+            if (identity.matches("^[a-zA-Z0-9_]*@[a-z]*\\.[a-z]*$"))
                 isEmail = true;
-            else if (identity.matches("^[a-zA-Z0-9][a-zA-Z0-9_]*"))
+            else if (identity.matches("^[a-zA-Z0-9][a-zA-Z0-9_]*$"))
                 isEmail = false;
             else throw new Exception("The provided identity doesn't match a Username or Email");
             authenticate(identity,password,isEmail);
@@ -84,15 +84,15 @@ public class AuthBean implements Serializable {
         password = hexHashString(password);
         if (user.passwordEquals(password)) {
             setSessionUser(user);
-            getHomePage(user);
+            getHomePage();
         } else throw new Exception("The password provided is Incorrect. Try Again");
     }
 
-    private void getHomePage(User user) {
+    private void getHomePage() {
         container(() -> {
-            if (user.getRole() == Role.Admin)
+            if (isCurrentUserAdmin())
                 redirect("/pages/admin/dashboard");
-            else redirect("/pages/user/view");
+            else redirect("/pages/user/settings");
         });
     }
 
@@ -108,6 +108,10 @@ public class AuthBean implements Serializable {
 
     public void goHomeIfAuthenticated() {
         if (getSessionUser() != null)
-            getHomePage(getSessionUser());
+            getHomePage();
+    }
+
+    public boolean isCurrentUserAdmin() {
+        return getSessionUser().getRole() == Role.Admin;
     }
 }

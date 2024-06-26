@@ -1,0 +1,46 @@
+<ui:composition template="/template/template.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+    <ui:define name="content">
+
+        <div class="pad20 autoMargin border borderRadius noBorder">
+            <h:form>
+                <h:messages style="color:gold"/>
+                <h:panelGrid columns="2">
+                    <span>Username</span>
+                    <h:inputText styleClass="borderRadius noBorder" id="username" type="text" value="#{userBean.userToEdit.username}" pt:placeholder="Username [abc_123]" required="true">
+                        <f:validateLength minimum="4"/>
+                        <f:validateRegex pattern="^[a-zA-Z0-9][a-zA-Z0-9_]*"/>
+                    </h:inputText>
+                    <span>First Name</span>
+                    <h:inputText styleClass="borderRadius noBorder" id="firstname" value="#{userBean.userToEdit.firstname}" pt:placeholder="Firstname [a-Z]" required="true">
+                        <f:validateLength minimum="2"/>
+                        <f:validateRegex pattern="^[a-zA-Z]*"/>
+                    </h:inputText>
+                    <span>Last Name</span>
+                    <h:inputText styleClass="borderRadius noBorder" id="lastname" value="#{userBean.userToEdit.lastname}" pt:placeholder="Lastname [a-Z]" required="false"/>
+                    <span>Date Of Birth</span>
+                    <h:inputText styleClass="borderRadius noBorder" id="dateOfBirth" value="#{userBean.userToEdit.dateOfBirth}" pt:placeholder="Birth Date [dd/mm/yyyy]" required="true">
+                        <f:convertDateTime pattern="dd/MM/yyyy"/>
+                        <f:validateRequired/>
+                    </h:inputText>
+                    <span>Email</span>
+                    <h:inputText styleClass="borderRadius noBorder" id="email" value="#{userBean.userToEdit.email}" pt:placeholder="Email Address [mail@site.com]" required="true">
+                        <f:validateLength minimum="8"/>
+                        <f:validateRegex pattern="^[a-zA-Z0-9_]*@[a-z]*\.[a-z]*$"/>
+                    </h:inputText>
+                    <span>Password</span>
+                    <h:inputSecret styleClass="borderRadius noBorder" id="password" value="#{userBean.userToEdit.password}" pt:placeholder="Password [a@#1G%!*]" required="true" validatorMessage="Password should have at lest 8 characters">
+                        <f:validateLength minimum="4"/>
+                    </h:inputSecret>
+                    <div style="margin-top:10px">
+                        <h:commandButton styleClass="borderRadius noBorder hpad inputSubmit" value="Save Details" action="#{userBean.saveDetails()}"/>
+                    </div>
+                </h:panelGrid>
+            </h:form>
+        </div>
+    </ui:define>
+</ui:composition>

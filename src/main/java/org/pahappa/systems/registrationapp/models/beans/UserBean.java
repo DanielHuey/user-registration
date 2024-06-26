@@ -124,7 +124,7 @@ public class UserBean implements Serializable {
         FacesContext ctx = FacesContext.getCurrentInstance();
         if (container(() -> userService.registerUser(user))) {
             ctx.addMessage(null, new FacesMessage("Successful Registration"));
-            container(() -> ctx.getExternalContext().redirect("/pages/index")); //an external context can redirect
+            container(() -> redirect("/pages/admin/dashboard")); //an external context can redirect
         }
     }
 
@@ -141,9 +141,21 @@ public class UserBean implements Serializable {
         if (container(() -> userService.validateUsername(username))) {
             container(() -> {
                 setUserToEdit(userService.getUserByUsername(username));
-                redirect("/pages/user/edit");
+                redirect("/pages/user/settings");
             });
         }
+    }
+
+    public void saveDetails() {
+        container(() -> {
+            userToEdit.setUsername(username);
+            userToEdit.setFirstname(firstname);
+            userToEdit.setLastname(lastname);
+            userToEdit.setDateOfBirth(dateOfBirth);
+            userToEdit.setEmail(email);
+            userToEdit.setPassword(hexHashString(password));
+//            userService.u
+        });
     }
 }
 
