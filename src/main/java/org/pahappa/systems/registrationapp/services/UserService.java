@@ -1,37 +1,37 @@
 package org.pahappa.systems.registrationapp.services;
 
 import org.pahappa.systems.registrationapp.dao.UserDAO;
-import org.pahappa.systems.registrationapp.exception.DateException;
-import org.pahappa.systems.registrationapp.exception.NameException;
-import org.pahappa.systems.registrationapp.exception.ExitException;
-import org.pahappa.systems.registrationapp.exception.UsernameException;
+import org.pahappa.systems.registrationapp.exception.*;
 import org.pahappa.systems.registrationapp.models.User;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-public class UserService {
+public class UserService extends ServiceSkeleton {
     private final UserDAO userDAO;
-    private final int MIN_USERNAME_LENGTH = 4;
-    private final int MAX_USERNAME_LENGTH = 16;
-    private final int MIN_NAME_LENGTH = 2;
 
     public UserService () {
         userDAO = new UserDAO();
     }
 
     public void registerUser(User user) throws Exception {
-        usernameExists(user.getUsername());
-        validateName(user.getFirstname());
         validateUsername(user.getUsername());
+        if (usernameExists(user.getUsername())) throw new UsernameException("This username has been taken already.");
+        validateEmail(user.getEmail());
+        if (emailExists(user.getEmail())) throw new EmailException("This email is already part of the system.");
+        validateName(user.getFirstname());
         validateDateOfBirth(user.getDateOfBirth());
         userDAO.addUser(user);
     }
 
+    /** Returns a soft list of users (where deleted = false)*/
     public List<User> getListOfUsers() {
-        return userDAO.getAllUsers();
+        return getListOfUsers(true);
+    }
+
+    /** @param softList True: A list of users with the deleted flag set to false. False: All users in the table */
+    public List<User> getListOfUsers(boolean softList) {
+        return userDAO.getAllUsers(softList);
     }
 
     public User getUserByUsername(String username) throws UsernameException {
@@ -42,10 +42,23 @@ public class UserService {
     public boolean usernameExists(String username) throws UsernameException {
         return getUserByUsername(username) != null;
     }
-    
+
+    public User getUserByEmail(String email) throws EmailException {
+        validateEmail(email);
+        return userDAO.getUserByEmail(email);
+    }
+
+    public boolean emailExists(String email) throws EmailException {
+        return getUserByEmail(email) != null;
+    }
+
     public void deleteUser(String username) throws UsernameException {
+        deleteUser(username, true);
+    }
+
+    public void deleteUser(String username, boolean softDelete) throws UsernameException {
         User user = getUserByUsername(username);
-        if (user != null) userDAO.deleteUser(user);
+        if (user != null) userDAO.deleteUser(user, softDelete);
     }
 
     public void deleteAllUsers() {
@@ -55,7 +68,6 @@ public class UserService {
     public boolean updateDetailsOfUser(String username, String firstname, String lastname, String newUserName, Date dateOfBirth) throws Exception {
         User user = getUserByUsername(username);
         if (user == null) return false;
-//        userDAO.deleteUser(user);
         user.setFirstname(firstname != null ? validateName(firstname) : user.getFirstname());
         user.setLastname(lastname != null ? lastname : user.getLastname());
         user.setDateOfBirth(dateOfBirth != null ? validateDateOfBirth(dateOfBirth) : validateDateOfBirth(user.getDateOfBirth()));
@@ -65,48 +77,12 @@ public class UserService {
     }
 
     /* Validators */
-    /** Returns the validated Name */
-    public String validateName(String name) throws NameException {
-        if (name.length() < MIN_NAME_LENGTH) {
-            throw new NameException("A name must have at least "+MIN_NAME_LENGTH+" letters.");
-        } else if (!name.matches("^[a-zA-Z]*")) {
-            throw new NameException("A name should have letters only");
-        } else return name;
-    }
-    /** Returns the validated Username */
-    public String validateUsername(String username) throws UsernameException {
-        if (username.length() < MIN_USERNAME_LENGTH) {
-            throw new UsernameException("Username is too short. Minimum is "+MIN_USERNAME_LENGTH+" characters.");
-        } else if (username.length() > MAX_USERNAME_LENGTH) {
-            throw new UsernameException("Username is too long. Maximum is "+MAX_USERNAME_LENGTH+" characters.");
+    /**
+     *
+     */
+    private void validateEmail(String email) throws EmailException {
+        if (!email.matches("^[a-zA-Z0-9_.]*@[a-z]*\\.[a-z]*")) {
+            throw new EmailException("Invalid characters in email.");
         }
-        if (!username.matches("^[a-zA-Z0-9][a-zA-Z0-9_]*")) {
-            throw new UsernameException("Invalid characters in username. Usernames start with a letter, and can only allow letters, numbers and underscores.");
-        }
-        return username;
-        
-    }
-    /** Returns a valid date */
-    @SuppressWarnings("deprecation")
-    public Date validateDateOfBirth(Date dateOfBirth) throws DateException {
-        if (Calendar.getInstance().getTime().before(dateOfBirth)) {
-            throw new DateException("You cannot be born in the future. Please choose another date.");                    
-        } else if (dateOfBirth.before(new Date(0, Calendar.JANUARY,1))) {
-            throw new DateException("You cannot be born before 1900. Please choose another date.");                    
-        }
-        return dateOfBirth;
-    }
-    /** Returns a valid date */
-    public Date validateDateOfBirth(String dateOfBirthString) throws Exception {
-        if (!dateOfBirthString.matches("\\d{1,2}/\\d{1,2}/\\d{4}")) {
-            throw new DateException("The date of birth must match the format dd/mm/yyyy.");
-        }
-        SimpleDateFormat dFormat = new SimpleDateFormat("dd/MM/yyyy");
-        Date dateOfBirth = dFormat.parse(dateOfBirthString);
-        return validateDateOfBirth(dateOfBirth);
-    }
-
-    public void isQuitting(String input) throws ExitException {
-        if (input.equalsIgnoreCase("n")) throw new ExitException();
     }
 }

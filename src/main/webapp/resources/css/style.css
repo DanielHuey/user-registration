@@ -1,0 +1,77 @@
+:root {
+    --p: #ffffff;
+    --s: #1c1919cc;
+    --t: #66ccdd;
+    --noColor: #0000;
+    --rad: 12px;
+    --pad: 20px;
+}
+html,body {margin:0 !important;height:max-content !important;}
+.flexDisplay {display:flex}
+.flexRow {flex-direction:row}
+.flexColumn {flex-direction:column}
+.bg {background:var(--p)}
+.textStyle {color:var(--s);font-weight:bold;}
+.autoMargin {margin: auto;}
+.navBar {border-bottom:solid 1px var(--s)}
+.splitBody {
+    display: grid;
+    grid-template-columns:150px auto;
+}
+.sidebar {
+    border-right:solid 1px var(--s);
+    height:100%;
+}
+.content {width:100%;margin-top:5%;padding-bottom:var(--pad);border-bottom:solid 1px var(--s);}
+.borderRadius {border-radius:var(--rad);}
+.border {border:solid 1px var(--s)}
+.b2 {border:solid 2px var(--s)}
+.noBorder {border:none}
+.pad20 {padding:var(--pad)}
+.pad10 {padding:calc(var(--pad)/2);}
+.actionButton {background:var(--noColor);padding:calc(var(--pad)/2);cursor:pointer;}
+.actionButton:hover {background:var(--s);color:var(--p)}
+.usernameLabel {
+    color:var(--t);
+    /*font-family:monospace;*/
+    padding:3px;
+    font-weight:900;
+}
+.redText {color:#f44}
+.greenText {color:#4f4}
+.userRow {justify-content:space-between;background:#0000}
+.userRow:hover {background:#f5f5f5}
+.spacer {width:20px}
+.smallText {font-size:10px;}
+input.textIn {padding:8px;background:#0002;color:#aaa}
+input[type="text"],input[type="password"] {
+    min-height: 22px;
+    padding: 6px;
+    border: solid 1px var(--s);
+}
+.inputSubmit {
+    height:40px;
+    background: var(--t);
+}
+.inputSubmit:hover{
+    background:#7de;
+}
+input::placeholder{
+    color:var(--s);
+}
+.tl {border-top-left-radius:var(--rad)}
+.tr {border-top-right-radius:var(--rad)}
+.bl {border-bottom-left-radius:var(--rad)}
+.br {border-bottom-right-radius:var(--rad)}
+.hpad {padding-left:var(--pad);padding-right:var(--pad)}
+.vpad {padding-top:var(--pad);padding-bottom:var(--pad)}
+.hmax {height:100%}
+.noTop {border-top-width:0px !important;}
+.listChild {border-bottom:solid 1px var(--s);}
+.firstChildBorder:nth-child(0) {
+    border-top:solid 1px var(--s);
+}
+.formStyle {
+    width:30%;
+    min-width:275px;
+}

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html>
+<html style="height:100%" lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+
+<h:head>
+    <meta charset="UTF-8"/>
+    <title>Login | User Registration</title>
+    <h:outputStylesheet name="css/style.css"/>
+
+</h:head>
+<h:body class="bg textStyle" style="height:100%">
+    #{authBean.goHomeIfAuthenticated()}
+    <div class="autoMargin formStyle">
+        <h:form class="flexDisplay flexColumn" style="margin-top:30%;">
+            <h1>Login</h1>
+            <h:inputText id="identity" styleClass="tl tr" value="#{authBean.identity}" pt:placeholder="Username/Email">
+                <f:validateLength minimum="4"/>
+            </h:inputText>
+            <h:inputSecret styleClass="noTop" id="password" value="#{authBean.password}" pt:placeholder="Password">
+                <f:validateLength minimum="4"/>
+<!--                <f:validateRegex pattern="^(?=.[a-zA-Z0-9_!@#$%^*~-=+]).*"/>-->
+            </h:inputSecret>
+            <div style="margin-top:10px">
+                <h:commandButton styleClass="borderRadius noBorder hpad inputSubmit" value="Login" action="#{authBean.login()}"/>
+            </div>
+        </h:form>
+    </div>
+
+</h:body>
+</html>

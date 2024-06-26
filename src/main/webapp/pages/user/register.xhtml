@@ -1,0 +1,30 @@
+<ui:composition template="/template/template.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+    <ui:define name="nav"><h:commandButton styleClass="borderRadius noBorder hpad inputSubmit" value="Logout" action="#{authBean.logout}"/></ui:define>
+    <ui:define name="content">
+        <h:form class="autoMargin flexDisplay flexColumn formStyle">
+            <h1>Register</h1>
+            <h:messages style="color:gold"/>
+            <h:inputText styleClass="border tl tr" id="username" type="text" value="#{userBean.username}" pt:placeholder="Username [abc_123]" required="true">
+                <f:validateLength minimum="4"/>
+                <f:validateRegex pattern="^[a-zA-Z0-9][a-zA-Z0-9_]*"/>
+            </h:inputText>
+            <h:inputText styleClass="noTop" id="firstname" value="#{userBean.firstname}" pt:placeholder="Firstname [a-Z]" required="true">
+                <f:validateLength minimum="2"/>
+                <f:validateRegex pattern="^[a-zA-Z]*"/>
+            </h:inputText>
+            <h:inputText styleClass="noTop" id="lastname" value="#{userBean.firstname}" pt:placeholder="Lastname [a-Z]" required="true"/>
+            <h:inputText styleClass="noTop" id="dateOfBirth" value="#{userBean.dateOfBirth}" pt:placeholder="Birth Date [dd/mm/yyyy]" required="true">
+                <f:convertDateTime pattern="dd/MM/yyyy"/>
+                <f:validateRequired/>
+            </h:inputText>
+            <div style="margin-top:10px">
+                <h:commandButton styleClass="borderRadius noBorder hpad inputSubmit" value="Register" action="#{userBean.register}"/>
+            </div>
+        </h:form>
+    </ui:define>
+</ui:composition>

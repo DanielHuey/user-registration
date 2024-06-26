@@ -1,5 +1,7 @@
 package org.pahappa.systems.registrationapp.models;
 
+import org.pahappa.systems.registrationapp.models.enums.Role;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -17,20 +19,36 @@ public class User extends UserSkeleton {
     private String firstname;
     private String lastname;
     private Date dateOfBirth;
+    private String email;
+    private String password;
+    private Role role;
+    private boolean deleted;
+    private Date deletedAt;
     @OneToMany(mappedBy = "owner")
     private List<Dependant> dependants;
 
-    public User(){
+    public Role getRole() {
+        return role;
+    }
 
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
+    public User(){
+        setRole(Role.Default);
+        setDeleted(false);
     }
 
     @SuppressWarnings("unused")
-    private User(long id, String username, String firstname, String lastname, Date dateOfBirth){
-        this.id = id;
-        this.username = username;
-        this.firstname = firstname;
-        this.lastname = lastname;
-        this.dateOfBirth = dateOfBirth;
+    private User(long id, String username, String firstname, String lastname, Date dateOfBirth, Role role){
+        setId(id);
+        setUsername(username);
+        setFirstname(firstname);
+        setLastname(lastname);
+        setDateOfBirth(dateOfBirth);
+        setRole(role);
+        setDeleted(false);
     }
 
     public long getId() {
@@ -95,6 +113,50 @@ public class User extends UserSkeleton {
     }
 
     @Override
+    public String getPassword() {
+        return password;
+    }
+
+    @Override
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    @Override
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    @Override
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
+    }
+
+    @Override
+    public Date getDeletedAt() {
+        return deletedAt;
+    }
+
+    @Override
+    public void setDeletedAt(Date deletedAt) {
+        this.deletedAt = deletedAt;
+    }
+
+    @Override
+    public String getEmail() {
+        return email;
+    }
+
+    @Override
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public boolean passwordEquals(String otherPassword) {
+        return password.equals(otherPassword);
+    }
+
+    @Override
     public String toString() {
         return username;
     }
@@ -115,6 +177,5 @@ public class User extends UserSkeleton {
     public int hashCode() {
         return Objects.hash(username, firstname, lastname, dateOfBirth);
     }
-
 
 }

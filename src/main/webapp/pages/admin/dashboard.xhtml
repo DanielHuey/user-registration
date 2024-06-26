@@ -1,0 +1,38 @@
+<ui:composition template="/template/template.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui">
+    <ui:define name="nav"><h:commandButton styleClass="borderRadius noBorder hpad inputSubmit" value="Logout" action="#{authBean.logout}"/></ui:define>
+    <ui:define name="content">
+        #{adminBean.restrictDashboard()}
+        #{indexBean.refreshUsers()}
+        <div><h:button style="margin-left:10px;" class="actionButton b2 borderRadius" value="Register A New User" outcome="/pages/user/register"/></div>
+        <br/>
+        <div style="margin-bottom:4px;display:flex;flex-direction:row-reverse">
+            ::filters::
+        </div>
+        <div class="flexColumn firstChildBorder">
+            <ui:repeat var="user" value="#{indexBean.users}" rows="5">
+                <div class="listChild pad10 flexDisplay flexRow userRow" style="margin-bottom:4px">
+                    <div class="flexDisplay flexRow">
+                        #{user.id}
+                        <div class="hpad">
+                            <div class="">#{user.firstname} #{user.lastname} </div>
+                            <div class="usernameLabel smallText">#{user.username} </div>
+                            <div clss="smallText">#{user.email}</div>
+                        </div>
+                        <div class="spacer"> </div>
+                        #{user.dateOfBirth}
+                    </div>
+                    <div class="flexDisplay flexRow"><h:form>
+                        <h:commandButton styleClass="noBorder actionButton borderRadius" action="#{userBean.edit(user.username)}" value="EDIT"/>
+                        <h:commandButton styleClass="noBorder greenText actionButton borderRadius" value="DEPENDANTS"/>
+                        <h:commandButton styleClass="noBorder redText actionButton borderRadius" action="#{userBean.delete(user.username)}" value="DELETE"/>
+                    </h:form></div>
+                </div>
+            </ui:repeat>
+        </div>
+    </ui:define>
+</ui:composition>

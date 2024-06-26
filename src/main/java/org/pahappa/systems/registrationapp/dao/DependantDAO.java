@@ -19,8 +19,8 @@ public class DependantDAO extends DaoSkeleton {
         return (Dependant) this.getByUsername(username);
     }
 
-    public List<Dependant> getAllDependants() {
-        return this.getAll();
+    public List<Dependant> getAllDependants(boolean softList) {
+        return this.getAll(softList);
     }
 
     public List<Dependant> getAllUserDependants(User user) {
@@ -46,8 +46,8 @@ public class DependantDAO extends DaoSkeleton {
         this.update(dependant);
     }
 
-    public void deleteDependant(Dependant dependant) {
-        this.delete(dependant);
+    public void deleteDependant(Dependant dependant, boolean softDelete) {
+        this.delete(dependant, softDelete);
     }
 
     public void deleteAllDependants() {

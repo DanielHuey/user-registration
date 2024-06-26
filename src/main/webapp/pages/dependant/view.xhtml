@@ -1,0 +1,37 @@
+<ui:composition template="/template/template.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+    <ui:define name="content">
+<!--        <f:metadata>-->
+<!--            <f:viewParam id="uname" name="u"/>-->
+<!--        </f:metadata>-->
+        <h:form class="">
+            <h1>Register</h1>
+            <h:messages style="color:gold"/>
+            <h:panelGrid columns="2">
+                <h:outputLabel for="username" value="Username: "/>
+                <h:inputText styleClass="textIn borderRadius border" id="username" type="text" value="#{userBean.username}" pt:placeholder="abc_123" required="true">
+                    <f:validateLength minimum="4"/>
+                    <f:validateRegex pattern="^[a-zA-Z0-9][a-zA-Z0-9_]*"/>
+                </h:inputText>
+                <h:outputLabel for="firstname" value="First Name: "/>
+                <h:inputText styleClass="textIn borderRadius border" id="firstname" value="#{userBean.firstname}" pt:placeholder="Firstname" required="true">
+                    <f:validateLength minimum="2"/>
+                    <f:validateRegex pattern="^[a-zA-Z]*"/>
+                </h:inputText>
+                <h:outputLabel for="lastname" value="Last Name: "/>
+                <h:inputText styleClass="textIn borderRadius border" id="lastname" value="#{userBean.firstname}" pt:placeholder="Lastname" required="true"/>
+                <h:outputLabel for="dateOfBirth" value="Date Of Birth: "/>
+                <h:inputText styleClass="textIn borderRadius border" id="dateOfBirth" value="#{userBean.dateOfBirth}" pt:placeholder="dd/mm/yyyy" required="true">
+                    <f:convertDateTime pattern="dd/MM/yyyy"/>
+                    <f:validateRequired/>
+                </h:inputText>
+            </h:panelGrid>
+            <h:commandButton value="Register" action="#{userBean.register}"/>
+            <h:link style="margin-left:10px" value="Back Home" outcome="/pages/index"/>
+        </h:form>
+    </ui:define>
+</ui:composition>

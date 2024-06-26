@@ -24,16 +24,16 @@ public class UserDAO extends DaoSkeleton {
         return (User) this.getByUsername(username);
     }
 
-    public List<User> getAllUsers() {
-        return this.getAll();
+    public List<User> getAllUsers(boolean softList) {
+        return this.getAll(softList);
     }
     
     public void updateUser(User user) {
         this.update(user);
     }
 
-    public void deleteUser(User user) {
-        this.delete(user);
+    public void deleteUser(User user, boolean softDelete) {
+        this.delete(user, softDelete);
     }
 
     public void deleteAllUsers() {
@@ -54,5 +54,9 @@ public class UserDAO extends DaoSkeleton {
             assert tx != null;
             this.rollback(tx,e);
         }
+    }
+
+    public User getUserByEmail(String email) {
+        return (User) this.getByEmail(email);
     }
 }

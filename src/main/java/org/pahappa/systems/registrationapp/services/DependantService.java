@@ -7,7 +7,7 @@ import org.pahappa.systems.registrationapp.models.User;
 
 import java.util.List;
 
-public class DependantService extends UserService{
+public class DependantService extends ServiceSkeleton {
     private final DependantDAO dependantDAO;
     public DependantService() {
         dependantDAO = new DependantDAO();
@@ -24,12 +24,14 @@ public class DependantService extends UserService{
 
     public List<Dependant> getDependantsOfUser(User user) { return dependantDAO.getAllUserDependants(user); }
 
-    @Override
     public boolean usernameExists(String username) throws UsernameException {
         return getDependantByUsername(username) != null;
     }
 
     public void deleteDependant(Dependant dependant) {
-        dependantDAO.deleteDependant(dependant);
+        deleteDependant(dependant, true);
+    }
+    public void deleteDependant(Dependant dependant, boolean softDelete) {
+        dependantDAO.deleteDependant(dependant, softDelete);
     }
 }

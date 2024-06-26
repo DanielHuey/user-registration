@@ -11,12 +11,12 @@ import javax.faces.context.FacesContext;
 import java.io.Serializable;
 import java.util.Date;
 
-import static org.pahappa.systems.registrationapp.models.beans.AuthBean.*;
 import static org.pahappa.systems.registrationapp.models.beans.MainBean.*;
+import static org.pahappa.systems.registrationapp.models.beans.AuthBean.*;
 
-@ManagedBean(name = "userBean")
+@ManagedBean(name = "adminBean")
 @SessionScoped
-public class UserBean implements Serializable {
+public class AdminBean implements Serializable {
     private String username;
     private String firstname;
     private String lastname;
@@ -25,11 +25,9 @@ public class UserBean implements Serializable {
     private String password;
     private Role role;
     private boolean deleted;
-    private Date deletedAt;
     private final UserService userService;
-    private static User userToEdit;
 
-    public UserBean() {
+    public AdminBean() {
         userService = new UserService();
     }
 
@@ -73,6 +71,14 @@ public class UserBean implements Serializable {
         this.email = email;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public Role getRole() {
         return role;
     }
@@ -89,61 +95,27 @@ public class UserBean implements Serializable {
         this.deleted = deleted;
     }
 
-    public Date getDeletedAt() {
-        return deletedAt;
-    }
-
-    public void setDeletedAt(Date deletedAt) {
-        this.deletedAt = deletedAt;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public User getUserToEdit() {
-        return userToEdit;
-    }
-
-    public void setUserToEdit(User user) {
-        userToEdit = user;
-    }
-
     public void register() {
-        User user = new User();
-        user.setUsername(username);
-        user.setFirstname(firstname);
-        user.setLastname(lastname);
-        user.setDateOfBirth(dateOfBirth);
-        user.setEmail(email);
-        user.setPassword(hexHashString(password));
+        User admin = new User();
+        admin.setUsername(username);
+        admin.setFirstname(firstname);
+        admin.setLastname(lastname);
+        admin.setEmail(email);
+        admin.setPassword(password);
+        admin.setDateOfBirth(dateOfBirth);
+        admin.setRole(Role.Admin);
         FacesContext ctx = FacesContext.getCurrentInstance();
-        if (container(() -> userService.registerUser(user))) {
-            ctx.addMessage(null, new FacesMessage("Successful Registration"));
-            container(() -> ctx.getExternalContext().redirect("/pages/index")); //an external context can redirect
+        if (container(() -> userService.registerUser(admin))) {
+            ctx.addMessage(null, new FacesMessage("Successful Administrator Registration"));
+            AuthBean ab = new AuthBean();
+            ab.setSessionUser(admin);
+            container(() -> redirect("/pages/admin/dashboard")); //an external context can redirect
         }
     }
 
-    public void delete(String username) {
-        container(() -> userService.deleteUser(username));
-
-        try {
-            redirect("");
-        }
-        catch (Exception ignore) {}
-    }
-
-    public void edit(String username) {
-        if (container(() -> userService.validateUsername(username))) {
-            container(() -> {
-                setUserToEdit(userService.getUserByUsername(username));
-                redirect("/pages/user/edit");
-            });
-        }
+    public void restrictDashboard() {
+        if (getSessionUser().getRole() != Role.Admin)
+            container(()-> redirect("/pages/user/view"));
     }
 }
 

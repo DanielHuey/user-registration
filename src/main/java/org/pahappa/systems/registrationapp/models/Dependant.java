@@ -17,9 +17,31 @@ public class Dependant extends UserSkeleton {
     private String firstname;
     private String lastname;
     private Date dateOfBirth;
+    private boolean deleted;
+    private Date deletedAt;
     private Gender gender;
     @ManyToOne
     private User owner;
+
+    @Override
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    @Override
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
+    }
+
+    @Override
+    public Date getDeletedAt() {
+        return deletedAt;
+    }
+
+    @Override
+    public void setDeletedAt(Date deletedAt) {
+        this.deletedAt = deletedAt;
+    }
 
     @Override
     public String getDateOfBirth() {
