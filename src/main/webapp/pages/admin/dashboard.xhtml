@@ -3,36 +3,30 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:my="http://java.sun.com/jsf/composite/agani"
                 xmlns:p="http://primefaces.org/ui">
-<!--    <ui:define name="nav"></ui:define>-->
+    <ui:define name="nav">
+        Dashboard
+        #{indexBean.router("dashboard")}
+    </ui:define>
     <ui:define name="content">
-        #{adminBean.restrictDashboard()}
-        #{indexBean.refreshUsers()}
-        <div><h:button style="margin-left:10px;" class="actionButton b2 borderRadius" value="Register A New User" outcome="/pages/user/register"/></div>
-        <br/>
-        <div style="margin-bottom:4px;display:flex;flex-direction:row-reverse">
-            ::filters::
-        </div>
-        <div class="flexColumn firstChildBorder">
-            <ui:repeat var="user" value="#{indexBean.users}" rows="5">
-                <div class="listChild pad10 flexDisplay flexRow userRow" style="margin-bottom:4px">
-                    <div class="flexDisplay flexRow">
-                        #{user.id}
-                        <div class="hpad">
-                            <div class="">#{user.firstname} #{user.lastname} </div>
-                            <div class="usernameLabel smallText">#{user.username} </div>
-                            <div class="smallText">#{user.email}</div>
-                        </div>
-                        #{user.dateOfBirth}
-                    </div>
-                    <div class="flexDisplay flexRow"><h:form>
-                        <h:commandButton styleClass="noBorder actionButton borderRadius" action="#{userBean.edit(user.username)}" value="EDIT"/>
-                        <h:commandButton styleClass="noBorder greenText actionButton borderRadius" value="DEPENDANTS"/>
-                        <h:commandButton styleClass="noBorder redText actionButton borderRadius" action="#{userBean.delete(user.username)}" value="DELETE"/>
+        #{adminBean.restrictToAdmin()}
+        #{indexBean.refreshUsersAndDependants()}
 
-                    </h:form></div>
-                </div>
-            </ui:repeat>
+        <div class="flexColumn mt pad10">
+            <h3 class="petCaps">My Cards</h3>
+            <div class="autoMargin m rad12 flexDisplay flexRow">
+                <my:stat icon="person" value="#{statBean.numberOfUsers}" label="Users"/>
+                <my:stat value="#{statBean.numberOfDependants}" label="Dependants" icon="people"/>
+                <my:stat value="#{statBean.usersWithNoDependants}" label="Users W'/D" icon="asterisk"/>
+                <my:stat value="#{statBean.usersWithDependants}" label="Uers W/D" icon="link-45deg"/>
+            </div>
+            <h3 class="petCaps">Chart</h3>
+            <div class="pad10 rad12 bgp">
+                <p:pieChart styleClass="rad12 pad10"
+                            style="max-width: 380px;max-height: 380px"
+                            model="#{statBean.pieChart}" id="pieChart"/>
+            </div>
         </div>
     </ui:define>
 </ui:composition>

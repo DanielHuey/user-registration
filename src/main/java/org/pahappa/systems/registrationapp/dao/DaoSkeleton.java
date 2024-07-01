@@ -5,7 +5,6 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.pahappa.systems.registrationapp.config.SessionConfiguration;
-import org.pahappa.systems.registrationapp.models.User;
 import org.pahappa.systems.registrationapp.models.UserSkeleton;
 import org.pahappa.systems.registrationapp.models.enums.Role;
 
@@ -110,7 +109,7 @@ public abstract class DaoSkeleton {
         }
     }
 
-    public void deleteAll() {
+    public void deleteAll(boolean softDelete) {
         Transaction tx = null;
         try {
             Session session = sessionFactory.openSession();

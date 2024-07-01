@@ -83,9 +83,10 @@ public class User extends UserSkeleton {
         this.lastname = lastname;
     }
 
-    public String getDateOfBirth() {
+    public String getDateOfBirthString() {
         return new SimpleDateFormat("dd/MM/yyyy").format(dateOfBirth);
     }
+    public Date getDateOfBirth() {return dateOfBirth;}
 
     public void setDateOfBirth(Date dateOfBirth) {
         this.dateOfBirth = dateOfBirth;

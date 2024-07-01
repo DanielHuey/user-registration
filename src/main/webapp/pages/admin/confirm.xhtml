@@ -1,0 +1,14 @@
+<ui:composition template="/template/template.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+    <ui:define name="content">
+        <h3 class="petCaps">Confirm Action !</h3>
+        <div class="m">
+            <h:button style="margin-right:10px;" class="actionButton b2 bgp" value="Return" outcome="#{authBean.goHomeIfAuthenticated()}"/>
+            <h:button class="actionButton b2 bgp redText" value="Delete All" outcome="#{indexBean.confirm()}"/>
+        </div>
+    </ui:define>
+</ui:composition>

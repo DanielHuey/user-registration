@@ -22,15 +22,16 @@ public class DependantDAO extends DaoSkeleton {
     public List<Dependant> getAllDependants(boolean softList) {
         return this.getAll(softList);
     }
-
-    public List<Dependant> getAllUserDependants(User user) {
+    public List<Dependant> getAllUserDependants(User user) {return getAllUserDependants(user,true);}
+    public List<Dependant> getAllUserDependants(User user,boolean softList) {
         List<Dependant> dependants = new ArrayList<>();
         org.hibernate.Transaction tx = null;
         try {
             org.hibernate.Session session = getSessionFactory().openSession();
             tx = session.beginTransaction();
-            org.hibernate.Query q = session.createQuery("FROM "+getTable()+" where owner = :owner");
+            org.hibernate.Query q = session.createQuery("FROM "+getTable()+" where owner = :owner" + (softList ? " AND deleted = :deleted":""));
             q.setParameter("owner", user);
+            if (softList) q.setParameter("deleted", false);
             dependants = q.list();
             tx.commit();
             session.close();
@@ -50,7 +51,7 @@ public class DependantDAO extends DaoSkeleton {
         this.delete(dependant, softDelete);
     }
 
-    public void deleteAllDependants() {
-        this.deleteAll();
+    public void deleteAllDependants(boolean softDelete) {
+        this.deleteAll(softDelete);
     }
 }

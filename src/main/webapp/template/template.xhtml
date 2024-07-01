@@ -4,30 +4,29 @@
     xmlns:h="http://java.sun.com/jsf/html"
     xmlns:f="http://java.sun.com/jsf/core"
     xmlns:ui="http://java.sun.com/jsf/facelets"
-    xmlns:p="http://primefaces.org/ui"
     xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
     <h:head>
         <meta charset="UTF-8"/>
         <title>User Registration</title>
         <h:outputStylesheet name="css/style.css"/>
-
     </h:head>
-    <h:body class="bg textStyle">
+    <h:body class="bgp textStyle maxViewport">
         #{authBean.restrictToAuthenticated()}
-        <div class="navBar pad10"><h:form><ui:insert name="nav"/></h:form></div>
-        <div class="splitBody">
+        <div class="navBar pad10 autoMargin petCaps" style="font-size: 2rem"><ui:insert name="nav"/></div>
+        <div class="splitBody hmax">
             <div class="sidebar">
-                <div class="autoMargin">
+                <div class="autoMargin hpad">
                     <h:form class="flexDisplay flexColumn">
-                        <h:commandButton styleClass="bold bi bi-home" value="Dashboard" rendered="#{authBean.isCurrentUserAdmin()}" action="#{authBean.goHomeIfAuthenticated()}"/>
-                        <h:commandButton styleClass="bold" value="Users" rendered="#{authBean.isCurrentUserAdmin()}" action="/pages/user/list.xhtml?faces-redirect=true"/>
-                        <h:commandButton styleClass="bold" value="Dependants" rendered="#{authBean.isCurrentUserAdmin()}" action="#{authBean.goHomeIfAuthenticated()}"/>
-                        <h:commandButton styleClass="bold" value="Settings" action="/pages/user/settings.xhtml?faces-redirect=true"/>
-                        <h:commandButton styleClass="bold" value="Logout" action="#{authBean.logout()}"/>
+                        <h3 class="pad10 autoMargin text-s petCaps">NAVIGATION</h3>
+                        <h:commandLink styleClass="#{indexBean.routeIs('dashboard')} middle" rendered="#{authBean.isCurrentUserAdmin()}" action="#{authBean.goHomeIfAuthenticated()}"><i class="pi pi-home"><h:outputText styleClass="hpad bold" value="Dashboard"/></i></h:commandLink>
+                        <h:commandLink styleClass="#{indexBean.routeIs('userlist')} middle" rendered="#{authBean.isCurrentUserAdmin()}" action="/pages/user/list.xhtml?faces-redirect=true"><i class="pi pi-user"><h:outputText styleClass="hpad bold" value="Users"/></i></h:commandLink>
+                        <h:commandLink styleClass="#{indexBean.routeIs('deplist')} middle" rendered="#{authBean.isCurrentUserAdmin()}" action="/pages/dependant/list.xhtml?faces-redirect=true"><i class="pi pi-users"><h:outputText styleClass="hpad bold" value="Dependants"/></i></h:commandLink>
+                        <h:commandLink styleClass="#{indexBean.routeIs('settings')} middle" action="#{userBean.setupSettings()}"><i class="pi pi-box"><h:outputText styleClass="hpad bold" value="Settings"/></i></h:commandLink>
+                        <h:commandLink styleClass="middle" action="#{authBean.logout()}"><i class="pi pi-sign-out"><h:outputText styleClass="hpad bold" value="Logout"/></i></h:commandLink>
                     </h:form>
                 </div>
             </div>
-            <div class="flexDisplay flexColumn autoMargin content">
+            <div class="flexDisplay flexColumn autoMargin content bg pad20">
                 <ui:insert name="content"/>
             </div>
         </div>

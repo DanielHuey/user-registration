@@ -1,0 +1,40 @@
+<ui:composition template="/template/template.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+    <ui:define name="nav">Add New Dependant To: #{depBean.dependantOwner.firstname}</ui:define>
+    <ui:define name="content">
+        <div class="pad20 m border rad12 ">
+            #{depBean.resetValues()}
+            <h:form class="autoMargin">
+                <h:messages style="color:gold"/>
+                <h:panelGrid columns="2">
+                    <span>Username</span>
+                    <h:inputText styleClass="rad12 noBorder" id="username" type="text" value="#{depBean.username}" pt:placeholder="Username [abc_123]" required="true">
+                        <f:validateLength minimum="4"/>
+                        <f:validateRegex pattern="^[a-zA-Z0-9][a-zA-Z0-9_]*"/>
+                    </h:inputText>
+                    <span>First Name</span>
+                    <h:inputText styleClass="rad12 noBorder" id="firstname" value="#{depBean.firstname}" pt:placeholder="First Name [a-Z]" required="true">
+                        <f:validateLength minimum="2"/>
+                        <f:validateRegex pattern="^[a-zA-Z]*"/>
+                    </h:inputText>
+                    <span>Last Name</span>
+                    <h:inputText styleClass="rad12 noBorder" id="lastname" value="#{depBean.lastname}" pt:placeholder="Last Name [a-Z]" required="false"/>
+                    <h:outputLabel for="calendar" value="Date Of Birth "/>
+                    <p:calendar styleClass="rad12" id="calendar" pattern="dd/MM/yyyy" navigator="true" showButtonPanel="true" value="#{depBean.dateOfBirth}" placeholder="Pick a date" required="true"/>
+                    <h:outputLabel for="gender" value="Gender "/>
+                    <p:selectOneListbox id="gender" value="#{depBean.gender}" pt:placeholder="Select Gender" required="true">
+                        <f:selectItems value="#{depBean.gnd}" var="gn" itemValue="#{gn}" itemLabel="#{gn}"/>
+                    </p:selectOneListbox>
+                    <div style="margin-top:20px">
+                        <h:commandButton styleClass="rad12 noBorder hpad inputSubmit" value="Add" action="#{depBean.addDependantToUser()}"/>
+                    </div>
+                </h:panelGrid>
+            </h:form>
+        </div>
+    </ui:define>
+</ui:composition>

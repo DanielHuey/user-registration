@@ -1,11 +1,7 @@
 package org.pahappa.systems.registrationapp.dao;
 
-import org.hibernate.Transaction;
-
 import java.util.List;
 
-import org.hibernate.Query;
-import org.hibernate.Session;
 import org.pahappa.systems.registrationapp.models.Dependant;
 import org.pahappa.systems.registrationapp.models.User;
 
@@ -36,8 +32,8 @@ public class UserDAO extends DaoSkeleton {
         this.delete(user, softDelete);
     }
 
-    public void deleteAllUsers() {
-        this.deleteAll();
+    public void deleteAllUsers(boolean softDelete) {
+        this.deleteAll(softDelete);
     }
 
 

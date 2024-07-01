@@ -25,8 +25,9 @@
                 <f:validateLength minimum="4"/>
 <!--                <f:validateRegex pattern="^(?=.[a-zA-Z0-9_!@#$%^*~-=+]).*"/>-->
             </h:inputSecret>
+            <h:messages style="color:red"/>
             <div style="margin-top:10px">
-                <h:commandButton styleClass="borderRadius noBorder hpad inputSubmit" value="Login" action="#{authBean.login()}"/>
+                <h:commandButton styleClass="rad12 noBorder hpad inputSubmit" value="Login" action="#{authBean.login()}"/>
             </div>
         </h:form>
     </div>

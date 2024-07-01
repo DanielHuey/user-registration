@@ -66,9 +66,9 @@ public class AuthBean implements Serializable {
     public void login() {
         container(() -> {
             boolean isEmail;
-            if (identity.matches("^[a-zA-Z0-9_]*@[a-z]*\\.[a-z]*$"))
+            if (identity.matches("^[a-zA-Z0-9_.]*@[a-z]*\\.[a-z]*$"))
                 isEmail = true;
-            else if (identity.matches("^[a-zA-Z0-9][a-zA-Z0-9_]*$"))
+            else if (identity.matches("^[a-zA-Z0-9][a-zA-Z0-9_.]*$"))
                 isEmail = false;
             else throw new Exception("The provided identity doesn't match a Username or Email");
             authenticate(identity,password,isEmail);
@@ -81,6 +81,7 @@ public class AuthBean implements Serializable {
             user = userService.getUserByEmail(identity);
         else
             user = userService.getUserByUsername(identity);
+        if (user==null) throw new Exception("There is no user with the provided "+ (isEmail?"email":"username"));
         password = hexHashString(password);
         if (user.passwordEquals(password)) {
             setSessionUser(user);
@@ -88,11 +89,14 @@ public class AuthBean implements Serializable {
         } else throw new Exception("The password provided is Incorrect. Try Again");
     }
 
-    private void getHomePage() {
+    private static void getHomePage() {
         container(() -> {
             if (isCurrentUserAdmin())
                 redirect("/pages/admin/dashboard");
-            else redirect("/pages/user/settings");
+            else {
+                new UserBean().setupSettings();
+                redirect("/pages/user/settings");
+            }
         });
     }
 
@@ -106,12 +110,12 @@ public class AuthBean implements Serializable {
             container(() -> redirect("/pages/login"));
     }
 
-    public void goHomeIfAuthenticated() {
+    public static void goHomeIfAuthenticated() {
         if (getSessionUser() != null)
             getHomePage();
     }
 
-    public boolean isCurrentUserAdmin() {
+    public static boolean isCurrentUserAdmin() {
         return getSessionUser().getRole() == Role.Admin;
     }
 }

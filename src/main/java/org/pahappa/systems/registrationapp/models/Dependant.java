@@ -43,9 +43,11 @@ public class Dependant extends UserSkeleton {
         super.setDeletedAt();
     }
 
-    @Override
-    public String getDateOfBirth() {
-        return super.getDateOfBirth();
+    public Date getDateOfBirth() {
+        return dateOfBirth;
+    }
+    public String getDateOfBirthString() {
+        return new SimpleDateFormat("dd/MM/yyyy").format(dateOfBirth);
     }
 
     @Override
@@ -101,7 +103,9 @@ public class Dependant extends UserSkeleton {
         this.owner = owner;
     }
 
-    public Dependant() {}
+    public Dependant() {
+        setDeleted(false);
+    }
 
     public Gender getGender() {
         return gender;

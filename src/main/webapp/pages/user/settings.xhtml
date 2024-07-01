@@ -3,44 +3,79 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
-                xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+                xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+                xmlns:p="http://primefaces.org/ui">
+    <ui:define name="nav">
+        Settings
+    </ui:define>
     <ui:define name="content">
-
-        <div class="pad20 autoMargin border borderRadius noBorder">
-            <h:form>
+        #{userBean.resetValues()}
+        <div class="m border">
+            <h:form class="autoMargin">
                 <h:messages style="color:gold"/>
                 <h:panelGrid columns="2">
                     <span>Username</span>
-                    <h:inputText styleClass="borderRadius noBorder" id="username" type="text" value="#{userBean.userToEdit.username}" pt:placeholder="Username [abc_123]" required="true">
+                    <h:inputText styleClass="rad12 noBorder" id="username" type="text" value="#{userBean.username}" pt:placeholder="#{userBean.getUserToEdit().username}">
                         <f:validateLength minimum="4"/>
                         <f:validateRegex pattern="^[a-zA-Z0-9][a-zA-Z0-9_]*"/>
                     </h:inputText>
                     <span>First Name</span>
-                    <h:inputText styleClass="borderRadius noBorder" id="firstname" value="#{userBean.userToEdit.firstname}" pt:placeholder="Firstname [a-Z]" required="true">
+                    <h:inputText styleClass="rad12 noBorder" id="firstname" value="#{userBean.firstname}" pt:placeholder="#{userBean.getUserToEdit().firstname}">
                         <f:validateLength minimum="2"/>
                         <f:validateRegex pattern="^[a-zA-Z]*"/>
                     </h:inputText>
                     <span>Last Name</span>
-                    <h:inputText styleClass="borderRadius noBorder" id="lastname" value="#{userBean.userToEdit.lastname}" pt:placeholder="Lastname [a-Z]" required="false"/>
+                    <h:inputText styleClass="rad12 noBorder" id="lastname" value="#{userBean.lastname}" pt:placeholder="#{userBean.getUserToEdit().lastname}"/>
                     <span>Date Of Birth</span>
-                    <h:inputText styleClass="borderRadius noBorder" id="dateOfBirth" value="#{userBean.userToEdit.dateOfBirth}" pt:placeholder="Birth Date [dd/mm/yyyy]" required="true">
+                    <p:calendar styleClass="rad12" id="dateOfBirth" yearRange="c-100:c" value="#{userBean.dateOfBirth}" pt:placeholder="#{userBean.getUserToEdit().dateOfBirthString}">
                         <f:convertDateTime pattern="dd/MM/yyyy"/>
                         <f:validateRequired/>
-                    </h:inputText>
+                    </p:calendar>
                     <span>Email</span>
-                    <h:inputText styleClass="borderRadius noBorder" id="email" value="#{userBean.userToEdit.email}" pt:placeholder="Email Address [mail@site.com]" required="true">
+                    <h:inputText styleClass="rad12 noBorder" id="email" value="#{userBean.email}" pt:placeholder="#{userBean.getUserToEdit().email}">
                         <f:validateLength minimum="8"/>
-                        <f:validateRegex pattern="^[a-zA-Z0-9_]*@[a-z]*\.[a-z]*$"/>
+                        <f:validateRegex pattern="^[a-zA-Z0-9_\.]*@[a-z]*\.[a-z]*$"/>
                     </h:inputText>
+                    <h:outputLabel for="oldpassword" value="Old Password" rendered="#{!authBean.isCurrentUserAdmin()}"/>
+                    <h:inputSecret rendered="#{!authBean.isCurrentUserAdmin()}" styleClass="rad12 noBorder" id="oldpassword" value="#{userBean.oldPassword}" pt:placeholder="Old Password [required]"/>
                     <span>Password</span>
-                    <h:inputSecret styleClass="borderRadius noBorder" id="password" value="#{userBean.userToEdit.password}" pt:placeholder="Password [a@#1G%!*]" required="true" validatorMessage="Password should have at lest 8 characters">
+                    <h:inputSecret styleClass="rad12 noBorder" id="password" value="#{userBean.password}" pt:placeholder="New Password" validatorMessage="Password should have at lest 4 characters">
                         <f:validateLength minimum="4"/>
                     </h:inputSecret>
                     <div style="margin-top:10px">
-                        <h:commandButton styleClass="borderRadius noBorder hpad inputSubmit" value="Save Details" action="#{userBean.saveDetails()}"/>
+                        <h:commandButton styleClass="rad12 noBorder hpad inputSubmit" value="Save" action="#{userBean.saveDetails()}"/>
                     </div>
                 </h:panelGrid>
             </h:form>
         </div>
+        #{userBean.loadSelfDependants()}
+        <div id="dependants" class="pad20 m border wmax">
+            <h:form><h:commandButton styleClass="actionButton noBorder" value="Add Dependant" action="#{userBean.addDependantPage(userBean.getUserToEdit().username)}"/>
+            <h:panelGroup rendered="#{(userBean.getUserToEdit().dependants.size() > 0)}">
+                <h1>Dependants</h1>
+                <table>
+                    <thead>
+                    <tr>
+                        <ui:repeat value="#{['ID','FirstName','LastName','Gender','Actions']}" var="h"><th class="pad10">#{h}</th></ui:repeat>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <ui:repeat value="#{userBean.getUserToEdit().dependants}" var="dep">
+                        <tr class="bottomLine">
+                            <td class="hpad">#{dep.id}</td>
+                            <td class="hpad">#{dep.firstname}</td>
+                            <td class="hpad">#{dep.lastname}</td>
+                            <td class="hpad">#{dep.gender}</td>
+                            <td class="hpad">
+                                <h:commandLink action="#{depBean.edit(dep.username,dep.owner.username)}"><i class="pi pi-pencil hpad greenText"/></h:commandLink>
+                                <h:commandLink action="#{depBean.delete(dep.username)}"><i class="pi pi-trash redText"/></h:commandLink>
+                            </td>
+                        </tr>
+                    </ui:repeat>
+                    </tbody>
+                </table>
+            </h:panelGroup></h:form>
+        </div>
+
     </ui:define>
 </ui:composition>

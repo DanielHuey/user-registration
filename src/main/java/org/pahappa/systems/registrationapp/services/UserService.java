@@ -3,6 +3,7 @@ package org.pahappa.systems.registrationapp.services;
 import org.pahappa.systems.registrationapp.dao.UserDAO;
 import org.pahappa.systems.registrationapp.exception.*;
 import org.pahappa.systems.registrationapp.models.User;
+import org.pahappa.systems.registrationapp.models.enums.Role;
 
 import java.util.Date;
 import java.util.List;
@@ -60,26 +61,31 @@ public class UserService extends ServiceSkeleton {
         User user = getUserByUsername(username);
         if (user != null) userDAO.deleteUser(user, softDelete);
     }
-
-    public void deleteAllUsers() {
-        userDAO.deleteAllUsers();
+    public void deleteAllUsers() {deleteAllUsers(true);}
+    public void deleteAllUsers(boolean softDelete) {
+        userDAO.deleteAllUsers(softDelete);
     }
 
-    public boolean updateDetailsOfUser(String username, String firstname, String lastname, String newUserName, Date dateOfBirth) throws Exception {
+    public boolean updateDetailsOfUser(String username, String firstname, String lastname, String newUserName, Date dateOfBirth, String password, String email, Role role) throws Exception {
         User user = getUserByUsername(username);
         if (user == null) return false;
-        user.setFirstname(firstname != null ? validateName(firstname) : user.getFirstname());
-        user.setLastname(lastname != null ? lastname : user.getLastname());
+        user.setFirstname(!firstname.isEmpty() ? validateName(firstname) : user.getFirstname());
+        user.setLastname(!lastname.isEmpty() ? lastname : user.getLastname());
         user.setDateOfBirth(dateOfBirth != null ? validateDateOfBirth(dateOfBirth) : validateDateOfBirth(user.getDateOfBirth()));
-        user.setUsername(newUserName != null ? validateUsername(newUserName) : user.getUsername());
+        user.setUsername(!newUserName.isEmpty() ? validateUsername(newUserName) : user.getUsername());
+        user.setPassword(!password.isEmpty() ? password : user.getPassword());
+        user.setEmail(!email.isEmpty() ? email : user.getEmail());
+        user.setRole(role != null ? role : user.getRole());
         userDAO.updateUser(user);
         return true;
     }
+    public void updateDetailsOfUser(String oldUsername,User u) throws Exception {
+        if (oldUsername.equals(u.getUsername()) || !usernameExists(u.getUsername()))
+            updateDetailsOfUser(oldUsername,u.getFirstname(),u.getLastname(),u.getUsername(),validateDateOfBirth(u.getDateOfBirth()),u.getPassword(),u.getEmail(),u.getRole());
+        else throw new UsernameException("This username is already taken!");
+    }
 
     /* Validators */
-    /**
-     *
-     */
     private void validateEmail(String email) throws EmailException {
         if (!email.matches("^[a-zA-Z0-9_.]*@[a-z]*\\.[a-z]*")) {
             throw new EmailException("Invalid characters in email.");

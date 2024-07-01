@@ -9,6 +9,7 @@ import java.util.Scanner;
 import org.pahappa.systems.registrationapp.exception.ExitException;
 import org.pahappa.systems.registrationapp.exception.UsernameException;
 import org.pahappa.systems.registrationapp.models.User;
+import org.pahappa.systems.registrationapp.models.enums.Role;
 import org.pahappa.systems.registrationapp.services.DependantService;
 import org.pahappa.systems.registrationapp.services.UserService;
 
@@ -265,7 +266,7 @@ public class UserView {
                     System.out.println(e.getMessage());
                 }
             }
-            if (userService.updateDetailsOfUser(username, firstname, lastname, newUsername, dateOfBirth)) {
+            if (userService.updateDetailsOfUser(username, firstname, lastname, newUsername, dateOfBirth,"","", Role.Default)) {
                 System.out.println("Details successfully recorded");
             } else {
                 System.out.println("Did not find the user with username \""+username+"\". Maybe the details were edited by another administrator while you were also editing.");                

@@ -113,7 +113,7 @@ public class AdminBean implements Serializable {
         }
     }
 
-    public void restrictDashboard() {
+    public void restrictToAdmin() {
         if (getSessionUser().getRole() != Role.Admin)
             container(()-> redirect("/pages/user/view"));
     }

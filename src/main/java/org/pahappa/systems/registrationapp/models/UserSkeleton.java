@@ -72,7 +72,7 @@ public abstract class UserSkeleton {
         this.lastname = lastname;
     }
 
-    public String getDateOfBirth() {
+    public String getDateOfBirthString() {
         return new SimpleDateFormat("dd/MM/yyyy").format(dateOfBirth);
     }
 

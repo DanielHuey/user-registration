@@ -3,40 +3,41 @@
 :root {
     --p: #ffffff;
     --s: #1c1919cc;
-    --t: #5B13D588;
+    --t: #0dc3e3;
+    --a: #1c6075;
+    --lightBlue:#dedeff;
     --noColor: #0000;
     --rad: 12px;
     --pad: 20px;
+    --mar: 2%;
 }
 html,body {margin:0 !important;height:max-content !important;}
 .flexDisplay {display:flex}
-.flexRow {flex-direction:row}
-.flexColumn {flex-direction:column}
-.bg {background:var(--p)}
-.textStyle {color:var(--s);font-weight:bold;}
+.flexRow {flex-direction:row}  .flexColumn {flex-direction:column}
+.bgp {background-color:var(--p)}  .bgs {background-color:var(--s)}
+.bgt {background-color:var(--t)}  .bga {background-color:var(--a)} .bg {background-color:var(--lightBlue)}
+.text-p {color:var(--p)}  .text-s {color:var(--s)}
+.text-t {color:var(--t)}  .text-a {color:var(--a)}
 .autoMargin {margin: auto;}
 .navBar {border-bottom:solid 1px var(--s)}
 .splitBody {
     display: grid;
-    grid-template-columns:150px auto;
+    grid-template-columns:240px auto;
 }
 .sidebar {
     border-right:solid 1px var(--s);
     height:100%;
 }
-.content {width:100%;margin-top:5%;padding-bottom:var(--pad);border-bottom:solid 1px var(--s);}
-.borderRadius {border-radius:var(--rad);}
+.content {width:100%;border-bottom:solid 1px var(--s);}
 .border {border:solid 1px var(--s)}
 .b2 {border:solid 2px var(--s)}
 .noBorder {border:none}
 .pad20 {padding:var(--pad)}
 .pad10 {padding:calc(var(--pad)/2);}
-.actionButton {background:var(--noColor);padding:calc(var(--pad)/2);cursor:pointer;}
+.actionButton {padding:calc(var(--pad)/2);cursor:pointer;}
 .actionButton:hover {background:var(--s);color:var(--p)}
 .usernameLabel {
     color:var(--t);
-    /*font-family:monospace;*/
-    padding:3px;
     font-weight:900;
 }
 .bold {font-weight: 600;}
@@ -45,9 +46,8 @@ html,body {margin:0 !important;height:max-content !important;}
 .greenText {color:#4f4}
 .userRow {justify-content:space-between;background:#0000}
 .userRow:hover {background:#f5f5f5}
-.spacer {width:20px}
+.spacer {width:20px;height:20px}
 .smallText {font-size:10px;}
-input.textIn {padding:8px;background:#0002;color:#aaa}
 input[type="text"],input[type="password"] {
     min-height: 22px;
     padding: 6px;
@@ -67,21 +67,26 @@ input::placeholder{
 .tr {border-top-right-radius:var(--rad)}
 .bl {border-bottom-left-radius:var(--rad)}
 .br {border-bottom-right-radius:var(--rad)}
+.rad12 {border-radius:var(--rad)}
+.rad24 {border-radius: 24px}
+.rad50p {border-radius: 50%}
 .hpad {padding-left:var(--pad);padding-right:var(--pad)}
 .vpad {padding-top:var(--pad);padding-bottom:var(--pad)}
-.hmax {height:100%}
-.noTop {border-top-width:0px !important;}
-.listChild {border-bottom:solid 1px var(--s);}
-.firstChildBorder:nth-child(0) {
-    border-top:solid 1px var(--s);
-}
+.bpad {padding-bottom: var(--pad)}
+.hmax {height: 100%}
+.maxViewport {max-height: 100vh}
+.m {margin:var(--mar)}
+.mt {margin-top:var(--mar)}
+.noTop {border-top-width:0 !important;}
+.bottomLine {border-bottom:solid 3px var(--s)!important;}
+.middle {align-items:center;align-content:center}
 .formStyle {
     width:30%;
     min-width:275px;
 }
-.sidebar input {
+.sidebar a {
     border:none;
-    border-bottom:solid 1px var(--s);
+    border-radius: var(--rad);
     width:100%;
     height:40px;
     padding:8px;
@@ -89,8 +94,16 @@ input::placeholder{
     cursor: pointer;
     color: var(--s);
     text-justify: distribute;
+    margin-bottom: var(--mar);
 }
-.sidebar input:hover {
-    background: var(--s);
-    color: var(--p);
+.sidebar a:hover,.route {
+    background: var(--s) !important;
+    color: var(--p) !important;
 }
+.petCaps {font-variant:all-petite-caps}
+table {
+    border-collapse:collapse;
+    font-variant:oldstyle-nums;
+    text-align: start;
+}
+table td {padding:var(--pad)}
