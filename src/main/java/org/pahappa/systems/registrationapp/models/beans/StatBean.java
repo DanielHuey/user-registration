@@ -12,7 +12,6 @@ import static org.pahappa.systems.registrationapp.models.beans.MainBean.*;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
-import java.util.ArrayList;
 import java.util.List;
 
 @ManagedBean(name = "statBean")
@@ -32,6 +31,7 @@ public class StatBean {
         return numberOfDependants;
     }
     public int getUsersWithNoDependants() {
+        getNumberOfUsers();
         int noDep = 0;
         for (User u: getUserList()) {
             if (u.getDependants().isEmpty()) noDep++;
@@ -39,8 +39,12 @@ public class StatBean {
         usersWithDependants = numberOfUsers - noDep;
         return noDep;
     }
-    public int getUsersWithDependants() {return usersWithDependants;}
+    public int getUsersWithDependants() {
+        getUsersWithNoDependants();
+        return usersWithDependants;
+    }
     public int getFemaleDependants() {
+        getNumberOfDependants();
         int fem = 0;
         for (Dependant d: getDependants()) {
             if (d.getGender() == Gender.Female) fem++;
@@ -48,7 +52,10 @@ public class StatBean {
         maleDependants = numberOfDependants - fem;
         return fem;
     }
-    public int getMaleDependants() {return maleDependants;}
+    public int getMaleDependants() {
+        getFemaleDependants();
+        return maleDependants;
+    }
     public PieChartModel getPieChart() {
         ChartData cd = new ChartData();
         PieChartDataSet ds = new PieChartDataSet();

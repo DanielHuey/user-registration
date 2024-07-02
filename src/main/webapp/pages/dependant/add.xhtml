@@ -5,7 +5,7 @@
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
-    <ui:define name="nav">Add New Dependant To: #{depBean.dependantOwner.firstname}</ui:define>
+    <ui:define name="nav">Add New Dependant To: #{depBean.getDependantOwner().firstname}</ui:define>
     <ui:define name="content">
         <div class="pad20 m border rad12 ">
             #{depBean.resetValues()}
@@ -25,7 +25,7 @@
                     <span>Last Name</span>
                     <h:inputText styleClass="rad12 noBorder" id="lastname" value="#{depBean.lastname}" pt:placeholder="Last Name [a-Z]" required="false"/>
                     <h:outputLabel for="calendar" value="Date Of Birth "/>
-                    <p:calendar styleClass="rad12" id="calendar" pattern="dd/MM/yyyy" navigator="true" showButtonPanel="true" value="#{depBean.dateOfBirth}" placeholder="Pick a date" required="true"/>
+                    <p:calendar styleClass="rad12" id="calendar" pattern="dd/MM/yyyy" navigator="true" yearRange="c-100:c"  showButtonPanel="true" value="#{depBean.dateOfBirth}" placeholder="Pick a date" required="true"/>
                     <h:outputLabel for="gender" value="Gender "/>
                     <p:selectOneListbox id="gender" value="#{depBean.gender}" pt:placeholder="Select Gender" required="true">
                         <f:selectItems value="#{depBean.gnd}" var="gn" itemValue="#{gn}" itemLabel="#{gn}"/>

@@ -15,56 +15,73 @@
         #{indexBean.refreshUsersAndDependants()}
         #{indexBean.setPageRange('d')}
         <h3 class="petCaps">My Cards</h3>
-        <div class="autoMargin m rad12 flexDisplay flexRow">
+        <div class="rad12 flexDisplay flexRow">
             <my:stat icon="gender-female" label="Female Dependant" value="#{statBean.femaleDependants}"/>
             <my:stat icon="gender-male" label="Male Dependants" value="#{statBean.maleDependants}"/>
         </div>
-        <div class="m">
-            <h:button style="margin-right:10px;" class="actionButton b2 bgp" value="Add New" outcome="/pages/user/settings.xhtml#dependants"/>
-            <h:button class="actionButton b2 bgp redText" value="Delete All" outcome="#{indexBean.deleteAll('d')}"/>
-        </div>
-        <br/>
-        <div class="hpad" style="margin-bottom:4px;display:flex;flex-direction:row-reverse">
+        <h3 class="petCaps">Search #{'&amp;'} Filter</h3>
+        <div id="randomname" class="hpad pad10 bgp rad24 flexDisplay flexColumn">
+            <h:form styleClass="flexDisplay flexRow mt">
+                <h:inputText styleClass="rad24 pad10 mb slightShadow noBorder fillWidth" value="#{indexBean.search}" pt:placeholder="Search..."/>
+                <h:commandLink action="#{indexBean.searchD()}" styleClass="noBorder ml"><i class="pi pi-search pad10 bg square actionButton tl bl text-s"/></h:commandLink>
+                <h:commandLink action="#{indexBean.setSearch('')}" styleClass="noBorder"><i class="pi pi-times pad10 bg square actionButton tr br text-s"/></h:commandLink>
+            </h:form>
             <h:form>
-                <h:selectOneRadio value="true" label="Male"
-                <h:inputText styleClass="rad24" value="#{indexBean.search}" pt:placeholder="Search..."/>
+                <div class="flexDisplay flexRow middle">
+                    <p:selectOneRadio value="#{indexBean.filteredGender}" pt:placeholder="Select Gender" valueChangeListener="#{indexBean.log(indexBean.filteredGender)}">
+                        <f:selectItems value="#{indexBean.filterOptions}" var="filterOpt" itemLabel="#{filterOpt}" itemValue="#{filterOpt}"/>
+                    </p:selectOneRadio>
+                    <p:inputText styleClass="rad24" value="#{indexBean.filteredUser}" pt:placeholder="Filter User (username)" valueChangeListener="#{indexBean.log(indexBean.filteredUser)}"/>
+                    <div class="hpad">
+                        <h:commandLink action="#{indexBean.filterDependants(indexBean.filteredUser,indexBean.filteredGender)}"><i class="pi pi-filter actionButton bg text-s tl bl"/></h:commandLink>
+                        <h:commandLink action="#{indexBean.resetFilters()}"><i class="pi pi-filter-slash actionButton bg text-s tr br"/></h:commandLink>
+                    </div>
+                </div>
             </h:form>
         </div>
-        <div class="flexColumn mt pad10 rad12 bgp">
-            <table>
-                <thead><tr>
-                    <ui:repeat value="#{['No.','FirstName','LastName','User','Date Of Birth','Username','Actions']}" var="h"><th class="pad10">#{h}</th></ui:repeat>
-                </tr></thead>
-                <tbody>
-                <ui:repeat value="#{indexBean.paginatedDependantList}" var="dep">
-                    <h:commandLink action="#{userBean.edit(dep.username)}">
-                        <tr class="userRow">
-                            <td>#{dep.id}</td>
-                            <td>#{dep.firstname}</td>
-                            <td>#{dep.lastname}</td>
-                            <td>#{dep.owner}</td>
-                            <td>#{dep.dateOfBirthString}</td>
-                            <td>#{dep.username}</td>
-                            <td><h:form>
-                                <h:commandLink styleClass="noBorder actionButton rad12" action="#{depBean.edit(dep.username,dep.owner.username)}"><i class="pi pi-pencil"/></h:commandLink>
-                                <h:commandLink styleClass="noBorder redText actionButton rad12" action="#{depBean.delete(dep.username)}"><i class="pi pi-trash"/></h:commandLink>
-                            </h:form></td>
-                        </tr>
-                    </h:commandLink>
-                </ui:repeat>
-                </tbody>
-            </table>
-            <h:form>
-                <h:panelGrid columns="4">
-                    <h:outputLabel for="perPage" value="Results Per Page"/>
-                    <h:inputText id="perPage" styleClass="pad10" value="#{indexBean.resultsPerPage}"/>
-                    <h:outputLabel for="pageNo" value="Page"/>
-                    <h:selectOneListbox id="pageNo" value="#{indexBean.pageNumber}">
-                        <f:selectItems value="#{indexBean.pageRange}" var="num" itemValue="#{num}" itemLabel="#{num}"/>
-                    </h:selectOneListbox>
-                </h:panelGrid>
-            </h:form>
-
-        </div>
+        <div class="m flexDisplay flexRowR"><h:form>
+            <h:commandButton class="actionButton noBorder bgp tl bl text-a bold" value="Add New" action="/pages/user/settings.xhtml#dependants"/>
+            <h:commandButton class="actionButton noBorder bgp tr br text-r bold redText" value="Delete All" action="#{indexBean.deleteAll('d')}"/>
+        </h:form></div>
+        <h:outputText rendered="#{indexBean.paginatedDependantList.size()==0}" styleClass="rad12 bgp pad20 petCaps bigText" value="No Dependants Here"/>
+        <h:panelGroup rendered="#{indexBean.paginatedDependantList.size()!=0}">
+            <div class="flexColumn pad10 rad12 bgp">
+                <table id="tableList" class="tableDesign autoMargin mt">
+                    <thead><tr>
+                        <ui:repeat value="#{['No.','FirstName','LastName','Gender','User','Date Of Birth','Username','Actions']}" var="h"><th class="pad10">#{h}</th></ui:repeat>
+                    </tr></thead>
+                    <tbody>
+                    <ui:repeat value="#{indexBean.paginatedDependantList}" var="dep">
+                        <h:commandLink action="#{userBean.edit(dep.username)}">
+                            <tr class="userRow #{dep.deleted?'text-gray':''}">
+                                <td>#{dep.id}</td>
+                                <td>#{dep.firstname}</td>
+                                <td>#{dep.lastname}</td>
+                                <td>#{dep.gender}</td>
+                                <td>#{dep.owner}</td>
+                                <td>#{dep.dateOfBirthString}</td>
+                                <td>#{dep.username}</td>
+                                <td><h:form>
+                                    <h:commandLink styleClass="noBorder actionButton rad12" action="#{depBean.edit(dep.username,dep.owner.username)}"><i class="pi pi-pencil"/></h:commandLink>
+                                    <h:commandLink styleClass="noBorder text-r actionButton rad12" action="#{depBean.delete(dep.username)}"><i class="pi pi-trash"/></h:commandLink>
+                                </h:form></td>
+                            </tr>
+                        </h:commandLink>
+                    </ui:repeat>
+                    </tbody>
+                </table>
+                <h:form>
+                    <h:panelGrid columns="6">
+                        <h:outputLabel styleClass="hpad" for="perPage" value="Results Per Page"/>
+                        <h:inputText id="perPage" styleClass="pad10" value="#{indexBean.resultsPerPage}"/>
+                        <div class="hpad flexDisplay flexRow middle">
+                            <my:button icon="arrow-left" iconClass="text-s actionButton" action="#{indexBean.nextPage(-1)}"/>
+                            <h:outputLabel value="#{indexBean.pageNumber}" styleClass="hpad"/>
+                            <my:button icon="arrow-right" iconClass="text-s actionButton" action="#{indexBean.nextPage(1)}"/>
+                        </div>
+                    </h:panelGrid>
+                </h:form>
+            </div>
+        </h:panelGroup>
     </ui:define>
 </ui:composition>

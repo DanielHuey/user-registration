@@ -210,15 +210,15 @@ public class UserBean implements Serializable {
 
     public void saveDetails() {
         container(() -> {
-            if (isCurrentUserAdmin() || Objects.equals(hexHashString(oldPassword), oldUserPassword)){
-                if (!(username==null||username.isEmpty())) userToEdit.setUsername(userService.validateUsername(username));
-                if (!(firstname==null||firstname.isEmpty())) userToEdit.setFirstname(userService.validateName(firstname));
-                if (!(lastname==null||lastname.isEmpty())) userToEdit.setLastname(userService.validateName(lastname));
-                if (dateOfBirth != null) userToEdit.setDateOfBirth(userService.validateDateOfBirth(dateOfBirth));
-                if (!(email==null||email.isEmpty())) userToEdit.setEmail(email);
-                if (!(password==null||password.isEmpty())) userToEdit.setPassword(hexHashString(password));
-                userService.updateDetailsOfUser(oldUsername,userToEdit);
-            }
+            if (!(username == null || username.isEmpty()))
+                userToEdit.setUsername(userService.validateUsername(username));
+            if (!(firstname==null||firstname.isEmpty())) userToEdit.setFirstname(userService.validateName(firstname));
+            if (!(lastname==null||lastname.isEmpty())) userToEdit.setLastname(userService.validateName(lastname));
+            if (dateOfBirth != null) userToEdit.setDateOfBirth(userService.validateDateOfBirth(dateOfBirth));
+            if (!(email==null||email.isEmpty())) userToEdit.setEmail(email);
+            if ((isCurrentUserAdmin() || Objects.equals(hexHashString(oldPassword), oldUserPassword)) && !(password==null||password.isEmpty()))
+                userToEdit.setPassword(hexHashString(password));
+            userService.updateDetailsOfUser(oldUsername,userToEdit);
         });
     }
      public void resetValues() {

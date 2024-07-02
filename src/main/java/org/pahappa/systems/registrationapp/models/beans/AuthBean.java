@@ -118,4 +118,9 @@ public class AuthBean implements Serializable {
     public static boolean isCurrentUserAdmin() {
         return getSessionUser().getRole() == Role.Admin;
     }
+
+    public void sessionTimeout() {
+//        java.time.Duration d = java.time.Duration.ofMinutes(10);
+//        if (true) logout();
+    }
 }

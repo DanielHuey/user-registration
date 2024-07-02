@@ -12,28 +12,41 @@
     --mar: 2%;
 }
 html,body {margin:0 !important;height:max-content !important;}
+a {text-decoration: none}
 .flexDisplay {display:flex}
-.flexRow {flex-direction:row}  .flexColumn {flex-direction:column}
+.flexRow {flex-direction:row}  .flexRowR {flex-direction:row-reverse}
+.flexColumn {flex-direction:column}  .flexColumnR {flex-direction: column-reverse}
 .bgp {background-color:var(--p)}  .bgs {background-color:var(--s)}
 .bgt {background-color:var(--t)}  .bga {background-color:var(--a)} .bg {background-color:var(--lightBlue)}
 .text-p {color:var(--p)}  .text-s {color:var(--s)}
 .text-t {color:var(--t)}  .text-a {color:var(--a)}
+.text-r {color:red}  .text-gray {color:gray}  .text-green {color:#4f4}
 .autoMargin {margin: auto;}
-.navBar {border-bottom:solid 1px var(--s)}
+.navBar {
+    margin-left:calc(var(--mar)*2);
+    margin-right:calc(var(--mar)*2);
+}
 .splitBody {
     display: grid;
     grid-template-columns:240px auto;
 }
 .sidebar {
-    border-right:solid 1px var(--s);
-    height:100%;
+    height: 50vh;
+    position: sticky;
+    top: 0;
+    z-index: 5;
 }
-.content {width:100%;border-bottom:solid 1px var(--s);}
+.content {
+    width:100%;
+    overflow-y: auto; height: inherit;
+}
 .border {border:solid 1px var(--s)}
 .b2 {border:solid 2px var(--s)}
 .noBorder {border:none}
-.pad20 {padding:var(--pad)}
-.pad10 {padding:calc(var(--pad)/2);}
+/*.slightShadow {box-shadow: #ccc 0 0 4px}*/
+.pad10 {padding:calc(var(--pad)/2) !important}
+.pad20 {padding:var(--pad) !important}
+.square {display:block;height: 36px;width:36px}
 .actionButton {padding:calc(var(--pad)/2);cursor:pointer;}
 .actionButton:hover {background:var(--s);color:var(--p)}
 .usernameLabel {
@@ -42,16 +55,20 @@ html,body {margin:0 !important;height:max-content !important;}
 }
 .bold {font-weight: 600;}
 .bolder {font-weight: 900;}
-.redText {color:#f44}
-.greenText {color:#4f4}
 .userRow {justify-content:space-between;background:#0000}
 .userRow:hover {background:#f5f5f5}
 .spacer {width:20px;height:20px}
-.smallText {font-size:10px;}
-input[type="text"],input[type="password"] {
+.smallText {font-size:10px}
+.bigText {font-size:20px}
+.noInputStyle {}
+input[type="text"]:not(.noInputStyle),input[type="password"]:not(.noInputStyle) {
     min-height: 22px;
-    padding: 6px;
-    border: solid 1px var(--s);
+    padding: 1rem;
+    border-radius: var(--rad);
+    border: dashed 3px #ccc;
+}
+input[type="text"]:hover,input[type="password"]:hover {
+    background-color: #f7f6ef;
 }
 .inputSubmit {
     height:40px;
@@ -73,17 +90,37 @@ input::placeholder{
 .hpad {padding-left:var(--pad);padding-right:var(--pad)}
 .vpad {padding-top:var(--pad);padding-bottom:var(--pad)}
 .bpad {padding-bottom: var(--pad)}
-.hmax {height: 100%}
+.hmax {height: max-content}
 .maxViewport {max-height: 100vh}
 .m {margin:var(--mar)}
-.mt {margin-top:var(--mar)}
+.mt {margin-top:var(--mar)}  .mb {margin-bottom:var(--mar)}
+.ml {margin-left:var(--mar)}  .mr {margin-right:var(--mar)}
 .noTop {border-top-width:0 !important;}
-.bottomLine {border-bottom:solid 3px var(--s)!important;}
-.middle {align-items:center;align-content:center}
-.formStyle {
-    width:30%;
-    min-width:275px;
+.underLine {
+    border-bottom:solid 5px var(--s)!important;
 }
+.middle {align-items:center;align-content:center}
+.loginForm {
+    z-index: 10;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    width: 33vw;
+    min-width: 440px;
+    background-color: #61957161;
+    box-shadow: #000 0 13px 20px 3px;
+}
+.backdropInvert {backdrop-filter: invert(1)}
+.imgStyle {
+    height: 100vh;
+    background-image: url("/registration-app/resources/images/abstract4.jpg");
+    background-repeat: no-repeat;
+    background-clip: border-box;
+    background-size: cover;
+    background-position: bottom;
+}
+.fillWidth {width: -webkit-fill-available}
 .sidebar a {
     border:none;
     border-radius: var(--rad);
@@ -96,14 +133,19 @@ input::placeholder{
     text-justify: distribute;
     margin-bottom: var(--mar);
 }
+.sidebar i {margin-left:20px}
 .sidebar a:hover,.route {
     background: var(--s) !important;
     color: var(--p) !important;
 }
 .petCaps {font-variant:all-petite-caps}
-table {
+.tableDesign {
     border-collapse:collapse;
     font-variant:oldstyle-nums;
     text-align: start;
 }
-table td {padding:var(--pad)}
+.tableDesign td {padding:var(--pad)}
+.tableDesign:nth-of-type(even) {
+    background-color: darkkhaki;
+}
+.ui-datepicker {top:2rem !important;left:2rem !important}

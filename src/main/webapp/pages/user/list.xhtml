@@ -14,25 +14,27 @@
         #{adminBean.restrictToAdmin()}
         #{indexBean.refreshUsersAndDependants()}
         #{indexBean.setPageRange('u')}
-        <div class="m">
-            <h:button style="margin-right:24px;" class="actionButton b2 bgp" value="Register A New User" outcome="/pages/user/register"/>
-            <h:button class="actionButton b2 bgp redText" value="Delete All Users" outcome="#{indexBean.deleteAll('u')}"/>
-        </div>
-        <br/>
-        <div class="hpad" style="margin-bottom:4px;display:flex;flex-direction:row-reverse">
-            <h:form >
-                <h:inputText styleClass="rad24" value="#{indexBean.search}" pt:placeholder="Search..."/>
+        <h3 class="petCaps ml mb">Search</h3>
+        <div class="hpad pad10 rad24 bgp">
+            <h:form styleClass="flexDisplay flexRow mt mb">
+                <h:inputText styleClass="slightShadow rad24 pad10 noBorder fillWidth" value="#{indexBean.search}" pt:placeholder="Search..."/>
+                <h:commandLink action="#{indexBean.searchU()}" styleClass="noBorder ml"><i class="pi pi-search pad10 bg square actionButton tl bl text-s"/></h:commandLink>
+                <h:commandLink action="#{indexBean.setSearch('')}" styleClass="noBorder"><i class="pi pi-times pad10 bg square actionButton tr br text-s"/></h:commandLink>
             </h:form>
         </div>
-        <div class="flexColumn mt pad10 rad12 bgp">
-            <table>
+        <div class="m flexDisplay flexRowR"><h:form>
+            <h:commandButton class="actionButton noBorder bgp tl bl text-a bold" value="Add New" action="register"/>
+            <h:commandButton class="actionButton noBorder bgp tr br text-r bold" value="Delete All" action="#{indexBean.deleteAll('u')}"/>
+        </h:form></div>
+        <div class="flexColumn pad10 rad12 bgp">
+            <table class="tableDesign autoMargin mt">
                 <thead><tr>
-                    <ui:repeat value="#{['No.','FirstName','LastName','Date Of Birth','No. Of Dependants','Username','Email','Actions']}" var="h"><th class="pad10">#{h}</th></ui:repeat>
+                    <ui:repeat value="#{['No.','FirstName','LastName','Date Of Birth','No. Of Dependants','Username','Email','Deleted','Actions']}" var="h"><th class="pad10">#{h}</th></ui:repeat>
                 </tr></thead>
                 <tbody>
                     <ui:repeat value="#{indexBean.paginatedUserList}" var="user">
                         <h:commandLink action="#{userBean.edit(user.username)}">
-                            <tr class="userRow">
+                            <tr class="userRow #{user.deleted?'text-gray':''}">
                                 <td>#{user.id}</td>
                                 <td>#{user.firstname}</td>
                                 <td>#{user.lastname}</td>
@@ -40,9 +42,10 @@
                                 <td>#{user.dependants.size()}</td>
                                 <td>#{user.username}</td>
                                 <td>#{user.email}</td>
-                                <td><h:form>
+                                <td>#{user.deleted}</td>
+                                <td><h:form styleClass="flexDisplay flexRow">
                                     <h:commandLink styleClass="noBorder actionButton rad12" action="#{userBean.edit(user.username)}"><i class="pi pi-pencil"/></h:commandLink>
-                                    <h:commandLink styleClass="noBorder redText actionButton rad12" action="#{userBean.delete(user.username)}"><i class="pi pi-trash"/></h:commandLink>
+                                    <h:commandLink styleClass="noBorder text-r actionButton rad12" action="#{userBean.delete(user.username)}"><i class="pi pi-trash"/></h:commandLink>
                                 </h:form></td>
                             </tr>
                         </h:commandLink>
@@ -50,13 +53,14 @@
                 </tbody>
             </table>
             <h:form>
-                <h:panelGrid columns="4">
-                    <h:outputLabel for="perPage" value="Results Per Page"/>
+                <h:panelGrid columns="6">
+                    <h:outputLabel styleClass="hpad" for="perPage" value="Results Per Page"/>
                     <h:inputText id="perPage" styleClass="pad10" value="#{indexBean.resultsPerPage}"/>
-                    <h:outputLabel for="pageNo" value="Page"/>
-                    <h:selectOneListbox id="pageNo" value="#{indexBean.pageNumber}">
-                        <f:selectItems value="#{indexBean.pageRange}" var="num" itemValue="#{num}" itemLabel="#{num}"/>
-                    </h:selectOneListbox>
+                    <div class="hpad flexDisplay flexRow middle">
+                        <my:button icon="arrow-left" iconClass="text-s actionButton" action="#{indexBean.nextPage(-1)}"/>
+                        <h:outputLabel value="#{indexBean.pageNumber}" styleClass="hpad"/>
+                        <my:button icon="arrow-right" iconClass="text-s actionButton" action="#{indexBean.nextPage(1)}"/>
+                    </div>
                 </h:panelGrid>
             </h:form>
         </div>

@@ -114,7 +114,16 @@ public abstract class DaoSkeleton {
         try {
             Session session = sessionFactory.openSession();
             tx = session.beginTransaction();
-            session.createQuery("DELETE * FROM "+getTable()+" WHERE role = :role").setParameter("role", Role.Default).executeUpdate();
+            Query q = session.createQuery((softDelete?"":"DELETE ") + "FROM " + getTable() +" WHERE role = :role" + (softDelete?" AND deleted = :deleted":"")).setParameter("role", Role.Default);
+            if (softDelete) {
+                q.setParameter("deleted",false);
+                List<UserSkeleton> objs = q.list();
+                for (UserSkeleton bone:objs) {
+                    bone.setDeleted(true);
+                    bone.setDeletedAt();
+                    session.saveOrUpdate(bone);
+                }
+            } else q.executeUpdate();
             tx.commit();
             session.close();
         } catch (Exception e) {

@@ -6,9 +6,9 @@
                 xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
     <ui:define name="content">
         <h3 class="petCaps">Confirm Action !</h3>
-        <div class="m">
-            <h:button style="margin-right:10px;" class="actionButton b2 bgp" value="Return" outcome="#{authBean.goHomeIfAuthenticated()}"/>
-            <h:button class="actionButton b2 bgp redText" value="Delete All" outcome="#{indexBean.confirm()}"/>
-        </div>
+        <div class="m"><h:form>
+            <h:commandButton style="margin-right:10px;" class="actionButton b2 bgp" value="Return" action="#{authBean.goHomeIfAuthenticated()}"/>
+            <h:commandButton class="actionButton b2 bgp redText" value="Delete All" action="#{indexBean.confirm()}"/>
+        </h:form></div>
     </ui:define>
 </ui:composition>

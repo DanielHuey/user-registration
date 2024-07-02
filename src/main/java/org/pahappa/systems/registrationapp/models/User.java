@@ -18,6 +18,7 @@ public class User extends UserSkeleton {
     private String username;
     private String firstname;
     private String lastname;
+    @Temporal(TemporalType.DATE)
     private Date dateOfBirth;
     private String email;
     private String password;

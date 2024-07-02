@@ -3,35 +3,30 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
-                xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
-<!--    <ui:define name="nav"></ui:define>-->
+                xmlns:pt="http://xmlns.jcp.org/jsf/passthrough" xmlns:p="http://primefaces.org/ui">
     <ui:define name="content">
         <h:form class="autoMargin flexDisplay flexColumn formStyle">
             <h1>Register</h1>
-            <h:messages style="color:gold"/>
-            <h:inputText styleClass="border tl tr" id="username" type="text" value="#{userBean.username}" pt:placeholder="Username [abc_123]" required="true">
+            <h:inputText styleClass="pad10 border tl tr" id="username" type="text" value="#{userBean.username}" pt:placeholder="Username [abc_123]" required="true">
                 <f:validateLength minimum="4"/>
                 <f:validateRegex pattern="^[a-zA-Z0-9][a-zA-Z0-9_]*"/>
             </h:inputText>
-            <h:inputText styleClass="noTop" id="firstname" value="#{userBean.firstname}" pt:placeholder="Firstname [a-Z]" required="true">
+            <h:inputText styleClass="pad10 noTop" id="firstname" value="#{userBean.firstname}" pt:placeholder="Firstname [a-Z]" required="true">
                 <f:validateLength minimum="2"/>
                 <f:validateRegex pattern="^[a-zA-Z]*"/>
             </h:inputText>
-            <h:inputText styleClass="noTop" id="lastname" value="#{userBean.lastname}" pt:placeholder="Lastname [a-Z]" required="false"/>
-            <h:inputText styleClass="noTop" id="dateOfBirth" value="#{userBean.dateOfBirth}" pt:placeholder="Birth Date [dd/mm/yyyy]" required="true">
-                <f:convertDateTime pattern="dd/MM/yyyy"/>
+            <h:inputText styleClass="pad10 noTop" id="lastname" value="#{userBean.lastname}" pt:placeholder="Lastname [a-Z]" required="false"/>
+            <p:calendar styleClass=" border pad10 noTop" id="dateOfBirth" navigator="true" pattern="dd/MM/yyyy" yearRange="1900:c" value="#{userBean.dateOfBirth}" pt:placeholder="Select a date..." required="true">
                 <f:validateRequired/>
-            </h:inputText>
-            <h:inputText styleClass="noTop" id="email" value="#{userBean.email}" pt:placeholder="Email Address [mail@site.com]" required="true">
+            </p:calendar>
+            <h:inputText styleClass="pad10 noTop" id="email" value="#{userBean.email}" pt:placeholder="Email Address [mail@site.com]" required="true">
                 <f:validateLength minimum="8"/>
                 <f:validateRegex pattern="^[a-zA-Z0-9_]*@[a-z]*\.[a-z]*$"/>
             </h:inputText>
-            <h:inputSecret styleClass="noTop" id="password" value="#{userBean.password}" pt:placeholder="Password [a@#1G%!*]" required="true" validatorMessage="Password should have at lest 8 characters">
+            <h:inputSecret styleClass="pad10 noTop bl br" id="password" value="#{userBean.password}" pt:placeholder="Password [a@#1G%!*]" required="true" validatorMessage="Password should have at lest 8 characters">
                 <f:validateLength minimum="4"/>
             </h:inputSecret>
-            <div style="margin-top:10px">
-                <h:commandButton styleClass="rad12 noBorder hpad inputSubmit" value="Register" action="#{userBean.register}"/>
-            </div>
+            <h:commandButton styleClass="pad10 rad12 mt noBorder hpad inputSubmit" value="Register" action="#{userBean.register}"/>
         </h:form>
     </ui:define>
 </ui:composition>

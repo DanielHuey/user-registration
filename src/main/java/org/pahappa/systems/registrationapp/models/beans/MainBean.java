@@ -3,20 +3,17 @@ package org.pahappa.systems.registrationapp.models.beans;
 import org.pahappa.systems.registrationapp.models.Dependant;
 import org.pahappa.systems.registrationapp.models.User;
 import org.pahappa.systems.registrationapp.models.enums.*;
-import org.pahappa.systems.registrationapp.services.DependantService;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
-import javax.faces.event.ValueChangeEvent;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.pahappa.systems.registrationapp.models.beans.DependantBean.getDependants;
-import static org.pahappa.systems.registrationapp.models.beans.DependantBean.loadDependants;
 import static org.pahappa.systems.registrationapp.models.beans.UserBean.getUsers;
 
 @ManagedBean(name = "indexBean")
@@ -32,8 +29,11 @@ public class MainBean implements Serializable {
     private int resultsPerPage = 5;
     private int pageNumber = 1;
     private List<Integer> pageRange;
+    private String filteredUser = "";
+    private Gender filteredGender = null;
+    private final List<Gender> filterOptions = List.of(Gender.Male,Gender.Female);
     private String search;
-    private char confirmAction;
+    private String confirmAction;
 
     public MainBean() {
         refreshUsersAndDependants();
@@ -56,7 +56,7 @@ public class MainBean implements Serializable {
     }
     public List<User> getPaginatedUserList() {
         searchU();
-        paginate(resultsPerPage,pageNumber);
+        paginateU(resultsPerPage,pageNumber);
         return paginatedUserList;
     }
     public void setPaginatedUserList(List<User> paginatedUserList) {
@@ -81,6 +81,7 @@ public class MainBean implements Serializable {
         MainBean.searchDependantList = searchDependantList;
     }
     public List<Dependant> getPaginatedDependantList() {
+        filterDependants(filteredUser,filteredGender);
         searchD();
         paginateD(resultsPerPage,pageNumber);
         return paginatedDependantList;
@@ -99,7 +100,7 @@ public class MainBean implements Serializable {
     }
     public void setPageRange(char c) {
         List<Integer> range = new ArrayList<> ();
-        for (int i = 1; i <= (((c=='u'?getNumberOfUsers():getNumberOfDependants()) / resultsPerPage) + 1); i++)
+        for (int i = 1; i <= Math.ceil(((double) (c == 'u' ? getNumberOfUsers() : getNumberOfDependants()) / resultsPerPage)); i++)
             range.add(i);
         pageRange = range;
     }
@@ -111,6 +112,23 @@ public class MainBean implements Serializable {
     public void setSearch(String search) {
         this.search = search;
     }
+    public Gender getFilteredGender() {
+        return filteredGender;
+    }
+    public void setFilteredGender(Gender filteredGender) {
+        this.filteredGender = filteredGender;
+    }
+    public List<Gender> getFilterOptions() {
+        return filterOptions;
+    }
+    public String getFilteredUser() {
+        return filteredUser;
+    }
+    public void setFilteredUser(String filteredUser) {
+        this.filteredUser = filteredUser;
+    }
+
+    public void resetFilters() {setFilteredUser("");setFilteredGender(null);}
 
     public void firstLaunch() {
         log("Launch Bootstrap");
@@ -147,17 +165,24 @@ public class MainBean implements Serializable {
         FacesContext.getCurrentInstance().getExternalContext().redirect("/registration-app"+location+".xhtml");
     }
 
-    public void deleteAll(char group) {
+    public void deleteAll(String group) {
         confirmAction = group;
         container(() -> redirect("/pages/admin/confirm"));
     }
     public void confirm() {
-        if (confirmAction == 'd') {
-            DependantBean.deleteAll();
-        } else if (confirmAction == 'u'){
-            UserBean.deleteAll();
-        }
-        confirmAction = 'x';
+        log(confirmAction);
+        container(() -> {
+            if (confirmAction.equals("d")) {
+                DependantBean.deleteAll();
+                refreshDependants();
+                redirect("/pages/dependant/list");
+            } else if (confirmAction.equals("u")){
+                UserBean.deleteAll();
+                refreshUsers();
+                redirect("/pages/user/list");
+            }
+            confirmAction = "x";
+        });
     }
 
     @FunctionalInterface
@@ -173,10 +198,10 @@ public class MainBean implements Serializable {
             return false;
         }
     }
-    public void filterDependants(User user, Gender gender) {
+    public void filterDependants(String uName, Gender gender) {
         List<Dependant> filterList = new ArrayList<>();
         for (Dependant d: dependantList) {
-            if (d.getOwner() == user && d.getGender() == gender) {
+            if ((uName==null||d.getOwner().getUsername().toLowerCase().contains(uName.toLowerCase())) && (gender == null || d.getGender() == gender)) {
                 filterList.add(d);
             }
         }
@@ -208,11 +233,12 @@ public class MainBean implements Serializable {
         } else searchList = filterDependantList;
         searchDependantList = searchList;
     }
-    public void paginate(int resultsPerPage, int pageNumber) {
+    public void paginateU(int resultsPerPage, int pageNumber) {
         List<User> paginatedList = new ArrayList<>();
         setPageRange('u');
         for (int result = 0; result < Integer.min(resultsPerPage,searchUserList.size()); result++) {
-            paginatedList.add(searchUserList.get(result + ((pageNumber - 1) * resultsPerPage)));
+            User u = searchUserList.get(Integer.min(result + ((pageNumber - 1) * resultsPerPage),searchUserList.size()-1));
+            if (!paginatedList.contains(u)) paginatedList.add(u);
         }
         paginatedUserList = paginatedList;
     }
@@ -220,19 +246,25 @@ public class MainBean implements Serializable {
         List<Dependant> paginatedListD = new ArrayList<>();
         setPageRange('d');
         for (int result = 0; result < Integer.min(resultsPerPage,searchDependantList.size()); result++) {
-            paginatedListD.add(searchDependantList.get(result + ((pageNumber - 1) * resultsPerPage)));
+            Dependant d = searchDependantList.get(Integer.min(result + ((pageNumber - 1) * resultsPerPage),searchDependantList.size()-1));
+            if (!paginatedListD.contains(d)) paginatedListD.add(d);
         }
         paginatedDependantList = paginatedListD;
-    }
-    public void paginationValueChanged(ValueChangeEvent e) {
-        pageNumber = (int) e.getNewValue();
-        paginate(resultsPerPage,pageNumber);
-        paginateD(resultsPerPage,pageNumber);
     }
 
     private static String route = "";
     public static void router(String s) {route=s;}
     public String routeIs(String s) {
         return route.equals(s)?"route":"";
+    }
+
+    public void clearThenGo(String location) {
+        setSearch("");
+        container(() -> redirect(location));
+    }
+    public void nextPage(int i) {
+        pageNumber += i;
+        pageNumber = Integer.min(pageRange.size(),pageNumber);
+        pageNumber = Integer.max(1,pageNumber);
     }
 }

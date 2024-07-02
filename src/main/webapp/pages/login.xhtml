@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE html>
-<html style="height:100%" lang="en" xmlns="http://www.w3.org/1999/xhtml"
+<html class="hmax maxViewport" lang="en" xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:ui="http://java.sun.com/jsf/facelets"
@@ -13,23 +13,27 @@
     <h:outputStylesheet name="css/style.css"/>
 
 </h:head>
-<h:body class="bg textStyle" style="height:100%">
+<h:body class="textStyle hmax maxViewport bigText text-p petCaps">
     #{authBean.goHomeIfAuthenticated()}
-    <div class="autoMargin formStyle">
-        <h:form class="flexDisplay flexColumn" style="margin-top:30%;">
-            <h1>Login</h1>
-            <h:inputText id="identity" styleClass="tl tr" value="#{authBean.identity}" pt:placeholder="Username/Email">
-                <f:validateLength minimum="4"/>
-            </h:inputText>
-            <h:inputSecret styleClass="noTop" id="password" value="#{authBean.password}" pt:placeholder="Password">
-                <f:validateLength minimum="4"/>
-<!--                <f:validateRegex pattern="^(?=.[a-zA-Z0-9_!@#$%^*~-=+]).*"/>-->
-            </h:inputSecret>
-            <h:messages style="color:red"/>
-            <div style="margin-top:10px">
-                <h:commandButton styleClass="rad12 noBorder hpad inputSubmit" value="Login" action="#{authBean.login()}"/>
-            </div>
-        </h:form>
+    <div class="pad20 maxViewport imgStyle"> </div>
+    <div style="position: absolute;z-index:2;top:0;left:0;width:100vw;height:100vh">
+        <div class="autoMargin rad24 pad20 loginForm backdropInvert">
+            <h:form class="flexDisplay flexColumn middle pad20">
+                <div class="autoMargin flexRow flexDisplay middle">
+                    <i class="bi bi-box-arrow-in-right pad10"/><span>Login</span>
+                </div>
+                <h:inputText id="identity" styleClass="fillWidth noInputStyle border pad20 tl tr mt" value="#{authBean.identity}" pt:placeholder="Email or username">
+                    <f:validateLength minimum="4"/>
+                </h:inputText>
+                <h:inputSecret styleClass="fillWidth noInputStyle border noTop pad20 bl br" id="password" value="#{authBean.password}" pt:placeholder="Password">
+                    <f:validateLength minimum="4"/>
+                </h:inputSecret>
+                <h:messages style="color:red"/>
+                <div style="margin-top:10px">
+                    <h:commandButton styleClass="rad12 noBorder text-p bold hpad inputSubmit" value="Login" action="#{authBean.login()}"/>
+                </div>
+            </h:form>
+        </div>
     </div>
 
 </h:body>

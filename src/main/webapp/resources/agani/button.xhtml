@@ -1,0 +1,26 @@
+<!--
+  Created by IntelliJ IDEA.
+  User: Coder-45
+  Date: 7/1/2024
+  Time: 11:25 AM
+-->
+<ui:component xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:cc="http://java.sun.com/jsf/composite"
+        xmlns:my="http://java.sun.com/jsf/composite/agani"
+        xmlns:ui="http://java.sun.com/jsf/facelets">
+    <cc:interface>
+        <cc:attribute name="icon" shortDescription="Bootstrap icon class without the 'bi-'"/>
+        <cc:attribute name="styleClass"/>
+        <cc:attribute name="iconClass"/>
+        <cc:attribute name="style"/>
+        <cc:attribute name="label"/>
+        <cc:attribute name="action" method-signature="void actionListener(javax.faces.event.ActionEvent)"/>
+    </cc:interface>
+    <cc:implementation>
+        <h:commandLink action="#{cc.attrs.action}" styleClass="flexDisplay flexRow middle #{cc.attrs.styleClass}">
+            <my:icon rendered="#{cc.attrs.icon!=null}" icon="#{cc.attrs.icon}" styleClass="#{cc.attrs.iconClass}" />
+            <h:outputText value="#{cc.attrs.label}" rendered="#{cc.attrs.label!=null}"/>
+        </h:commandLink>
+    </cc:implementation>
+</ui:component>
