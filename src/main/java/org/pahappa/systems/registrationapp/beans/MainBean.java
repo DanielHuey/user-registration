@@ -1,4 +1,4 @@
-package org.pahappa.systems.registrationapp.models.beans;
+package org.pahappa.systems.registrationapp.beans;
 
 import org.pahappa.systems.registrationapp.models.Dependant;
 import org.pahappa.systems.registrationapp.models.User;
@@ -12,9 +12,6 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.pahappa.systems.registrationapp.models.beans.DependantBean.getDependants;
-import static org.pahappa.systems.registrationapp.models.beans.UserBean.getUsers;
 
 @ManagedBean(name = "indexBean")
 @SessionScoped
@@ -62,7 +59,7 @@ public class MainBean implements Serializable {
     public void setPaginatedUserList(List<User> paginatedUserList) {
         MainBean.paginatedUserList = paginatedUserList;
     }
-    public List<Dependant> getDependantList() {
+    public static List<Dependant> getDependantList() {
         return dependantList;
     }
     public void setDependantList(List<Dependant> dependantlist) {
@@ -134,7 +131,7 @@ public class MainBean implements Serializable {
         log("Launch Bootstrap");
         container(() -> {
             // is it the first launch?
-            if (getUsers().isEmpty())
+            if (UserBean.getUsers().isEmpty())
                 redirect("/pages/admin/admin_setup");
                 // else go to log in
             else redirect("/pages/login");
@@ -151,11 +148,11 @@ public class MainBean implements Serializable {
         refreshDependants();
     }
     public static void refreshUsers() {
-        userList = getUsers();
+        userList = UserBean.getUsers();
         paginatedUserList = searchUserList = userList;
     }
     public static void refreshDependants() {
-        dependantList = getDependants();
+        dependantList = DependantBean.getDependants();
         filterDependantList = dependantList;
     }
 
@@ -169,19 +166,17 @@ public class MainBean implements Serializable {
         confirmAction = group;
         container(() -> redirect("/pages/admin/confirm"));
     }
-    public void confirm() {
-        log(confirmAction);
+    public void confirm(final String option) {
         container(() -> {
-            if (confirmAction.equals("d")) {
+            if (option.equals("d")) {
                 DependantBean.deleteAll();
                 refreshDependants();
                 redirect("/pages/dependant/list");
-            } else if (confirmAction.equals("u")){
+            } else if (option.equals("u")){
                 UserBean.deleteAll();
                 refreshUsers();
                 redirect("/pages/user/list");
             }
-            confirmAction = "x";
         });
     }
 

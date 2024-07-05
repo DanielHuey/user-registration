@@ -3,4 +3,20 @@
               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_2.xsd"
               version="2.2">
+    <validator>
+        <validator-id>uNameVal</validator-id>
+        <validator-class>org.pahappa.systems.registrationapp.models.validators.Username</validator-class>
+    </validator>
+    <validator>
+        <validator-id>nameVal</validator-id>
+        <validator-class>org.pahappa.systems.registrationapp.models.validators.Name</validator-class>
+    </validator>
+    <validator>
+        <validator-id>emailVal</validator-id>
+        <validator-class>org.pahappa.systems.registrationapp.models.validators.Email</validator-class>
+    </validator>
+    <validator>
+        <validator-id>dobVal</validator-id>
+        <validator-class>org.pahappa.systems.registrationapp.models.validators.DateOfBirth</validator-class>
+    </validator>
 </faces-config>

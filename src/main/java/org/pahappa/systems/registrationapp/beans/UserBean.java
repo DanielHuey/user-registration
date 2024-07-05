@@ -1,4 +1,4 @@
-package org.pahappa.systems.registrationapp.models.beans;
+package org.pahappa.systems.registrationapp.beans;
 
 import org.pahappa.systems.registrationapp.models.Dependant;
 import org.pahappa.systems.registrationapp.models.User;
@@ -17,9 +17,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
-import static org.pahappa.systems.registrationapp.models.beans.AuthBean.*;
-import static org.pahappa.systems.registrationapp.models.beans.DependantBean.loadDependants;
-import static org.pahappa.systems.registrationapp.models.beans.MainBean.*;
+import static org.pahappa.systems.registrationapp.beans.AuthBean.*;
+import static org.pahappa.systems.registrationapp.beans.MainBean.*;
 
 @ManagedBean(name = "userBean")
 @SessionScoped
@@ -125,13 +124,13 @@ public class UserBean implements Serializable {
     }
 
     public static List<User> getUsers() {
-        List<User> users = userService.getListOfUsers(false);
-        for (User u:users) loadDependants(u);
+        List<User> users = userService.getListOfUsers();
+        for (User u:users) DependantBean.loadDependants(u);
         return users;
     }
 
     public void loadSelfDependants() {
-        loadDependants(getSessionUser());
+        DependantBean.loadDependants(getSessionUser());
     }
 
     public void addDependantToSelf() {
@@ -159,8 +158,10 @@ public class UserBean implements Serializable {
         user.setPassword(hexHashString(password));
         FacesContext ctx = FacesContext.getCurrentInstance();
         if (container(() -> userService.registerUser(user))) {
-            ctx.addMessage(null, new FacesMessage("Successful Registration"));
-            container(() -> redirect("/pages/admin/dashboard")); //an external context can redirect
+            container(() -> {
+                ctx.addMessage(null, new FacesMessage("Successful Registration"));
+                redirect("/pages/user/list");
+            });
         }
     }
 
@@ -236,6 +237,11 @@ public class UserBean implements Serializable {
 
     public void setOldPassword(String oldPassword) {
         this.oldPassword = oldPassword;
+    }
+
+    public void restoreDeletedUser(User user) {
+        user.setDeleted(false);
+        container(() -> userService.updateDetailsOfUser(user.getUsername(),user));
     }
 }
 

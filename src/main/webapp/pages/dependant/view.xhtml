@@ -8,7 +8,7 @@
     <ui:define name="nav">Viewing: #{depBean.getDependantToEdit().firstname}</ui:define>
     <ui:define name="content">
         #{depBean.resetValues()}
-        <h:form class="m pad10 border">
+        <h:form class="m pad20 border bgp rad12">
             <h:messages style="color:gold"/>
             <h:panelGrid columns="2">
                 <h:outputLabel for="username" value="Username: "/>
@@ -24,7 +24,11 @@
                 <h:outputLabel for="lastname" value="Last Name: "/>
                 <h:inputText styleClass="rad12 border" id="lastname" value="#{depBean.lastname}" pt:placeholder="#{depBean.getDependantToEdit().lastname}"/>
                 <h:outputLabel for="calendar" value="Date Of Birth: "/>
-                <p:calendar styleClass="rad12" id="calendar" pattern="dd/MM/yyyy" navigator="true" showButtonPanel="true" value="#{depBean.dateOfBirth}" placeholder="#{depBean.getDependantToEdit().dateOfBirth}"/>
+                <p:calendar styleClass="rad12" id="calendar"
+                            navigator="true" showButtonPanel="true" value="#{depBean.dateOfBirth}"
+                            placeholder="#{depBean.getDependantToEdit().dateOfBirthString}">
+                    <f:convertDateTime pattern="dd/mm/yyyy" for="calendar" />
+                </p:calendar>
                 <h:outputLabel for="gender" value="Gender: "/>
                 <p:selectOneListbox id="gender" value="#{depBean.gender}" pt:placeholder="#{depBean.getDependantToEdit().gender}">
                     <f:selectItems value="#{depBean.gnd}" var="gn" itemValue="#{gn}" itemLabel="#{gn}"/>

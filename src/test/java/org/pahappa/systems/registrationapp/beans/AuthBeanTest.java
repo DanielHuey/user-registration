@@ -1,8 +1,9 @@
-package org.pahappa.systems.registrationapp.models.beans;
+package org.pahappa.systems.registrationapp.beans;
 
 import static org.junit.Assert.*;
 
 import org.junit.Test;
+import org.pahappa.systems.registrationapp.beans.AuthBean;
 
 /**
  * Unit test for the Auth bean.

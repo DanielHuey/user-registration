@@ -1,4 +1,4 @@
-package org.pahappa.systems.registrationapp.models.beans;
+package org.pahappa.systems.registrationapp.beans;
 
 import org.pahappa.systems.registrationapp.models.Dependant;
 import org.pahappa.systems.registrationapp.models.User;
@@ -8,13 +8,12 @@ import org.pahappa.systems.registrationapp.services.UserService;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import static org.pahappa.systems.registrationapp.models.beans.AuthBean.getSessionUser;
-import static org.pahappa.systems.registrationapp.models.beans.MainBean.container;
-import static org.pahappa.systems.registrationapp.models.beans.MainBean.redirect;
+import static org.pahappa.systems.registrationapp.beans.AuthBean.isCurrentUserAdmin;
+import static org.pahappa.systems.registrationapp.beans.MainBean.container;
+import static org.pahappa.systems.registrationapp.beans.MainBean.redirect;
 
 @ManagedBean(name = "depBean")
 @SessionScoped
@@ -67,7 +66,7 @@ public class DependantBean {
         this.dateOfBirth = dateOfBirth;
     }
     public static List<Dependant> getDependants() {
-        return dependantService.getListOfDependants(false);
+        return dependantService.getListOfDependants();
     }
     public static List<Dependant> getDependantsOfUser(User user) {
         return dependantService.getDependantsOfUser(user);
@@ -114,7 +113,12 @@ public class DependantBean {
         d.setOwner(dependantOwner);
         dependantService.registerDependant(d);
         dependantOwner = null;
-        new UserBean().setupSettings();
+        container(() -> {
+            if (isCurrentUserAdmin())
+                redirect("/pages/dependant/list");
+            else new UserBean().setupSettings();
+        });
+
     }
 
     public void resetValues() {

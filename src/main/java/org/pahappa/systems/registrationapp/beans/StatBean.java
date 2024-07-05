@@ -1,4 +1,4 @@
-package org.pahappa.systems.registrationapp.models.beans;
+package org.pahappa.systems.registrationapp.beans;
 
 import org.pahappa.systems.registrationapp.models.Dependant;
 import org.pahappa.systems.registrationapp.models.User;
@@ -7,8 +7,7 @@ import org.primefaces.model.charts.ChartData;
 import org.primefaces.model.charts.pie.PieChartDataSet;
 import org.primefaces.model.charts.pie.PieChartModel;
 
-import static org.pahappa.systems.registrationapp.models.beans.DependantBean.*;
-import static org.pahappa.systems.registrationapp.models.beans.MainBean.*;
+import static org.pahappa.systems.registrationapp.beans.MainBean.*;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -46,7 +45,7 @@ public class StatBean {
     public int getFemaleDependants() {
         getNumberOfDependants();
         int fem = 0;
-        for (Dependant d: getDependants()) {
+        for (Dependant d: getDependantList()) {
             if (d.getGender() == Gender.Female) fem++;
         }
         maleDependants = numberOfDependants - fem;

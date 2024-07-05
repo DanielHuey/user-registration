@@ -27,7 +27,7 @@ public abstract class ServiceSkeleton {
         } else if (username.length() > MAX_USERNAME_LENGTH) {
             throw new UsernameException("Username is too long. Maximum is "+ MAX_USERNAME_LENGTH +" characters.");
         }
-        if (!username.matches("^[a-zA-Z0-9][a-zA-Z0-9_]*")) {
+        if (!username.matches("^[a-zA-Z0-9][a-zA-Z0-9_.]*")) {
             throw new UsernameException("Invalid characters in username. Usernames start with a letter, and can only allow letters, numbers and underscores.");
         }
         return username;

@@ -12,12 +12,13 @@
     </h:head>
     <h:body class="bgp textStyle maxViewport">
         #{authBean.restrictToAuthenticated()}
-        <div class="navBar pad20 autoMargin petCaps bl br" style="font-size: 1.33rem"><ui:insert name="nav"/></div>
+        <div class="imageBackground"> </div>
+        <div class="navBar pad20 ml petCaps bl bold bigText text-p backdropInvert"><div class="hpad"> </div><ui:insert name="nav"/></div>
         <div class="splitBody hmax">
-            <div class="sidebar br tr">
+            <div class="sidebar pad10">
                 <div class="autoMargin hpad">
                     <h:form class="flexDisplay flexColumn">
-                        <h3 class="pad10 autoMargin text-s petCaps">NAVIGATION</h3>
+                        <h3 class="pad10 autoMargin text-p bgBlack rad12 mb">NAVIGATION</h3>
                         <h:commandLink styleClass="#{indexBean.routeIs('dashboard')} middle" rendered="#{authBean.isCurrentUserAdmin()}" action="#{authBean.goHomeIfAuthenticated()}"><i class="pi pi-home"><h:outputText styleClass="hpad bold" value="Dashboard"/></i></h:commandLink>
                         <h:commandLink styleClass="#{indexBean.routeIs('userlist')} middle" rendered="#{authBean.isCurrentUserAdmin()}" action="#{indexBean.clearThenGo('/pages/user/list')}"><i class="pi pi-user"><h:outputText styleClass="hpad bold" value="Users"/></i></h:commandLink>
                         <h:commandLink styleClass="#{indexBean.routeIs('deplist')} middle" rendered="#{authBean.isCurrentUserAdmin()}" action="#{indexBean.clearThenGo('/pages/dependant/list')}"><i class="pi pi-users"><h:outputText styleClass="hpad bold" value="Dependants"/></i></h:commandLink>
@@ -26,7 +27,7 @@
                     </h:form>
                 </div>
             </div>
-            <div class="flexDisplay flexColumn autoMargin content tl bl bg pad20">
+            <div class="flexDisplay flexColumn autoMargin content bl pad20 mr">
                 <ui:insert name="content"/>
             </div>
         </div>

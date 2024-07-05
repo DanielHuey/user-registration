@@ -7,3 +7,7 @@ bin/
 .vscode/
 .idx/
 target/
+.classpath
+.project
+.smarttomcat
+hsqlDB.sh
