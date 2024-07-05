@@ -62,7 +62,7 @@ public class MainBean implements Serializable {
     public void setPaginatedUserList(List<User> paginatedUserList) {
         MainBean.paginatedUserList = paginatedUserList;
     }
-    public List<Dependant> getDependantList() {
+    public static List<Dependant> getDependantList() {
         return dependantList;
     }
     public void setDependantList(List<Dependant> dependantlist) {
@@ -169,19 +169,17 @@ public class MainBean implements Serializable {
         confirmAction = group;
         container(() -> redirect("/pages/admin/confirm"));
     }
-    public void confirm() {
-        log(confirmAction);
+    public void confirm(final String option) {
         container(() -> {
-            if (confirmAction.equals("d")) {
+            if (option.equals("d")) {
                 DependantBean.deleteAll();
                 refreshDependants();
                 redirect("/pages/dependant/list");
-            } else if (confirmAction.equals("u")){
+            } else if (option.equals("u")){
                 UserBean.deleteAll();
                 refreshUsers();
                 redirect("/pages/user/list");
             }
-            confirmAction = "x";
         });
     }
 

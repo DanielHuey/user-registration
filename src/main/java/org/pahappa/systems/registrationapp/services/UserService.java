@@ -86,9 +86,10 @@ public class UserService extends ServiceSkeleton {
     }
 
     /* Validators */
-    private void validateEmail(String email) throws EmailException {
-        if (!email.matches("^[a-zA-Z0-9_.]*@[a-z]*\\.[a-z]*")) {
-            throw new EmailException("Invalid characters in email.");
+    public void validateEmail(String email) throws EmailException {
+        if (email.length() < 8) throw new EmailException("The email provided is too short!");
+        if (!email.matches("^[a-zA-Z0-9_.]*@[a-zA-Z0-9]*\\.[a-z]*")) {
+            throw new EmailException("Invalid characters exist in email.");
         }
     }
 }

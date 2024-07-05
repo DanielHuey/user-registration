@@ -13,6 +13,7 @@ import java.util.Date;
 
 import static org.pahappa.systems.registrationapp.models.beans.MainBean.*;
 import static org.pahappa.systems.registrationapp.models.beans.AuthBean.*;
+import static org.pahappa.systems.registrationapp.models.beans.UserBean.getUsers;
 
 @ManagedBean(name = "adminBean")
 @SessionScoped
@@ -95,27 +96,35 @@ public class AdminBean implements Serializable {
         this.deleted = deleted;
     }
 
-    public void register() {
+    public void register(final boolean autoLogin) {
         User admin = new User();
         admin.setUsername(username);
         admin.setFirstname(firstname);
         admin.setLastname(lastname);
         admin.setEmail(email);
-        admin.setPassword(password);
+        admin.setPassword(AuthBean.hexHashString(password));
         admin.setDateOfBirth(dateOfBirth);
         admin.setRole(Role.Admin);
         FacesContext ctx = FacesContext.getCurrentInstance();
-        if (container(() -> userService.registerUser(admin))) {
+        container(() -> {
+            userService.registerUser(admin);
             ctx.addMessage(null, new FacesMessage("Successful Administrator Registration"));
-            AuthBean ab = new AuthBean();
-            ab.setSessionUser(admin);
-            container(() -> redirect("/pages/admin/dashboard")); //an external context can redirect
-        }
+            if (autoLogin) {
+                new AuthBean().setSessionUser(admin);
+                redirect("/pages/admin/dashboard");
+            } else {
+                redirect("/pages/login");
+            }
+        });
     }
 
     public void restrictToAdmin() {
         if (getSessionUser().getRole() != Role.Admin)
-            container(()-> redirect("/pages/user/view"));
+            container(()-> redirect("/pages/user/settings"));
+    }
+
+    public void restrictIfUsersExist() {
+        if (!getUsers().isEmpty()) restrictToAdmin();
     }
 }
 

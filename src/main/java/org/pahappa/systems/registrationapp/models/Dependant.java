@@ -131,12 +131,11 @@ public class Dependant extends UserSkeleton {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
         SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
-        sb.append("Dependant{name:").append(getFirstname()).append(" ").append(getLastname())
-                .append(",username:").append(username)
-                .append(",date_of_birth:").append(df.format(getDateOfBirth()))
-                .append(",gender:").append(getGender()).append("}");
-        return sb.toString();
+        String sb = "Dependant{name:" + getFirstname() + " " + getLastname() +
+                ",username:" + username +
+                ",date_of_birth:" + df.format(getDateOfBirth()) +
+                ",gender:" + getGender() + "}";
+        return sb;
     }
 }

@@ -16,11 +16,11 @@
         #{indexBean.setPageRange('d')}
         <h3 class="petCaps">My Cards</h3>
         <div class="rad12 flexDisplay flexRow">
-            <my:stat icon="gender-female" label="Female Dependant" value="#{statBean.femaleDependants}"/>
+            <my:stat icon="gender-female" label="Female Dependants" value="#{statBean.femaleDependants}"/>
             <my:stat icon="gender-male" label="Male Dependants" value="#{statBean.maleDependants}"/>
         </div>
         <h3 class="petCaps">Search #{'&amp;'} Filter</h3>
-        <div id="randomname" class="hpad pad10 bgp rad24 flexDisplay flexColumn">
+        <div id="randomname" class="pad20 bgp rad24 flexDisplay flexColumn">
             <h:form styleClass="flexDisplay flexRow mt">
                 <h:inputText styleClass="rad24 pad10 mb slightShadow noBorder fillWidth" value="#{indexBean.search}" pt:placeholder="Search..."/>
                 <h:commandLink action="#{indexBean.searchD()}" styleClass="noBorder ml"><i class="pi pi-search pad10 bg square actionButton tl bl text-s"/></h:commandLink>
@@ -40,12 +40,12 @@
             </h:form>
         </div>
         <div class="m flexDisplay flexRowR"><h:form>
-            <h:commandButton class="actionButton noBorder bgp tl bl text-a bold" value="Add New" action="/pages/user/settings.xhtml#dependants"/>
-            <h:commandButton class="actionButton noBorder bgp tr br text-r bold redText" value="Delete All" action="#{indexBean.deleteAll('d')}"/>
+            <h:commandButton class="actionButton border bgp tl bl text-a bold" value="Add New" action="/pages/user/settings.xhtml#dependants"/>
+            <h:commandButton class="actionButton border bgp tr br text-r bold redText" style="border-left: none" value="Delete All" action="#{indexBean.deleteAll('d')}"/>
         </h:form></div>
         <h:outputText rendered="#{indexBean.paginatedDependantList.size()==0}" styleClass="rad12 bgp pad20 petCaps bigText" value="No Dependants Here"/>
         <h:panelGroup rendered="#{indexBean.paginatedDependantList.size()!=0}">
-            <div class="flexColumn pad10 rad12 bgp">
+            <div class="flexColumn pad10 rad12 bgp xOverflow">
                 <table id="tableList" class="tableDesign autoMargin mt">
                     <thead><tr>
                         <ui:repeat value="#{['No.','FirstName','LastName','Gender','User','Date Of Birth','Username','Actions']}" var="h"><th class="pad10">#{h}</th></ui:repeat>
@@ -53,7 +53,8 @@
                     <tbody>
                     <ui:repeat value="#{indexBean.paginatedDependantList}" var="dep">
                         <h:commandLink action="#{userBean.edit(dep.username)}">
-                            <tr class="userRow #{dep.deleted?'text-gray':''}">
+<!--                            <tr class="userRow #{dep.deleted?'text-gray del':''}">-->
+                            <tr class="userRow">
                                 <td>#{dep.id}</td>
                                 <td>#{dep.firstname}</td>
                                 <td>#{dep.lastname}</td>
@@ -71,9 +72,12 @@
                     </tbody>
                 </table>
                 <h:form>
+                    <p:remoteCommand action="#{indexBean.paginateU(indexBean.resultsPerPage,indexBean.pageNumber)}" name="changeRPP"/>
                     <h:panelGrid columns="6">
                         <h:outputLabel styleClass="hpad" for="perPage" value="Results Per Page"/>
-                        <h:inputText id="perPage" styleClass="pad10" value="#{indexBean.resultsPerPage}"/>
+                        <p:selectOneMenu id="perPage" value="#{indexBean.resultsPerPage}" onchange="changeRPP();location.reload()">
+                            <f:selectItems value="#{[5,10,15]}" var="per" itemLabel="#{per}" itemValue="#{per}"/>
+                        </p:selectOneMenu>
                         <div class="hpad flexDisplay flexRow middle">
                             <my:button icon="arrow-left" iconClass="text-s actionButton" action="#{indexBean.nextPage(-1)}"/>
                             <h:outputLabel value="#{indexBean.pageNumber}" styleClass="hpad"/>

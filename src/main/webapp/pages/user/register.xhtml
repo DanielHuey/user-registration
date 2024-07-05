@@ -5,28 +5,38 @@
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:pt="http://xmlns.jcp.org/jsf/passthrough" xmlns:p="http://primefaces.org/ui">
     <ui:define name="content">
-        <h:form class="autoMargin flexDisplay flexColumn formStyle">
-            <h1>Register</h1>
-            <h:inputText styleClass="pad10 border tl tr" id="username" type="text" value="#{userBean.username}" pt:placeholder="Username [abc_123]" required="true">
-                <f:validateLength minimum="4"/>
-                <f:validateRegex pattern="^[a-zA-Z0-9][a-zA-Z0-9_]*"/>
-            </h:inputText>
-            <h:inputText styleClass="pad10 noTop" id="firstname" value="#{userBean.firstname}" pt:placeholder="Firstname [a-Z]" required="true">
-                <f:validateLength minimum="2"/>
-                <f:validateRegex pattern="^[a-zA-Z]*"/>
-            </h:inputText>
-            <h:inputText styleClass="pad10 noTop" id="lastname" value="#{userBean.lastname}" pt:placeholder="Lastname [a-Z]" required="false"/>
-            <p:calendar styleClass=" border pad10 noTop" id="dateOfBirth" navigator="true" pattern="dd/MM/yyyy" yearRange="1900:c" value="#{userBean.dateOfBirth}" pt:placeholder="Select a date..." required="true">
-                <f:validateRequired/>
-            </p:calendar>
-            <h:inputText styleClass="pad10 noTop" id="email" value="#{userBean.email}" pt:placeholder="Email Address [mail@site.com]" required="true">
-                <f:validateLength minimum="8"/>
-                <f:validateRegex pattern="^[a-zA-Z0-9_]*@[a-z]*\.[a-z]*$"/>
-            </h:inputText>
-            <h:inputSecret styleClass="pad10 noTop bl br" id="password" value="#{userBean.password}" pt:placeholder="Password [a@#1G%!*]" required="true" validatorMessage="Password should have at lest 8 characters">
-                <f:validateLength minimum="4"/>
-            </h:inputSecret>
-            <h:commandButton styleClass="pad10 rad12 mt noBorder hpad inputSubmit" value="Register" action="#{userBean.register}"/>
-        </h:form>
+        <div class="m bgp rad12 pad20">
+            <h:form class="autoMargin">
+                <h1>Register</h1>
+                <h:panelGrid columns="2">
+                    <h:outputLabel for="username" value="Username"/>
+                    <h:inputText styleClass="rad12 border" id="username" type="text" value="#{userBean.username}" pt:placeholder="Username [abc_123]" required="true" validatorMessage="Invalid Username">
+                        <f:validateLength minimum="4"/>
+                        <f:validateRegex pattern="#{Const.unameRgx}"/>
+                    </h:inputText>
+                    <h:outputLabel for="firstname" value="First Name"/>
+                    <h:inputText styleClass="rad12" id="firstname" value="#{userBean.firstname}" pt:placeholder="Firstname [a-Z]" required="true" validatorMessage="Invalid First Name">
+                        <f:validateLength minimum="2"/>
+                        <f:validateRegex pattern="#{Const.namesRgx}"/>
+                    </h:inputText>
+                    <h:outputLabel for="lastname" value="Last Name"/>
+                    <h:inputText styleClass="rad12" id="lastname" value="#{userBean.lastname}" pt:placeholder="Lastname [a-Z]" required="false"/>
+                    <h:outputLabel for="dateOfBirth" value="Date of Birth"/>
+                    <p:calendar styleClass="" id="dateOfBirth" navigator="true" pattern="dd/MM/yyyy" yearRange="1900:c" maxdate="t" value="#{userBean.dateOfBirth}" pt:placeholder="Select a date..." required="true">
+                        <f:validateRequired/>
+                    </p:calendar>
+                    <h:outputLabel for="email" value="Email"/>
+                    <h:inputText styleClass="rad12" id="email" value="#{userBean.email}" pt:placeholder="Email Address [mail@site.com]" required="true">
+                        <f:validateLength minimum="8"/>
+                        <f:validateRegex pattern="#{Const.emailRgx}"/>
+                    </h:inputText>
+                    <h:outputLabel value="Password"/>
+                    <h:inputSecret styleClass="rad12" id="password" value="#{userBean.password}" pt:placeholder="Password [a@#1G%!*]" required="true" validatorMessage="Password should have at lest 4 characters">
+                        <f:validateLength minimum="4"/>
+                    </h:inputSecret>
+                </h:panelGrid>
+                <h:commandButton styleClass="pad10 rad12 mt noBorder hpad inputSubmit" value="Register" action="#{userBean.register}"/>
+            </h:form>
+        </div>
     </ui:define>
 </ui:composition>

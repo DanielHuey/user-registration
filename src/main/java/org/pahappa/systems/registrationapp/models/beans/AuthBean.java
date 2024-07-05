@@ -66,9 +66,10 @@ public class AuthBean implements Serializable {
     public void login() {
         container(() -> {
             boolean isEmail;
-            if (identity.matches("^[a-zA-Z0-9_.]*@[a-z]*\\.[a-z]*$"))
+            ConstantsBean cb = new ConstantsBean();
+            if (identity.matches(cb.getEmailRgx()))
                 isEmail = true;
-            else if (identity.matches("^[a-zA-Z0-9][a-zA-Z0-9_.]*$"))
+            else if (identity.matches(cb.getUnameRgx()))
                 isEmail = false;
             else throw new Exception("The provided identity doesn't match a Username or Email");
             authenticate(identity,password,isEmail);
@@ -82,9 +83,11 @@ public class AuthBean implements Serializable {
         else
             user = userService.getUserByUsername(identity);
         if (user==null) throw new Exception("There is no user with the provided "+ (isEmail?"email":"username"));
+        if (user.isDeleted()) throw new Exception("Your account was disabled. Please contact an admin to re-enable the account.");
         password = hexHashString(password);
         if (user.passwordEquals(password)) {
             setSessionUser(user);
+            new UserBean().setUserToEdit(user);
             getHomePage();
         } else throw new Exception("The password provided is Incorrect. Try Again");
     }

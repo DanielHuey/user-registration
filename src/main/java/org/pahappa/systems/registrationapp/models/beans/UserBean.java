@@ -125,7 +125,7 @@ public class UserBean implements Serializable {
     }
 
     public static List<User> getUsers() {
-        List<User> users = userService.getListOfUsers(false);
+        List<User> users = userService.getListOfUsers();
         for (User u:users) loadDependants(u);
         return users;
     }
@@ -159,8 +159,10 @@ public class UserBean implements Serializable {
         user.setPassword(hexHashString(password));
         FacesContext ctx = FacesContext.getCurrentInstance();
         if (container(() -> userService.registerUser(user))) {
-            ctx.addMessage(null, new FacesMessage("Successful Registration"));
-            container(() -> redirect("/pages/admin/dashboard")); //an external context can redirect
+            container(() -> {
+                ctx.addMessage(null, new FacesMessage("Successful Registration"));
+                redirect("/pages/user/list");
+            });
         }
     }
 
@@ -236,6 +238,11 @@ public class UserBean implements Serializable {
 
     public void setOldPassword(String oldPassword) {
         this.oldPassword = oldPassword;
+    }
+
+    public void restoreDeletedUser(User user) {
+        user.setDeleted(false);
+        container(() -> userService.updateDetailsOfUser(user.getUsername(),user));
     }
 }
 

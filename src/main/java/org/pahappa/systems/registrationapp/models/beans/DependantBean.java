@@ -13,6 +13,7 @@ import java.util.Date;
 import java.util.List;
 
 import static org.pahappa.systems.registrationapp.models.beans.AuthBean.getSessionUser;
+import static org.pahappa.systems.registrationapp.models.beans.AuthBean.isCurrentUserAdmin;
 import static org.pahappa.systems.registrationapp.models.beans.MainBean.container;
 import static org.pahappa.systems.registrationapp.models.beans.MainBean.redirect;
 
@@ -67,7 +68,7 @@ public class DependantBean {
         this.dateOfBirth = dateOfBirth;
     }
     public static List<Dependant> getDependants() {
-        return dependantService.getListOfDependants(false);
+        return dependantService.getListOfDependants();
     }
     public static List<Dependant> getDependantsOfUser(User user) {
         return dependantService.getDependantsOfUser(user);
@@ -114,7 +115,12 @@ public class DependantBean {
         d.setOwner(dependantOwner);
         dependantService.registerDependant(d);
         dependantOwner = null;
-        new UserBean().setupSettings();
+        container(() -> {
+            if (isCurrentUserAdmin())
+                redirect("/pages/dependant/list");
+            else new UserBean().setupSettings();
+        });
+
     }
 
     public void resetValues() {

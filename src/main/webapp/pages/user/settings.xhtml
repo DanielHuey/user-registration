@@ -50,7 +50,7 @@
         #{userBean.loadSelfDependants()}
         <div id="dependants" class="pad20 m rad12 bgp wmax">
             <h:form><h:commandButton styleClass="actionButton noBorder" value="Add Dependant" action="#{userBean.addDependantPage(userBean.getUserToEdit().username)}"/>
-            <h:panelGroup rendered="#{(userBean.getUserToEdit().dependants.size() > 0)}">
+            <h:panelGroup rendered="#{(userBean.getUserToEdit().dependants.size() > 0)}" styleClass="xOverflow">
                 <h1>Dependants</h1>
                 <table class="tableDesign">
                     <thead>
