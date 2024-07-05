@@ -1,4 +1,4 @@
-package org.pahappa.systems.registrationapp.models.validators;
+package org.pahappa.systems.registrationapp.validators;
 
 import org.pahappa.systems.registrationapp.services.UserService;
 

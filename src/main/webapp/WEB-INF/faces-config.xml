@@ -5,18 +5,18 @@
               version="2.2">
     <validator>
         <validator-id>uNameVal</validator-id>
-        <validator-class>org.pahappa.systems.registrationapp.models.validators.Username</validator-class>
+        <validator-class>org.pahappa.systems.registrationapp.validators.Username</validator-class>
     </validator>
     <validator>
         <validator-id>nameVal</validator-id>
-        <validator-class>org.pahappa.systems.registrationapp.models.validators.Name</validator-class>
+        <validator-class>org.pahappa.systems.registrationapp.validators.Name</validator-class>
     </validator>
     <validator>
         <validator-id>emailVal</validator-id>
-        <validator-class>org.pahappa.systems.registrationapp.models.validators.Email</validator-class>
+        <validator-class>org.pahappa.systems.registrationapp.validators.Email</validator-class>
     </validator>
     <validator>
         <validator-id>dobVal</validator-id>
-        <validator-class>org.pahappa.systems.registrationapp.models.validators.DateOfBirth</validator-class>
+        <validator-class>org.pahappa.systems.registrationapp.validators.DateOfBirth</validator-class>
     </validator>
 </faces-config>
