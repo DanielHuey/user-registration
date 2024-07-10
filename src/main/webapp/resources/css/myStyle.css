@@ -11,13 +11,13 @@
     --noColor: #0000;
     --rad: 12px;
     --pad: 20px;
-    --mar: 2%;
+    --mar: 2.4%;
 }
 div.bgp {border: solid 1px var(--s)}
 html,body {margin:0 !important;height:max-content !important;}
 body {font-family: "Work Sans", "Arsenal SC", Candara, sans-serif}
 a {text-decoration: none}
-.navBar {background-color: #000a}
+.navBar {background-color: #000}
 .flexDisplay {display:flex}
 .flexRow {flex-direction:row}  .flexRowR {flex-direction:row-reverse}
 .flexColumn {flex-direction:column}  .flexColumnR {flex-direction: column-reverse}
@@ -43,7 +43,7 @@ a {text-decoration: none}
     width:100%;
     overflow-y: auto;
     height: inherit;
-    /*background-color: #ffffffaa;*/
+    background-color: #fafafaaa;
     backdrop-filter: blur(3px);
     border-left: solid 1px;
     border-bottom: solid 1px;
@@ -94,6 +94,7 @@ input[type="text"]:not(.noInputStyle),input[type="password"]:not(.noInputStyle) 
     padding: 1rem;
     border-radius: var(--rad);
     border: dashed 3px #ccc;
+    outline: none !important;
 }
 input[type="text"]:hover,input[type="password"]:hover {
     background-color: #f7f6ef;
@@ -108,21 +109,23 @@ input[type="text"]:hover,input[type="password"]:hover {
 input::placeholder{
     color:var(--s);
 }
-.tl {border-top-left-radius:var(--rad)}
-.tr {border-top-right-radius:var(--rad)}
-.bl {border-bottom-left-radius:var(--rad)}
-.br {border-bottom-right-radius:var(--rad)}
-.rad12 {border-radius:var(--rad)}
-.rad24 {border-radius: 24px}
+.tl {border-top-left-radius:var(--rad)!important}
+.tr {border-top-right-radius:var(--rad)!important}
+.bl {border-bottom-left-radius:var(--rad)!important}
+.br {border-bottom-right-radius:var(--rad)!important}
+.rad12 {border-radius:var(--rad) !important}
+.rad24 {border-radius: 24px !important}
 .rad50p {border-radius: 50%}
+.pill {border-radius: 10000px !important}
+.noShadow {box-shadow: none !important}
 .hpad {padding-left:var(--pad);padding-right:var(--pad)}
 .vpad {padding-top:var(--pad);padding-bottom:var(--pad)}
 .bpad {padding-bottom: var(--pad)}
 .hmax {height: max-content}
 .maxViewport {max-height: 100vh}
 .m {margin:var(--mar)}
-.mt {margin-top:var(--mar)}  .mb {margin-bottom:var(--mar)}
-.ml {margin-left:var(--mar)}  .mr {margin-right:var(--mar)}
+.mt {margin-top:var(--mar) !important}  .mb {margin-bottom:var(--mar) !important}
+.ml {margin-left:var(--mar) !important}  .mr {margin-right:var(--mar) !important}
 .noTop {border-top-width:0 !important;}
 .underLine {
     border-bottom:solid 5px var(--s)!important;
@@ -136,14 +139,16 @@ input::placeholder{
 }
 .loginForm {
     z-index: 10;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%,-50%);
     width: 33vw;
     min-width: 440px;
     background-color: #49705561;
     box-shadow: #000 0 13px 20px 3px;
+}
+.absoluteMiddle {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
 }
 .backdropInvert {backdrop-filter: invert(1)}
 .imageBackground {
@@ -156,6 +161,7 @@ input::placeholder{
     z-index: -100;
     position: fixed;
     top: 0; left: 0;
+    opacity: 0.2;
 }
 .fillWidth {width: -webkit-fill-available}
 .petCaps {

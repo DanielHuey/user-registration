@@ -8,6 +8,7 @@ import org.pahappa.systems.registrationapp.services.UserService;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -17,7 +18,7 @@ import static org.pahappa.systems.registrationapp.beans.MainBean.redirect;
 
 @ManagedBean(name = "depBean")
 @SessionScoped
-public class DependantBean {
+public class DependantBean implements Serializable {
     private String username;
     private String firstname;
     private String lastname;

@@ -13,7 +13,7 @@
         <div class="m rad12 bgp pad20">
             <h:form class="autoMargin">
                 <h:messages style="color:gold"/>
-                <h:panelGrid columns="2">
+                <p:panelGrid columns="2">
                     <span>Username</span>
                     <h:inputText styleClass="rad12 noBorder" id="username" type="text" value="#{userBean.username}" pt:placeholder="#{userBean.getUserToEdit().username}">
                         <f:validateLength minimum="4"/>
@@ -44,7 +44,7 @@
                     <div style="margin-top:10px">
                         <h:commandButton styleClass="rad12 noBorder hpad inputSubmit" value="Save" action="#{userBean.saveDetails()}"/>
                     </div>
-                </h:panelGrid>
+                </p:panelGrid>
             </h:form>
         </div>
         #{userBean.loadSelfDependants()}

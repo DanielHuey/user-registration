@@ -96,7 +96,7 @@ public class AdminBean implements Serializable {
         this.deleted = deleted;
     }
 
-    public void register(final boolean autoLogin) {
+    private User makeAdmin() {
         User admin = new User();
         admin.setUsername(username);
         admin.setFirstname(firstname);
@@ -105,8 +105,19 @@ public class AdminBean implements Serializable {
         admin.setPassword(AuthBean.hexHashString(password));
         admin.setDateOfBirth(dateOfBirth);
         admin.setRole(Role.Admin);
+        return admin;
+    }
+    public void register() {
         FacesContext ctx = FacesContext.getCurrentInstance();
         container(() -> {
+            userService.registerUser(makeAdmin());
+            ctx.addMessage(null, new FacesMessage("Successful Administrator Registration"));
+        });
+    }
+    public void register(final boolean autoLogin) {
+        FacesContext ctx = FacesContext.getCurrentInstance();
+        container(() -> {
+            User admin = makeAdmin();
             userService.registerUser(admin);
             ctx.addMessage(null, new FacesMessage("Successful Administrator Registration"));
             if (autoLogin) {

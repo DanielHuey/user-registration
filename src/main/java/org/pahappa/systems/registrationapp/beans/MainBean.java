@@ -127,7 +127,7 @@ public class MainBean implements Serializable {
 
     public void resetFilters() {setFilteredUser("");setFilteredGender(null);}
 
-    public void firstLaunch() {
+    public void launch() {
         log("Launch Bootstrap");
         container(() -> {
             // is it the first launch?
@@ -201,6 +201,7 @@ public class MainBean implements Serializable {
             }
         }
         filterDependantList = filterList;
+        searchD();
     }
     public void searchU() {
         List<User> searchList = new ArrayList<>();

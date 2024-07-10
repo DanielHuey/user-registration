@@ -11,11 +11,12 @@ import static org.pahappa.systems.registrationapp.beans.MainBean.*;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import java.io.Serializable;
 import java.util.List;
 
 @ManagedBean(name = "statBean")
 @SessionScoped
-public class StatBean {
+public class StatBean implements Serializable {
     private int numberOfUsers;
     private int usersWithDependants;
     private int numberOfDependants;

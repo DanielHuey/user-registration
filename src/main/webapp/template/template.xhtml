@@ -8,12 +8,20 @@
     <h:head>
         <meta charset="UTF-8"/>
         <title>User Registration</title>
-        <h:outputStylesheet name="css/style.css"/>
+        <h:outputStylesheet name="css/myStyle.css"/>
+        <h:outputScript>
+            function showDlg(name) {
+                PF(name).show();
+            }
+            function hideDlg(name) {
+                PF(name).hide();
+            }
+        </h:outputScript>
     </h:head>
     <h:body class="bgp textStyle maxViewport">
         #{authBean.restrictToAuthenticated()}
         <div class="imageBackground"> </div>
-        <div class="navBar pad20 ml petCaps bl bold bigText text-p backdropInvert"><div class="hpad"> </div><ui:insert name="nav"/></div>
+        <div class="navBar pad20 ml petCaps bl bold bigText text-p"><div class="hpad"> </div><ui:insert name="nav"/></div>
         <div class="splitBody hmax">
             <div class="sidebar pad10">
                 <div class="autoMargin hpad">

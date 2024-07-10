@@ -176,15 +176,14 @@ public class UserBean implements Serializable {
         userService.deleteAllUsers();
     }
 
-    public void edit(String username) {
+    public void edit(User user) {
         resetValues();
-        if (container(() -> userService.validateUsername(username))) {
-            container(() -> {
-                setUserToEdit(userService.getUserByUsername(username));
-                oldUsername = getUserToEdit().getUsername();
-                redirect("/pages/user/settings");
-            });
-        }
+        userToEdit = user;
+        oldUsername = user.getUsername();
+        log("Editing: " + user.getFirstname());
+        /*container(() -> {
+            redirect("/pages/user/settings");
+        });*/
     }
     public void addDependantPage(String username) {
         container(() -> {
@@ -221,6 +220,7 @@ public class UserBean implements Serializable {
                 userToEdit.setPassword(hexHashString(password));
             userService.updateDetailsOfUser(oldUsername,userToEdit);
         });
+        refreshUsers();
     }
      public void resetValues() {
         setUsername(null);

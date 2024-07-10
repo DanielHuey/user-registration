@@ -14,7 +14,7 @@ import java.security.NoSuchAlgorithmException;
 
 import static org.pahappa.systems.registrationapp.beans.MainBean.*;
 
-@ManagedBean(name = "authBean")
+@ManagedBean
 @SessionScoped
 public class AuthBean implements Serializable {
     private String identity;
