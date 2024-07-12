@@ -25,7 +25,7 @@ public class User extends UserSkeleton {
     private Role role;
     private boolean deleted;
     private Date deletedAt;
-    @OneToMany(mappedBy = "owner")
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
     private List<Dependant> dependants;
 
     public Role getRole() {
