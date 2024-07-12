@@ -8,12 +8,12 @@ import javax.faces.context.FacesContext;
 import javax.faces.validator.Validator;
 import javax.faces.validator.ValidatorException;
 
-public class Name extends ServiceSkeleton implements Validator{
+public class Name extends ServiceSkeleton implements Validator<String> {
 
     @Override
-    public void validate(FacesContext facesContext, UIComponent uiComponent, Object o) throws ValidatorException {
+    public void validate(FacesContext facesContext, UIComponent uiComponent, String name) throws ValidatorException {
         try {
-            validateName((String) o);
+            validateName(name);
         } catch (Exception e) {
             FacesMessage msg = new FacesMessage(e.getMessage());
             msg.setSeverity(FacesMessage.SEVERITY_ERROR);
