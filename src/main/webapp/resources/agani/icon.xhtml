@@ -1,0 +1,19 @@
+<!--
+  Created by IntelliJ IDEA.
+  User: Coder-45
+  Date: 7/1/2024
+  Time: 11:25 AM
+-->
+<ui:component xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:cc="http://java.sun.com/jsf/composite"
+        xmlns:ui="http://java.sun.com/jsf/facelets">
+    <cc:interface>
+        <cc:attribute name="icon" shortDescription="Bootstrap icon class without the 'bi-'"/>
+        <cc:attribute name="styleClass"/>
+        <cc:attribute name="style"/>
+    </cc:interface>
+    <cc:implementation>
+        <i class="bi bi-#{cc.attrs.icon} pad10 square rad50p #{cc.attrs.styleClass}" style="#{cc.attrs.style}"/>
+    </cc:implementation>
+</ui:component>

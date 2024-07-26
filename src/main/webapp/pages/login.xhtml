@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html>
+<html class="hmax maxViewport" lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+
+<h:head>
+    <meta charset="UTF-8"/>
+    <title>Login | User Registration</title>
+    <h:outputStylesheet name="css/myStyle.css"/>
+
+</h:head>
+<h:body class="textStyle hmax maxViewport bigText text-p petCaps">
+    #{authBean.goHomeIfAuthenticated()}
+    <div class="imageBackground"> </div>
+    <div class="popupContainer">
+        <div class="autoMargin rad24 pad20 loginForm backdropInvert b2 absoluteMiddle">
+            <h:form class="flexDisplay flexColumn middle pad20">
+                <div class="autoMargin flexRow flexDisplay middle">
+                    <i class="bi bi-box-arrow-in-right pad10"/><span>Login</span>
+                </div>
+                <h:inputText id="identity" styleClass="fillWidth noInputStyle border pad20 tl tr mt" value="#{authBean.identity}" pt:placeholder="Email or username" validatorMessage="The identity is too short.">
+                    <f:validateLength minimum="4"/>
+                </h:inputText>
+                <h:inputSecret styleClass="fillWidth noInputStyle border noTop pad20 bl br" id="password" value="#{authBean.password}" pt:placeholder="Password" validatorMessage="The password should have more than 4 characters">
+                    <f:validateLength minimum="4"/>
+                </h:inputSecret>
+                <p:messages style="color:white;font-family: 'Work Sans', Candara, sans-serif"/>
+                <div style="margin-top:10px">
+                    <h:commandButton styleClass="rad12 noBorder text-p bold hpad inputSubmit" value="Login" action="#{authBean.login()}"/>
+                </div>
+            </h:form>
+        </div>
+    </div>
+
+</h:body>
+</html>

@@ -1,0 +1,28 @@
+<!--
+  Created by IntelliJ IDEA.
+  User: Coder-45
+  Date: 6/30/2024
+  Time: 10:13 AM
+-->
+<ui:component xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:cc="http://java.sun.com/jsf/composite"
+        xmlns:my="http://java.sun.com/jsf/composite/agani"
+        xmlns:ui="http://java.sun.com/jsf/facelets">
+    <cc:interface>
+        <cc:attribute name="icon" required="true" />
+        <cc:attribute name="label" required="true" />
+        <cc:attribute name="value" required="true" />
+    </cc:interface>
+    <cc:implementation>
+        <div id="#{cc.clientId}" class="flexDisplay flexRow pad10 mr border underLine bgp rad24 middle" style="width:20vw;height:64px">
+            <div class="">
+                <my:icon icon="#{cc.attrs.icon}" styleClass="text-p bga m"/>
+            </div>
+            <div class="flexDisplay flexColumn hpad">
+                <span class="bolder text-a">#{cc.attrs.label}</span>
+                <span class="bold text-t">#{cc.attrs.value}</span>
+            </div>
+        </div>
+    </cc:implementation>
+</ui:component>

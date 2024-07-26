@@ -1,0 +1,182 @@
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css");
+@import url('https://fonts.googleapis.com/css2?family=Arsenal+SC:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@100..400&display=swap');
+
+:root {
+    --p: #ffffff;
+    --s: #231f1f;
+    --t: #0dc3e3;
+    --a: #1c6075;
+    --lightBlue:#dedeff;
+    --noColor: #0000;
+    --rad: 12px;
+    --pad: 20px;
+    --mar: 2.4%;
+}
+div.bgp {border: solid 1px var(--s)}
+html,body {margin:0 !important;height:max-content !important;}
+body {font-family: "Work Sans", "Arsenal SC", Candara, sans-serif}
+a {text-decoration: none}
+.navBar {background-color: #000}
+.flexDisplay {display:flex}
+.flexRow {flex-direction:row}  .flexRowR {flex-direction:row-reverse}
+.flexColumn {flex-direction:column}  .flexColumnR {flex-direction: column-reverse}
+.bgp {background-color:var(--p)}  .bgs {background-color:var(--s)} .bgRed {background-color: #f33}
+.bgt {background-color:var(--t)}  .bga {background-color:var(--a)} .bg {background-color:var(--lightBlue)}
+.bgBlack {background-color: #000}
+.text-p {color:var(--p)}  .text-s {color:var(--s)}
+.text-t {color:var(--t)}  .text-a {color:var(--a)}
+.text-r {color:red}  .text-gray {color:gray}  .text-green {color:#4f4}
+.autoMargin {margin: auto;}
+.splitBody {
+    display: grid;
+    grid-template-columns:240px auto;
+}
+.sidebar {
+    height: 50vh;
+    position: sticky;
+    top: 0;
+    z-index: 5;
+}
+.sidebar span {font-family: "Work Sans", Candara, sans-serif}
+.content {
+    width:100%;
+    overflow-y: auto;
+    height: inherit;
+    background-color: #fafafaaa;
+    backdrop-filter: blur(3px);
+    border-left: solid 1px;
+    border-bottom: solid 1px;
+}
+.sidebar a {
+    border-radius: var(--rad);
+    width:100%;
+    height:40px;
+    padding:8px;
+    background:var(--p);
+    border: solid 1px var(--s);
+    cursor: pointer;
+    color: var(--s);
+    text-justify: distribute;
+    margin-bottom: var(--mar);
+}
+.sidebar i {margin-left:20px}
+.sidebar a:hover,.route {
+    background: var(--s) !important;
+    color: var(--p) !important;
+}
+/*.sidebar h3 {*/
+/*    text-shadow: 0 0 10px #eeeeee;*/
+/*}*/
+.border {border:solid 1px var(--s)}
+.b2 {border:solid 2px var(--s)}
+.noBorder {border:none}
+.pad10 {padding:calc(var(--pad)/2) !important}
+.pad20 {padding:var(--pad) !important}
+.square {display:block;height: 36px;width:36px}
+.actionButton {padding:calc(var(--pad)/2);cursor:pointer;}
+.actionButton:hover {background:var(--s);color:var(--p)}
+.usernameLabel {
+    color:var(--t);
+    font-weight:900;
+}
+.bold {font-weight: 600;}
+.bolder {font-weight: 900;}
+.userRow {background:var(--noColor)}
+.userRow.del {text-decoration: rgba(236, 69, 69, 0.69) line-through}
+.userRow:hover {background:#f5f5f5}
+.spacer {width:20px;height:20px}
+.smallText {font-size:0.67rem}
+.bigText {font-size:1.55rem}
+.noInputStyle {}
+input[type="text"]:not(.noInputStyle),input[type="password"]:not(.noInputStyle) {
+    min-height: 22px;
+    padding: 1rem;
+    border-radius: var(--rad);
+    border: dashed 3px #ccc;
+    outline: none !important;
+}
+input[type="text"]:hover,input[type="password"]:hover {
+    background-color: #f7f6ef;
+}
+.inputSubmit {
+    height:40px;
+    background: var(--t);
+}
+.inputSubmit:hover{
+    background:#7de;
+}
+input::placeholder{
+    color:var(--s);
+}
+.tl {border-top-left-radius:var(--rad)!important}
+.tr {border-top-right-radius:var(--rad)!important}
+.bl {border-bottom-left-radius:var(--rad)!important}
+.br {border-bottom-right-radius:var(--rad)!important}
+.rad12 {border-radius:var(--rad) !important}
+.rad24 {border-radius: 24px !important}
+.rad50p {border-radius: 50%}
+.pill {border-radius: 10000px !important}
+.noShadow {box-shadow: none !important}
+.hpad {padding-left:var(--pad);padding-right:var(--pad)}
+.vpad {padding-top:var(--pad);padding-bottom:var(--pad)}
+.bpad {padding-bottom: var(--pad)}
+.hmax {height: max-content}
+.maxViewport {max-height: 100vh}
+.m {margin:var(--mar)}
+.mt {margin-top:var(--mar) !important}  .mb {margin-bottom:var(--mar) !important}
+.ml {margin-left:var(--mar) !important}  .mr {margin-right:var(--mar) !important}
+.noTop {border-top-width:0 !important;}
+.underLine {
+    border-bottom:solid 5px var(--s)!important;
+}
+.middle {align-items:center;align-content:center}
+.popupContainer {
+    position: absolute;
+    z-index:2;
+    top:0; left:0;
+    width:100vw; height:100vh;
+}
+.loginForm {
+    z-index: 10;
+    width: 33vw;
+    min-width: 440px;
+    background-color: #49705561;
+    box-shadow: #000 0 13px 20px 3px;
+}
+.absoluteMiddle {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+}
+.backdropInvert {backdrop-filter: invert(1)}
+.imageBackground {
+    height: 100vh; width: 100vw;
+    background-image: url("/registration-app/resources/images/macrovector.svg");
+    background-repeat: no-repeat;
+    background-clip: border-box;
+    background-size: initial;
+    background-position: bottom;
+    z-index: -100;
+    position: fixed;
+    top: 0; left: 0;
+    opacity: 0.2;
+}
+.fillWidth {width: -webkit-fill-available}
+.petCaps {
+    font-family: "Arsenal SC", Candara, sans-serif;
+    font-variant:all-petite-caps;
+}
+.tableDesign {
+    border-collapse:collapse;
+    font-variant:oldstyle-nums;
+    text-align: start;
+}
+.tableDesign td {padding:var(--pad)}
+.tableDesign:nth-of-type(even) {
+    background-color: darkkhaki;
+}
+.ui-datepicker {top:2rem !important;left:2rem !important}
+.xOverflow {overflow-x:auto}
+.yOverflow {overflow-y:auto}

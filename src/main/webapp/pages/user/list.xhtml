@@ -1,0 +1,166 @@
+<ui:composition template="/template/template.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:my="http://java.sun.com/jsf/composite/agani"
+                xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+                xmlns:p="http://primefaces.org/ui">
+    <ui:define name="nav">
+        Users
+        #{indexBean.router('userlist')}
+    </ui:define>
+    <ui:define name="content">
+        #{adminBean.restrictToAdmin()}
+        #{indexBean.refreshUsersAndDependants()}
+        #{indexBean.setPageRange('u')}
+        <h3 class="petCaps ml mb">Search</h3>
+        <div class="hpad pad10 rad24 bgp">
+            <h:form styleClass="flexDisplay flexRow mt mb">
+                <p:inputText styleClass="noShadow rad24 pad10 noBorder fillWidth" value="#{indexBean.search}" pt:placeholder="Search...">
+                    <p:ajax event="keyup" listener="#{indexBean.searchU()}" update=":userForm:userList"/>
+                </p:inputText>
+<!--                <h:commandLink action="#{indexBean.searchU()}" styleClass="noBorder ml"><i class="pi pi-search pad10 bg square actionButton tl bl text-s"/></h:commandLink>-->
+<!--                <h:commandLink action="#{indexBean.setSearch('')}" styleClass="noBorder"><i class="pi pi-times pad10 bg square actionButton tr br text-s"/></h:commandLink>-->
+            </h:form>
+        </div>
+        <div class="m flexDisplay flexRow fillWidth" style="justify-content: flex-end">
+            <h:commandButton class="actionButton noBorder bga rad12 text-p bold mr" value="Add Admin" onclick="showDlg('regAdminDialog')"/>
+            <h:commandButton class="actionButton border bgp tl bl text-a bold" value="Add New" onclick="showDlg('regUserDialog')"/>
+            <h:commandButton class="actionButton border bgp tr br text-r bold" style="border-left: none" value="Delete All" onclick="showDlg('confirmDialog')"/>
+        </div>
+        <div class="flexColumn pad10 rad12 bgp xOverflow">
+            <h:form id="userForm">
+                <p:dataTable id="userList" styleClass="mb"
+                        value="#{indexBean.searchUserList}" var="user_dt"
+                        rowsPerPageTemplate="5,10,15" rows="5"
+                        paginator="true" resizableColumns="true" rowStyleClass="userRow">
+                    <p:column headerText="No." width="12px">#{user_dt.id}</p:column>
+                    <p:column headerText="FirstName" width="70px">#{user_dt.firstname}</p:column>
+                    <p:column headerText="LastName" width="70px">#{user_dt.lastname}</p:column>
+                    <p:column headerText="Date Of Birth" width="90px">#{user_dt.dateOfBirthString}</p:column>
+                    <p:column headerText="No. Of Dependants" width="110px">#{user_dt.dependants.size()}</p:column>
+                    <p:column headerText="Username" width="100px">#{user_dt.username}</p:column>
+                    <p:column headerText="Email">#{user_dt.email}</p:column>
+                    <p:column headerText="Actions">
+                        <h:form styleClass="flexDisplay flexRow">
+                            <p:remoteCommand name="editSelectedUser" action="#{userBean.edit(user_dt)}"/>
+                            <p:commandButton styleClass="noBorder actionButton pill mt mr" onclick="editSelectedUser();showDlg('editUser')" action="#{userBean.edit(user_dt.username)}" icon="pi pi-pencil" update="editForm"/>
+                            <p:commandButton styleClass="noBorder text-r actionButton pill mt mr" action="#{userBean.delete(user_dt.username)}" icon="pi pi-trash"/>
+                        </h:form>
+                    </p:column>
+                </p:dataTable>
+            </h:form>
+        </div>
+        <p:dialog header="#{userBean.getUserToEdit().firstname}" widgetVar="editUser" closable="true" closeOnEscape="true" responsive="true" resizable="true">
+            <h:form id="editForm">
+<!--                <p:messages style="color:gold"/>-->
+                <p:panelGrid id="editGrid" columns="4">
+                    <span>Username</span>
+                    <h:inputText styleClass="rad12 noBorder" id="edit_username" type="text" value="#{userBean.username}" pt:placeholder="#{userBean.getUserToEdit().username}">
+                        <f:validateLength minimum="4"/>
+                        <f:validateRegex pattern="^[a-zA-Z0-9][a-zA-Z0-9_.]*"/>
+                    </h:inputText>
+                    <span>First Name</span>
+                    <h:inputText styleClass="rad12 noBorder" id="edit_firstname" value="#{userBean.firstname}" pt:placeholder="#{userBean.getUserToEdit().firstname}">
+                        <f:validateLength minimum="2"/>
+                        <f:validateRegex pattern="^[a-zA-Z]*"/>
+                    </h:inputText>
+                    <span>Last Name</span>
+                    <h:inputText styleClass="rad12 noBorder" id="edit_lastname" value="#{userBean.lastname}" pt:placeholder="#{userBean.getUserToEdit().lastname}"/>
+                    <span>Date Of Birth</span>
+                    <p:calendar styleClass="rad12" id="edit_dateOfBirth" pattern="dd/MM/yyyy" navigator="true" yearRange="1900:c" value="#{userBean.dateOfBirth}" pt:placeholder="#{userBean.getUserToEdit().dateOfBirth}">
+                        <f:validateRequired/>
+                    </p:calendar>
+                    <span>Email</span>
+                    <h:inputText styleClass="rad12 noBorder" id="edit_email" value="#{userBean.email}" pt:placeholder="#{userBean.getUserToEdit().email}">
+                        <f:validateLength minimum="8"/>
+                        <f:validateRegex pattern="^[a-zA-Z0-9_\.]*@[a-z]*\.[a-z]*$"/>
+                    </h:inputText>
+                    <!--                        <h:outputLabel for="edit_oldpassword" value="Old Password" rendered="#{!authBean.isCurrentUserAdmin()}"/>-->
+                    <!--                        <p:password rendered="#{!authBean.isCurrentUserAdmin()}" styleClass="rad12 noBorder" id="edit_oldpassword" value="#{userBean.oldPassword}" pt:placeholder="Old Password" title="[required for new password]"/>-->
+                    <span>Password</span>
+                    <p:password styleClass="rad12 noBorder" id="edit_password" value="#{userBean.password}" placeholder="New Password" validatorMessage="Password should have at lest 4 characters">
+                        <f:validateLength minimum="4"/>
+                    </p:password>
+                </p:panelGrid>
+                <p:commandButton styleClass="rad12 noBorder hpad inputSubmit pill mr" icon="pi pi-folder-open" value="Save" action="#{userBean.saveDetails()}" onsuccess="hideDlg('editUser')"/>
+                <p:commandButton styleClass="rad12 noBorder hpad inputSubmit pill" icon="pi pi-times" value="Cancel" onclick="hideDlg('editUser')"/>
+            </h:form>
+        </p:dialog>
+        <p:dialog header="Register" widgetVar="regUserDialog" responsive="true" resizable="true" closable="true" closeOnEscape="true">
+            <h:form class="autoMargin flexDisplay flexColumn">
+                <p:panelGrid columns="4">
+                    <h:outputLabel for="username" value="Username"/>
+                    <p:inputText styleClass=" border" id="username" type="text" value="#{userBean.username}" pt:placeholder="Username [abc_123]" required="true" validatorMessage="Invalid Username">
+                        <f:validator validatorId="uNameVal"/>
+                    </p:inputText>
+                    <h:outputLabel for="firstname" value="First Name"/>
+                    <p:inputText styleClass="" id="firstname" value="#{userBean.firstname}" pt:placeholder="Firstname [a-Z]" required="true" validatorMessage="Invalid First Name">
+                        <f:validator validatorId="nameVal"/>
+                    </p:inputText>
+                    <h:outputLabel for="lastname" value="Last Name"/>
+                    <p:inputText styleClass="" id="lastname" value="#{userBean.lastname}" pt:placeholder="Lastname [a-Z]" required="false"/>
+                    <h:outputLabel for="dateOfBirth" value="Date of Birth"/>
+                    <p:calendar styleClass=" border noBorder" id="dateOfBirth" navigator="true" pattern="dd/MM/yyyy" yearRange="1900:c" maxdate="t" value="#{userBean.dateOfBirth}" pt:placeholder="Select a date..." required="true">
+                        <f:validator validatorId="dobVal"/>
+                    </p:calendar>
+                    <h:outputLabel for="email" value="Email"/>
+                    <p:inputText styleClass="" id="email" value="#{userBean.email}" pt:placeholder="Email Address [mail@site.com]">
+                        <f:validateLength minimum="8"/>
+                        <f:validateRegex pattern="#{Const.emailRgx}"/>
+                    </p:inputText>
+                    <h:outputLabel value="Password"/>
+                    <h:inputSecret styleClass="fillWidth" id="password" value="#{userBean.password}" pt:placeholder="Password [a@#1G%!*]" required="true" validatorMessage="Password should have at lest 4 characters">
+                        <f:validateLength minimum="4"/>
+                    </h:inputSecret>
+                </p:panelGrid>
+                <h:commandButton styleClass="pad10 rad12 mt noBorder hpad inputSubmit" value="Register" action="#{userBean.register}"/>
+            </h:form>
+        </p:dialog>
+
+        <p:dialog header="Register An Admin" widgetVar="regAdminDialog" responsive="true" resizable="true" closable="true" closeOnEscape="true">
+            <h:form class="autoMargin flexDisplay flexColumn">
+                <p:messages/>
+                <p:panelGrid columns="4">
+                    <h:outputLabel for="admin_username" value="Admin Username"/>
+                    <p:inputText styleClass=" border" id="admin_username" type="text" value="#{adminBean.username}" pt:placeholder="abc_123" required="true">
+                        <f:validator validatorId="uNameVal"/>
+                    </p:inputText>
+                    <h:outputLabel for="admin_firstname" value="First Name"/>
+                    <p:inputText styleClass=" border" id="admin_firstname" value="#{adminBean.firstname}" pt:placeholder="Firstname" required="true">
+                        <f:validator validatorId="nameVal"/>
+                    </p:inputText>
+                    <h:outputLabel for="admin_lastname" value="Last Name"/>
+                    <p:inputText styleClass=" border" id="admin_lastname" value="#{adminBean.lastname}" pt:placeholder="Lastname" required="true"/>
+                    <h:outputLabel for="admin_dateOfBirth" value="Date of Birth"/>
+                    <p:calendar styleClass=" border noBorder" id="admin_dateOfBirth" navigator="true" pattern="dd/MM/yyyy" yearRange="1900:c" maxdate="t" value="#{adminBean.dateOfBirth}" pt:placeholder="Select a date..." required="true">
+                        <f:validator validatorId="dobVal"/>
+                    </p:calendar>
+                    <h:outputLabel for="admin_email" value="Email"/>
+                    <p:inputText styleClass="" id="admin_email" value="#{adminBean.email}" pt:placeholder="Email Address [mail@site.com]" required="true">
+                        <f:validator validatorId="emailVal"/>
+                        <p:message for="admin_email"/>
+                    </p:inputText>
+                    <h:outputLabel value="Password"/>
+                    <p:password styleClass="" id="admin_password" value="#{adminBean.password}" pt:placeholder="Password [a@#1G%!*]" required="true" validatorMessage="Password should have at lest 4 characters">
+                        <f:validateLength minimum="4"/>
+                        <p:message for="admin_password"/>
+                    </p:password>
+                </p:panelGrid>
+<!--                <p:remoteCommand value="#{adminBean.register()}" name="saveAdmin"/>-->
+                <h:commandButton styleClass="pad10 rad12 mt noBorder hpad inputSubmit" value="Save" action="#{adminBean.register()}" onclick="hideDlg('regAdminDialog')"/>
+            </h:form>
+        </p:dialog>
+
+        <p:dialog header="Confirm Action" responsive="true" closeOnEscape="true" closable="true" widgetVar="confirmDialog">
+            <div class="m">
+                <h:form>
+<!--                    <h:commandButton style="margin-right:10px;" class="actionButton b2 bgp" value="Return"/>-->
+                    <span class="smallText"><i class="pi pi-info-circle"/> Hit esc to close</span>
+                    <h:commandButton class="actionButton b2 bgp text-r" value="Delete All ?" action="#{indexBean.confirm('u')}"/>
+                </h:form>
+            </div>
+        </p:dialog>
+    </ui:define>
+</ui:composition>

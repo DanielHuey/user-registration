@@ -1,0 +1,32 @@
+<ui:composition template="/template/template.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:my="http://java.sun.com/jsf/composite/agani"
+                xmlns:p="http://primefaces.org/ui">
+    <ui:define name="nav">
+        Dashboard
+        #{indexBean.router("dashboard")}
+    </ui:define>
+    <ui:define name="content">
+        #{adminBean.restrictToAdmin()}
+        #{indexBean.refreshUsersAndDependants()}
+
+        <div class="flexColumn mt pad10">
+            <h3 class="petCaps">My Cards</h3>
+            <div class="autoMargin m rad12 flexDisplay flexRow">
+                <my:stat icon="person" value="#{statBean.numberOfUsers}" label="Users"/>
+                <my:stat value="#{statBean.numberOfDependants}" label="Dependants" icon="people"/>
+                <my:stat value="#{statBean.usersWithDependants}" label="Users W/D" icon="link-45deg"/>
+                <my:stat value="#{statBean.usersWithNoDependants}" label="Users W'/D" icon="x"/>
+            </div>
+            <h3 class="petCaps">Chart</h3>
+            <div class="pad10 rad12 bgp">
+                <p:pieChart styleClass="rad12 pad10"
+                            style="max-width: 380px;max-height: 380px"
+                            model="#{statBean.pieChart}" id="pieChart"/>
+            </div>
+        </div>
+    </ui:define>
+</ui:composition>
